@@ -4,19 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>map test</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="../leaflet/leaflet.css" />
+    <script src="../leaflet/leaflet.js"></script>
 </head>
 <body>
-    <div id="map" style="height: 900px; width: 500px;"></div>
-    <script>
-        var map = L.map('map').setView([54.26, -124.51], 5);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        var marker = L.marker([51, -124]).addTo(map);
-        var popup = marker.bindPopup('<b>Weather Station Name</b><br />Last Updated 6 minutes ago.');
-    </script>
+    <div id="map" style="height: 900px; width: 500px; top: 100px; left: 30px;"></div>
+    <script src="../leaflet/map_test1.js"></script>
 </body>
 </html>
