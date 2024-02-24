@@ -12,16 +12,11 @@
 
     <title>Hello, world!</title>
 
-    <style>
-        .col-4,
-        .col-8 {
-            border: 1px solid black;
-            padding: 20px;
-        }
-    </style>
+
 </head>
 
 <body>
+
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">BC Weather and Wildfire</a>
@@ -37,12 +32,30 @@
 
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-4">
-                Hi
+        <div class="row pt-3">
+            <!-- Station Map Column -->
+            <div class="col-4 text-center border-right">
+                <h2 class="">
+                    Alexis Creek - #34
+                </h2>
+                <hr>
+                <img src="../static/bc_map.jpeg" width="100%" alt="bc map">
+                <hr>
+                <h2 class="">
+                    Latitude: 37.7749
+                </h2>
+                <h2 class="">
+                    Longitude: -122.4194
+                </h2>
+                <h2 class="">
+                    Elevation: 1000m
+                </h2>
             </div>
+            <!-- Weather Data Column -->
             <div class="col-8">
-                Hi
+                <h1>
+                    Weather
+                </h1>
             </div>
         </div>
     </div>
