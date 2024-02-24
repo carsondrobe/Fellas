@@ -1,7 +1,11 @@
 # Create your tests here.
 from django.test import TestCase
 from .models import UserProfile, User, WeatherStation, StationData, Dashboard, Alert, Feedback, ResponseFromAdmin
-
+import os
+from django.conf import settings
+from django.core.management import call_command
+from io import StringIO
+import pandas as pd
 
 #Begin models tests
 
@@ -196,6 +200,36 @@ class ResponseFromAdminModelTest(TestCase):
         
 #End models tests
 
+#Test ws_upload command
+class WSUploadCommandTestCase(TestCase):
+    def setUp(self):
+        self.csv_path = os.path.join(settings.BASE_DIR, 'website', 'data', 'BC_Wildfire_Active_Weather_Stations.csv')
+        self.data = pd.read_csv(self.csv_path)
 
+    def test_command_output(self):
+        # Test if the command outputs 'Data uploaded successfully'
+        try:
+            out = StringIO()
+            call_command('ws_upload', stdout=out)
+            self.assertIn('Data uploaded successfully', out.getvalue())
+        except Exception as e:
+            self.fail(e)
 
+    def test_data_upload(self):
+        # Test if the data from the csv file was uploaded correctly
+        call_command('ws_upload')
+        for _, row in self.data.iterrows():
+            ws = WeatherStation.objects.filter(WEATHER_STATIONS_ID=row["WEATHER_STATIONS_ID"]).first()
+            self.assertIsNotNone(ws)
+            self.assertEqual(ws.X, row["X"])
+            self.assertEqual(ws.Y, row["Y"])
+            self.assertEqual(ws.STATION_CODE, row["STATION_CODE"])
+            self.assertEqual(ws.STATION_NAME, row["STATION_NAME"])
+            if ws.STATION_ACRONYM == 'nan' and pd.isna(row["STATION_ACRONYM"]):
+                self.assertTrue(True)
+            else:
+                self.assertEqual(ws.STATION_ACRONYM, row["STATION_ACRONYM"])
+            self.assertEqual(ws.ELEVATION, row["ELEVATION"])
+            self.assertEqual(ws.INSTALL_DATE, pd.to_datetime(row["INSTALL_DATE"], format='%Y/%m/%d %H:%M:%S%z'))
+#End ws_upload command tests
 
