@@ -1,3 +1,6 @@
+// Create new JSDOM object to test home.html and map.js
+const { JSDOM } = require('jsdom');
+const dom = new JSDOM(`
 <!doctype html>
 <html lang="en">
 
@@ -169,3 +172,36 @@
 </body>
 
 </html>
+`);
+
+// Create DOM model of HTML code above
+const document = dom.window.document;
+
+// Create test suite of map
+describe('Map testing', () => {
+    // Test if map element is present
+    test('Map element is present', () => {
+        const mapElement = document.getElementById('map');
+        expect(mapElement).toBeTruthy();
+    });
+    // Test if map's station name and id information matches startup station's station name and id information
+    test('Station name and id loaded in properly', () => {
+        const sni = document.getElementById('station-name').innerText;
+        expect(sni == "ASPEN GROVE - #100");
+    });   
+    // Test if map's latitude information matches startup station's latitude information
+    test('Latitude loaded in properly', () => {
+        const latitude = document.getElementById('latitude').innerText;
+        expect(latitude == "Latitude: 49.94811");
+    }); 
+    // Test if map's longitude information matches startup station's longitude information
+    test('Longitude loaded in properly', () => {
+        const longitude = document.getElementById('longitude').innerText;
+        expect(longitude == "Longitude: -120.62107");
+    });    
+    // Test if map's elevation information matches startup station's elevation information
+    test('Elevation loaded in properly', () => {
+        const elevation = document.getElementById('elevation').innerText;
+        expect(elevation == "1065m");
+    });
+});
