@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="../leaflet/leaflet.css" />
+    <script src="../leaflet/leaflet.js"></script> 
+
     <title>Dashboard</title>
 
 
@@ -39,7 +43,8 @@
                     Alexis Creek - #34
                 </h2>
                 <hr>
-                <img src="../static/bc_map.jpeg" width="100%" alt="bc map">
+                <div id="map" style="height: 900px; width: 600px; left: auto;"></div>
+                <script src="../leaflet/map.js"></script>
                 <hr>
                 <h2 class="">
                     Latitude: 37.7749
