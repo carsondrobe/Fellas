@@ -8,6 +8,7 @@ from io import StringIO
 import pandas as pd
 from django.urls import reverse
 from django.test import Client
+from django.contrib.auth.models import User
 
 #Begin models tests
 
@@ -237,15 +238,36 @@ class WSUploadCommandTestCase(TestCase):
 
 #Test cases for login
 class LoginTests(TestCase):
+
+    # Test case to check login with invalid data
     def test_login_view_invalid_data(self):
         client = Client()
         response = client.post(reverse('login'), {'username': '', 'password': ''})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content.decode('utf-8'), 'Please fill in all fields')
 
+    # Test case to check login with valid data
     def test_login_view_valid_data(self):
         client = Client()
         response = client.post(reverse('login'), {'username': 'testuser', 'password': 'testpassword'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode('utf-8'), 'Login form submitted successfully')
+
+    # Set up test environment for the next 2 tests
+    def setUp(self):
+        self.url = reverse('login')
+        self.username = 'testuser'
+        self.password = 'testpassword'
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+
+    # Test case to check POST request with valid data
+    def test_login_view_post_success(self):
+        response = self.client.post(self.url, {'username': self.username, 'password': self.password})
+        self.assertEqual(response.status_code, 302)  # Redirect to home page after successful login
+
+    # Test case to check POST request with invalid data
+    def test_login_view_post_failure(self):
+        response = self.client.post(self.url, {'username': self.username, 'password': 'wrongpassword'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Invalid username or password.')
 #End of test cases for login
