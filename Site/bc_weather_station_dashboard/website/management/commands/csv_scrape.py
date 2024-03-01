@@ -1,3 +1,5 @@
+import warnings
+
 from django.core.management.base import BaseCommand
 import requests
 from django.utils import timezone
@@ -23,6 +25,7 @@ class Command(BaseCommand):
 
     def update_model_with_csv(self, filename) -> None:
         """Updates the StationData model with data from a CSV file."""
+        warnings.filterwarnings('ignore')
         data = pd.read_csv(filename)
         for index, row in data.iterrows():
             # Convert the date time string to a datetime object
