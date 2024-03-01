@@ -19,4 +19,4 @@ def submit_feedback(request):
             return redirect("home")
     else:
         form = FeedbackForm()
-    return render(request, "home.html", {"feedback_form": form})
+    return redirect("home")
