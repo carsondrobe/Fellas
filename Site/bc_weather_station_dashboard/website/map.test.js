@@ -42,7 +42,7 @@ const dom = new JSDOM(`
         <div class="row pt-3">
             <!-- Station Map Column -->
             <div class="col-4 text-center border-right">
-                <h2 id="station-name">
+                <h2 id="station-name-code">
                 </h2>
                 <hr>
                 <!-- Leaflet Map Implementation -->
@@ -186,7 +186,7 @@ describe('Map testing', () => {
     });
     // Test if map's station name and id information matches startup station's station name and id information
     test('Station name and id loaded in properly', () => {
-        const sni = document.getElementById('station-name').innerText;
+        const sni = document.getElementById('station-name-code').innerText;
         expect(sni == "ASPEN GROVE - #100");
     });   
     // Test if map's latitude information matches startup station's latitude information

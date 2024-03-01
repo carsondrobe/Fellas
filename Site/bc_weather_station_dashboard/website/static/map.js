@@ -23,7 +23,9 @@ fetch('/weather_stations_data/')
                 .addTo(map)
                 .bindPopup(
                     `<b>Station ID: ${station.id}</b><br>` +
+                    `<b>Station Code: ${station.code}</b><br>` +
                     `<b>Station Name: ${station.name}</b><br>` +
+                    `<b>Station Acronym: ${station.acronym}</b><br>` +
                     `<b>Latitude: ${station.latitude}</b><br>` +
                     `<b>Longitude: ${station.longitude}</b><br>` +
                     `<b>Elevation: ${station.elevation}m</b><br>` +
@@ -31,7 +33,7 @@ fetch('/weather_stations_data/')
                 );
              // Set HTML elements to show information of weather station with id of 100 on start
             if(station['id'] == 100) {
-                document.getElementById('station-name').innerText = station['name'] + " - #" + station['id'];
+                document.getElementById('station-name-code').innerText = station['name'] + " - #" + station['code'];
                 document.getElementById('latitude').innerText = 'Latitude: ' + station['latitude'];
                 document.getElementById('longitude').innerText = 'Longitude: ' + station['longitude'];
                 document.getElementById('elevation').innerText = 'Elevation: ' + station['elevation'] + "m";
@@ -40,7 +42,7 @@ fetch('/weather_stations_data/')
             }
             // Add click event listener to update station information on click
             marker.on('click', function() {
-                document.getElementById('station-name').innerText = station.name + " - #" + station.id;
+                document.getElementById('station-name-code').innerText = station.name + " - #" + station.id;
                 document.getElementById('latitude').innerText = 'Latitude: ' + station.latitude;
                 document.getElementById('longitude').innerText = 'Longitude: ' + station.longitude;
                 document.getElementById('elevation').innerText = 'Elevation: ' + station.elevation + "m";

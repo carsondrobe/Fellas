@@ -8,10 +8,12 @@ def home(request):
 def weather_stations_data(request):
     stations = WeatherStation.objects.all()
     data = [{
+        'id': station.WEATHER_STATIONS_ID,
+        'code': station.STATION_CODE,
+        'name': station.STATION_NAME,
+        'acronym': station.STATION_ACRONYM,
         'latitude': station.Y,
         'longitude': station.X,
-        'name': station.STATION_NAME,
-        'id': station.WEATHER_STATIONS_ID,
         'elevation': station.ELEVATION,
         'install_date': station.INSTALL_DATE.strftime('%Y-%m-%d')
     } for station in stations]
