@@ -4,7 +4,6 @@ from django.utils import timezone
 from datetime import datetime
 from website.models import StationData,WeatherStation
 import pandas as pd
-from django.utils.timezone import make_aware
 import tempfile
 
 class Command(BaseCommand):
@@ -28,9 +27,7 @@ class Command(BaseCommand):
         for index, row in data.iterrows():
             # Convert the date time string to a datetime object
             naive_datetime = datetime.strptime(str(row['DATE_TIME']), "%Y%m%d%H")
-            # Make the datetime object timezone aware
-            aware_datetime = make_aware(naive_datetime)
-            row['DATE_TIME'] = aware_datetime
+            row['DATE_TIME'] = naive_datetime
 
             # Replace None or NaN values with a default value
             row_data = row.to_dict()
