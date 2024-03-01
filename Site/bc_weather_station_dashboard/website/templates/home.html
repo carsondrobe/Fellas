@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 
@@ -11,8 +12,15 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Leaflet CSS and JS -->
-    <link rel="stylesheet" href="../leaflet/leaflet.css" />
-    <script src="../leaflet/leaflet.js"></script> 
+    <!-- <link rel="stylesheet" href="../leaflet/leaflet.css" />
+    <script src="../leaflet/leaflet.js"></script>  -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
 
     <title>Dashboard</title>
 
@@ -43,8 +51,9 @@
                 </h2>
                 <hr>
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 50em; width: 100%; left: auto;"></div>
-                <script src="../leaflet/map.js"></script>
+                <div id="map" style="height: 50em; width: 100%; left: auto;" data-weather-stations-url="{% url 'weather-stations-api' %}"></div>
+                <!-- <script src="../static/map.js"></script> -->
+                <script src="{% static 'map-static/map.js' %}"></script>
                 <hr>
                 <h2 id="latitude">
                 </h2>
