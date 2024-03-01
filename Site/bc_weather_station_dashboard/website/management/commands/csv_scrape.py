@@ -4,7 +4,7 @@ from django.utils import timezone
 from datetime import datetime
 from website.models import StationData,WeatherStation
 import pandas as pd
-import tempfile
+import os
 
 class Command(BaseCommand):
     help = 'Manually download current day CSV data and update StationData model to run use the command: python manage.py csv_scrape.'
@@ -56,14 +56,19 @@ class Command(BaseCommand):
         # Format the date as yyyy-mm-dd
         date_str = date.strftime('%Y-%m-%d')
             
-        # Create the URL
+        # Create the URL and filename
         url = f'https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/2024/{date_str}.csv'
-
-        # Create a temporary file for the CSV being downloaded
-        with tempfile.NamedTemporaryFile(delete=True) as temp_file:
-            # Try to download the CSV
-            if self.download_csv(temp_file, url):
-                temp_file.seek(0)  # Go to the start of the file
-                # Update the model with the data from the CSV
-                self.update_model_with_csv(temp_file.name)
-                self.stdout.write(self.style.SUCCESS(f'Most current data for {date_str} inserted into the StationData model'))
+        filename = f'{date_str}.csv'
+        
+        try:
+            # Open a temporary file
+            with open(filename, 'wb') as temp_file:
+                # Try to download the CSV
+                if self.download_csv(temp_file, url):
+                    self.update_model_with_csv(filename)  
+            self.stdout.write(self.style.SUCCESS('Data inserted into the model'))
+        finally:
+            # Delete the CSV file after model updated
+            if os.path.exists(filename):
+                os.remove(filename)
+                self.stdout.write(self.style.SUCCESS('File Deleted Successfully'))
