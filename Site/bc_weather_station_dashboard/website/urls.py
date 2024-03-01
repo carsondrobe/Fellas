@@ -16,7 +16,10 @@ Including another URLconf
 """
 from . import views
 from django.urls import path
+from .views import weather_stations_data
+
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path('weather_stations_data/', weather_stations_data, name='weather_stations_data'),
 ]
