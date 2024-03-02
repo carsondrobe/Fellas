@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.management import call_command
 from io import StringIO
 import pandas as pd
+import re
 
 #Begin models tests
 
@@ -239,13 +240,15 @@ class CSVScrapeCommandTestCase(TestCase):
         self.csv_url = "https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/2024/2024-01-01.csv" # Replace with the actual path of the CSV file
         self.data = pd.read_csv(self.csv_url)
     def test_command_output(self):
-        # Test if the command outputs 'Most current data for {date_str} inserted into the StationData model'
-        try:
-            out = StringIO()
-            call_command('csv_scrape', stdout=out)
-            self.assertIn('Most current data for', out.getvalue())
-        except Exception as e:
-            self.fail(e)
+        # Run the command
+        out = StringIO()
+        call_command('csv_scrape', stdout=out)
+
+        # Strip escape sequences from the output
+        output = re.sub(r'\x1b\[.*?m', '', out.getvalue())
+
+        # Check the output
+        self.assertIn('Deleted Successfully', output)
     def test_data_scrape(self):
         # Test if the data from the CSV file was scraped correctly by checking if the expected station codes are in the database
         call_command('csv_scrape')
