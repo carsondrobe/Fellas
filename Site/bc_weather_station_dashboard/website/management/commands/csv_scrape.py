@@ -1,8 +1,9 @@
 import warnings
-
+from datetime import timedelta
 from django.core.management.base import BaseCommand
 import requests
 from django.utils import timezone
+from datetime import date
 from datetime import datetime
 from website.models import StationData,WeatherStation
 import pandas as pd
@@ -51,27 +52,37 @@ class Command(BaseCommand):
             # Create a new StationData object or update the existing one
             StationData.objects.get_or_create(**row_data)
 
-    def handle(self, *args, **kwargs)-> None:
-        """Handles the command, calls the other methods."""
-        # Get the current date in the 'America/Vancouver' timezone
-        date = timezone.localtime(timezone.now())
+    def handle(self, *args, **kwargs) -> None:
+        """Handles the command, calls the other methods. You can change the date range here."""
+        # Create a date range for when you want to scrape the data
+        start_date = date(2024, 3, 2) # Change the start date (make sure this start_date and end_date are in the same year)
+        end_date = date(2024, 3, 2) # Change the end date
+        delta = timedelta(days=1)
+        dates = []
+        while start_date <= end_date:
+            dates.append(start_date)
+            start_date += delta
 
-        # Format the date as yyyy-mm-dd
-        date_str = date.strftime('%Y-%m-%d')
-            
-        # Create the URL and filename
-        url = f'https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/2024/{date_str}.csv'
-        filename = f'{date_str}.csv'
-        
-        try:
-            # Open a temporary file
-            with open(filename, 'wb') as temp_file:
-                # Try to download the CSV
-                if self.download_csv(temp_file, url):
-                    self.update_model_with_csv(filename)  
-            self.stdout.write(self.style.SUCCESS('Data inserted into the model'))
-        finally:
-            # Delete the CSV file after model updated
-            if os.path.exists(filename):
-                os.remove(filename)
-                self.stdout.write(self.style.SUCCESS('File Deleted Successfully'))
+        # Loop over the dates
+        for date_current in dates:
+            # Format the date as yyyy-mm-dd
+            date_str = date_current.strftime('%Y-%m-%d')
+            # Get the year from the date
+            year = date_current.strftime('%Y')
+
+            # Create the URL and filename
+            url = f'https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/{year}/{date_str}.csv'
+            filename = f'{date_str}.csv'
+
+            try:
+                # Open a temporary file
+                with open(filename, 'wb') as temp_file:
+                    # Try to download the CSV
+                    if self.download_csv(temp_file, url):
+                        self.update_model_with_csv(filename)
+                self.stdout.write(self.style.SUCCESS(f'Data inserted into the model for {filename}'))
+            finally:
+                # Delete the CSV file after model updated
+                if os.path.exists(filename):
+                    os.remove(filename)
+                    self.stdout.write(self.style.SUCCESS(f'File {filename} Deleted Successfully'))
