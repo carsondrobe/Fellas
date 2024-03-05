@@ -274,43 +274,69 @@ class WSUploadCommandTestCase(TestCase):
 # End ws_upload command tests
 
 
-# Test the submit_feedback view
-
+from django.test import TestCase, Client
 from django.urls import reverse
-from website.forms import FeedbackForm
+from django.contrib.auth.models import User
+from .forms import FeedbackForm
+from .models import Feedback
 
 
-class SubmitFeedbackTests(TestCase):
-    def test_submit_feedback_valid_form(self):
-        url = reverse("submit_feedback")
-        data = {"feedback": "This is a test feedback"}
-        response = self.client.post(url, data)
-        self.assertEqual(
-            response.status_code, 302
-        )  # Check if it redirects to the home page
+class SubmitFeedbackTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
 
-        # TODO: Add assertions to check if the feedback is saved to the database
+    def test_submit_feedback_valid(self):
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
 
-    def test_submit_feedback_invalid_form(self):
-        url = reverse("submit_feedback")
-        data = {}  # Empty data to make the form invalid
-        response = self.client.post(url, data)
-        self.assertEqual(
-            response.status_code, 200
-        )  # Check if it renders the home.html template
+        feedback_data = {"feedback": "This is a test feedback"}
 
-        # TODO: Add assertions to check if the form is passed to the template context
+        # Simulate a POST request to submit feedback
+        response = self.client.post(reverse("submit_feedback"), data=feedback_data)
+
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
+
+        # Check if the feedback is saved in the database
+        feedback = Feedback.objects.get(user=self.user)
+        self.assertEqual(feedback.message, feedback_data["feedback"])
+        self.assertEqual(feedback.user, self.user)
+        self.assertEqual(feedback.status, Feedback.SUBMITTED)
+
+    def test_submit_feedback_invalid(self):
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
+
+        # Simulate a POST request with invalid data
+        response = self.client.post(reverse("submit_feedback"), data={})
+
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
+
+        # Check that no feedback is saved in the database
+        self.assertEqual(Feedback.objects.count(), 0)
 
     def test_submit_feedback_get_request(self):
-        url = reverse("submit_feedback")
-        response = self.client.get(url)
-        self.assertEqual(
-            response.status_code, 200
-        )  # Check if it renders the home.html template
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
 
-        # TODO: Add assertions to check if the form is passed to the template context
+        # Simulate a GET request
+        response = self.client.get(reverse("submit_feedback"))
 
-        form = response.context["feedback_form"]
-        self.assertIsInstance(
-            form, FeedbackForm
-        )  # Check if the form is an instance of FeedbackForm
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
+
+        # Check that no feedback is saved in the database
+        self.assertEqual(Feedback.objects.count(), 0)

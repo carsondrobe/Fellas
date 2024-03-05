@@ -1,12 +1,13 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from .forms import FeedbackForm
 from django.http import JsonResponse
-from .models import WeatherStation
+from .models import WeatherStation, Feedback
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def home(request):
     return render(request, "home.html", {})
 
@@ -33,10 +34,13 @@ def submit_feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            # TODO: Save the feedback to the database
-            # For right now just prints the feedback to the console
-            print(form.cleaned_data["feedback"])
+            feedback = Feedback(
+                message=form.cleaned_data["feedback"],
+                user=request.user,
+                status=Feedback.SUBMITTED,
+            )
+            feedback.save()
+
             return redirect("home")
-    else:
-        form = FeedbackForm()
+
     return redirect("home")
