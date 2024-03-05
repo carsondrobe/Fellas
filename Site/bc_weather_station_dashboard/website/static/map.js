@@ -31,21 +31,14 @@ fetch('/weather_stations_data/')
                     `<b>Elevation: ${station.elevation}m</b><br>` +
                     `<b>Install Date: ${station.install_date}</b>`
                 );
-             // Set HTML elements to show information of weather station with id of 100 on start
+             // Set HTML elements to show information of weather station with id of 100 on start with its popup activated
             if(station['id'] == 100) {
                 document.getElementById('station-name-code').innerText = station['name'] + " - #" + station['code'];
-                document.getElementById('latitude').innerText = 'Latitude: ' + station['latitude'];
-                document.getElementById('longitude').innerText = 'Longitude: ' + station['longitude'];
-                document.getElementById('elevation').innerText = 'Elevation: ' + station['elevation'] + "m";
-                // Show popup of that station on display
                 marker.fire('click');
             }
-            // Add click event listener to update station information on click
+            // Add click event listener to update station name and code on click
             marker.on('click', function() {
                 document.getElementById('station-name-code').innerText = station.name + " - #" + station.id;
-                document.getElementById('latitude').innerText = 'Latitude: ' + station.latitude;
-                document.getElementById('longitude').innerText = 'Longitude: ' + station.longitude;
-                document.getElementById('elevation').innerText = 'Elevation: ' + station.elevation + "m";
             });
         });
     })
