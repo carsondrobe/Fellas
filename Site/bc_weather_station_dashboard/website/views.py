@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
+# Using a Dummy User for now
+test_feedback_user, created = User.objects.get_or_create(username="test_feedback_user")
+
 
 # Create your views here.
 # @login_required
@@ -60,7 +63,6 @@ def submit_feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
         # Using a Dummy User for now
-        test_feedback_user = User.objects.create(username="testuser")
         if form.is_valid():
             feedback = Feedback(
                 message=form.cleaned_data["feedback"],
