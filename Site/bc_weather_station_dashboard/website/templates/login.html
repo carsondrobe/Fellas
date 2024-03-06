@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card bg-light p-3 m-5">
+            <h2 class="text-center">Login</h2>
+            <div class="row justify-content-center">
+                <form class="col-lg-6 col-md-8 col-sm-10" action="{% url 'login' %}" method="post" onsubmit="return validateForm()">
+                    {% csrf_token %}  
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Login</button>
+                </form>
+            </div>
+            <div class="btn-container mt-3 row justify-content-center">
+                <a href="/register" class="btn btn-primary mr-3">Register</a>
+                <a href="/forgot-password" class="btn btn-danger">Forgot Password</a>
+            </div>
+        </div>
+    </div>
+    <script src="../static/login.js"></script>
+</body>
+</html>
