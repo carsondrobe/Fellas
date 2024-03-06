@@ -55,13 +55,16 @@ def weather_stations_data(request):
     return JsonResponse(data, safe=False)
 
 
+# TODO: Add a decorator to require login
 def submit_feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
+        # Using a Dummy User for now
         test_feedback_user = User.objects.create(username="testuser")
         if form.is_valid():
             feedback = Feedback(
                 message=form.cleaned_data["feedback"],
+                # TODO: Replace with the actual user
                 user=test_feedback_user,
                 status=Feedback.SUBMITTED,
             )
