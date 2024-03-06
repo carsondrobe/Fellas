@@ -8,6 +8,7 @@ from .models import WeatherStation, Feedback
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 # Using a Dummy User for now
 test_feedback_user, created = User.objects.get_or_create(username="test_feedback_user")
@@ -59,6 +60,8 @@ def weather_stations_data(request):
 
 
 # TODO: Add a decorator to require login
+# TODO: Reenable csrf protection
+@csrf_exempt
 def submit_feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
