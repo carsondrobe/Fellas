@@ -66,6 +66,9 @@ def submit_feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
         # Using a Dummy User for now
+        test_feedback_user, created = User.objects.get_or_create(
+            username="test_feedback_user"
+        )
         if form.is_valid():
             feedback = Feedback(
                 message=form.cleaned_data["feedback"],
