@@ -7,8 +7,12 @@ from .models import WeatherStation
 
 
 # Create your views here.
-def home(request):
-    return render(request, "home.html", {})
+def home(request): # Default weather page
+    return render(request, "weather.html", {})
+
+
+def fire(request):
+    return render(request, "fire.html", {})
 
 
 def weather_stations_data(request):

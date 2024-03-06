@@ -24,4 +24,6 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("weather_stations_data/", weather_stations_data, name="weather_stations_data"),
     path("submit_feedback/", views.submit_feedback, name="submit_feedback"),
+    path("weather", views.home, name="weather"),
+    path("fire/", views.fire, name="fire"),
 ]

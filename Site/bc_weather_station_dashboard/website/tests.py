@@ -297,7 +297,7 @@ class SubmitFeedbackTests(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(
             response.status_code, 200
-        )  # Check if it renders the home.html template
+        )  # Check if it renders the weather.html template
 
         # TODO: Add assertions to check if the form is passed to the template context
 
@@ -306,7 +306,7 @@ class SubmitFeedbackTests(TestCase):
         response = self.client.get(url)
         self.assertEqual(
             response.status_code, 200
-        )  # Check if it renders the home.html template
+        )  # Check if it renders the weather.html template
 
         # TODO: Add assertions to check if the form is passed to the template context
 
