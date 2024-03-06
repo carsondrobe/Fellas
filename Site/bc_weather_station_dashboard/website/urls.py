@@ -22,7 +22,7 @@ from .views import weather_stations_data
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path('login/', views.login, name='login')
+    path("login/", views.login, name="login"),
     path("weather_stations_data/", weather_stations_data, name="weather_stations_data"),
     path("submit_feedback/", views.submit_feedback, name="submit_feedback"),
 ]
