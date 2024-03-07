@@ -66,6 +66,7 @@
                 <!-- If user is not logged in, hide the link -->
                 {% else %}
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Log in</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#registerModal">Register</a>
                 {% endif %}
             </div>
         </div>
@@ -198,6 +199,39 @@
                         <div class="mt-3 mb-3">
                             <button type="submit" class="btn btn-primary">Login</button>
                             <a href="#" class="btn btn-secondary float-right" >Reset Password</a>
+                        </div>
+                    </form>
+                </div>
+                <script src="../static/forms.js"></script>
+            </div>
+        </div>
+    </div>
+
+    <!-- register popup -->
+    <div class="modal" id="registerModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create Account</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="row justify-content-center">
+                    <form class="col-lg-8 col-md-8 col-sm-10" action="{% url 'register' %}" method="post" onsubmit="return validateRegisterForm()">
+                        {% csrf_token %}
+                        <div class="mb-3 mt-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" name="password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="password">
+                        </div>
+                        <div class="mt-3 mb-3">
+                            <button type="submit" class="btn btn-primary">Register</button>
                         </div>
                     </form>
                 </div>

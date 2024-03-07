@@ -28,3 +28,31 @@ function validateFeedbackForm() {
     }
     return true;
 }
+
+function validateRegisterForm() {
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (email === '' || password === '') {
+        alert('Please fill in all fields');
+        return false;
+    }
+
+    if (email.indexOf('@') === -1) {
+        alert('Invalid email address');
+        return false;
+    }
+
+    if (password.length < 8) {
+        alert('Password must be at least 8 characters long');
+        return false;
+    }
+
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return false;
+    }
+
+    return true;
+}

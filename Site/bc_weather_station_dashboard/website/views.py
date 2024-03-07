@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 from .forms import FeedbackForm
@@ -34,6 +35,22 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
+    return redirect(reverse('home'))
+
+def register(request):
+    print("register", request.POST)
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    if not email or not password:
+        return HttpResponse('Please fill in all fields', status=400)
+
+    # Create the user
+    user = User.objects.create_user(email, email, password)
+    user.save()
+    # Log the user in
+    login(request, user)
+    # Redirect to the home page
+
     return redirect(reverse('home'))
 
 def weather_stations_data(request):
