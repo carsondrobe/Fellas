@@ -1,36 +1,45 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 
 from .forms import FeedbackForm
 from django.http import JsonResponse
-from .models import WeatherStation
+from .models import WeatherStation, Feedback
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+
+# Using a Dummy User for now
+test_feedback_user, created = User.objects.get_or_create(username="test_feedback_user")
 
 
 # Create your views here.
+# @login_required
 def home(request):
     return render(request, "home.html", {})
-  
+
+
 def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         if not username or not password:
-            return HttpResponse('Please fill in all fields', status=400)
-        
+            return HttpResponse("Please fill in all fields", status=400)
+
         # Authenticate the user
         user = authenticate(request, username=username, password=password)
         if user is not None:
             # User is valid, log them in
             login(request, user)
             # Redirect to the home page
-            return redirect(reverse('home'))
+            return redirect(reverse("home"))
         else:
             # Invalid username or password
-            return HttpResponse('Invalid username or password', status=400)
-    
-    return render(request, 'login.html')
+            return HttpResponse("Invalid username or password", status=400)
+
+    return render(request, "login.html")
+
 
 def weather_stations_data(request):
     stations = WeatherStation.objects.all()
@@ -50,14 +59,25 @@ def weather_stations_data(request):
     return JsonResponse(data, safe=False)
 
 
+# TODO: Add a decorator to require login
+# TODO: Reenable csrf protection
+@csrf_exempt
 def submit_feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
+        # Using a Dummy User for now
+        test_feedback_user, created = User.objects.get_or_create(
+            username="test_feedback_user"
+        )
         if form.is_valid():
-            # TODO: Save the feedback to the database
-            # For right now just prints the feedback to the console
-            print(form.cleaned_data["feedback"])
+            feedback = Feedback(
+                message=form.cleaned_data["feedback"],
+                # TODO: Replace with the actual user
+                user=test_feedback_user,
+                status=Feedback.SUBMITTED,
+            )
+            feedback.save()
+
             return redirect("home")
-    else:
-        form = FeedbackForm()
+
     return redirect("home")

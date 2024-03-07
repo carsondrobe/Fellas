@@ -187,8 +187,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <form method="post" action="{% url 'submit_feedback' %}" autocomplete="off"
-                        onsubmit="return validateForm()">
+                    <form method="post" action="{% url 'submit_feedback' %}" autocomplete="off">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Feedback:</label>
@@ -198,20 +197,11 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
+
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
-                <script>
-                    function validateForm() {
-                        var feedback = document.getElementById('exampleFormControlTextarea1').value;
-                        if (feedback.trim() === '') {
-                            alert('Feedback is empty. Please enter your feedback.');
-                            return false;
-                        }
-                        return true;
-                    }
-                </script>
             </div>
         </div>
     </div>
