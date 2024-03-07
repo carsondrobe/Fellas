@@ -1,10 +1,11 @@
 // Assume value is retrieved from the database and passed to the template
-let value = 92; // Example value
+const value = 92; // Example value
+let position = value;
 
-if (value > 100) {
-    value = 100;
-} else if (value < 0) {
-    value = 0;
+if (position > 100) {
+    position = 100;
+} else if (position < 0) {
+    position = 0;
 }
   
 // Get the arrow and arrow value elements
@@ -15,9 +16,9 @@ const arrowValue = document.getElementById('arrowValue');
 let topPosition;
 
 if (value < 80) {
-    topPosition = 'calc(' + (100 - (value / 80) * 60) + '% - 15px)'; // Calculate the top position
+    topPosition = 'calc(' + (100 - (position / 80) * 60) + '% - 15px)'; // Calculate the position relative to the top
 } else {
-    topPosition = 'calc(' + (100 - value) * 2 + '% - 15px)'; // Calculate the top position
+    topPosition = 'calc(' + (100 - position) * 2 + '% - 15px)'; // Calculate the position position relative to the top
 
 }
 
