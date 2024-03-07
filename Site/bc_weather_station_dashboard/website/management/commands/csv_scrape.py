@@ -56,7 +56,7 @@ class Command(BaseCommand):
         """Handles the command, calls the other methods. You can change the date range here."""
         # Create a date range for when you want to scrape the data
         start_date = date(2024, 3, 2) # Change the start date (make sure this start_date and end_date are in the same year)
-        end_date = date(2024, 3, 5) # Change the end date
+        end_date = date(2024, 3, 6) # Change the end date
         delta = timedelta(days=1)
         dates = []
         while start_date <= end_date:
