@@ -1,5 +1,5 @@
 // Initialize map to open a focus around startup weather station
-const map = L.map('map').setView([51, -121], 7);
+const map = L.map('map').setView([51, -121], 6);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
 }).addTo(map);
@@ -15,12 +15,16 @@ const markerIcon = L.icon({
 });
 
 // Create variable to hold current station's station code
-var currentStationCode = 302;
-
+var currentStationCode;
+var weatherStations;
 // Fetch weather station information from Django backend
 fetch('/weather_stations_information/')
     .then(response => response.json())
     .then(data => {
+        // Set weatherStations to data
+        weatherStations = data;
+        // Set closest station to open on startup
+        checkLocation();
         // Create a marker for each weather station with a popup of information
         data.forEach(station => {
             var marker = L.marker([station.latitude, station.longitude], {icon: markerIcon})
@@ -35,12 +39,6 @@ fetch('/weather_stations_information/')
                     `<b>Elevation: ${station.elevation}m</b><br>` +
                     `<b>Install Date: ${station.install_date}</b>`
                 );
-            // Set HTML elements to show information of weather station with station code of currentStationCode on start with its popup activated
-            if(station.code == currentStationCode) {
-                document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
-                updateData(currentStationCode);
-                marker.fire('click');
-            }
             // Add click event listener to update station name and code on click
             marker.on('click', function() {
                 currentStationCode = station.code;
@@ -60,7 +58,7 @@ function updateData(stationCode) {
         var year = new Date().getFullYear();
         var month = (new Date().getMonth() + 1).toString().padStart(2, '0');
         var day = new Date().getDate().toString().padStart(2, '0');
-        datePicker = `${year}-${month}-${day}` + " 12:00:00";
+        datePicker = `${year}-${month}-${day}`;
     }
     var selectedDate = datePicker + " 12:00:00";
     // Fetch all of the data for the clicked station
@@ -147,3 +145,83 @@ document.getElementById('map').addEventListener('click', function() {
     // Only need to update the HTML since date time is not changing
     updateDataHTML(currentStationCode);
 });
+
+// Function to check if geolocation is available
+function checkLocation() {
+    // If geolocation is available
+    if(navigator.geolocation) {
+        // Get current location of user
+        navigator.geolocation.getCurrentPosition(getClosestStation);
+    } else {
+        // geolocation is not available
+        console.log("Geolocation is not available on this browser.");
+    }
+}
+
+// Function to get user's location 
+function getClosestStation(position) {
+    // Get user's longitude and latitude and set max
+    var userLongitude = position.coords.longitude;
+    var userLatitude = position.coords.latitude;
+    var closestStationID;
+    var closestStationCode;
+    var closestStationName;
+    var closestStationAcronym;
+    var closestStationLatitude;
+    var closestStationLongitude;
+    var closestStationElevation;
+    var closestStationInstallDate;
+    var max = Number.MAX_VALUE;
+    // Go through all of the weather stations
+    weatherStations.forEach(station => {
+        // Get stations longitude and latitude
+        var stationLongitude = station.longitude;
+        var stationLatitude = station.latitude;
+        // Compute distance between two points
+        var tempDistance = computeDistance(userLongitude, userLatitude, stationLongitude, stationLatitude);
+        // If tempDistance is less than max, this station code is equal to closestStationCode
+        if(tempDistance < max) {
+            // Save all fields of this weather station
+            max = tempDistance;
+            currentStationCode = station.code;
+            closestStationID = station.id;
+            closestStationCode = station.code;
+            closestStationName = station.name;
+            closestStationAcronym = station.acronym;
+            closestStationLongitude = stationLongitude;
+            closestStationLatitude = stationLatitude;
+            closestStationElevation = station.elevation;
+            closestStationInstallDate = station.install_date; 
+        }
+    });
+    // Add current station's marker to the map
+    var marker = L.marker([closestStationLatitude, closestStationLongitude], {icon: markerIcon})
+        .addTo(map)
+        .bindPopup(
+            `<b>Station ID: ${closestStationID}</b><br>` +
+            `<b>Station Code: ${closestStationCode}</b><br>` +
+            `<b>Station Name: ${closestStationName}</b><br>` +
+            `<b>Station Acronym: ${closestStationAcronym}</b><br>` +
+            `<b>Latitude: ${closestStationLatitude}</b><br>` +
+            `<b>Longitude: ${closestStationLongitude}</b><br>` +
+            `<b>Elevation: ${closestStationElevation}m</b><br>` +
+            `<b>Install Date: ${closestStationInstallDate}</b>`
+        );
+        // Add current station's name and code to the dashboard
+        document.getElementById('station-name-code').innerText = closestStationName + " - #" + closestStationCode;
+        // Display current station's data
+        updateData(currentStationCode);
+        // Open current station's popup
+        marker.fire('click');
+}
+
+// Function to compute the distance between 2 points using longitude and latitude
+function computeDistance(longitude1, latitude1, longitude2, latitude2) {
+    // Set variables to compute distance using Haversine equation
+    var radius = 6371;
+    var distLongitude = (longitude2-longitude1) * (Math.PI/180);
+    var distLatitude = (latitude2 - latitude1) * (Math.PI/180);
+    var a = Math.sin(distLatitude/2) * Math.sin(distLatitude/2) + Math.cos((latitude1) * (Math.PI/180)) * Math.cos((latitude2)* (Math.PI/180)) *  Math.sin(distLongitude/2) * Math.sin(distLongitude/2);
+    var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return radius * b;
+}
