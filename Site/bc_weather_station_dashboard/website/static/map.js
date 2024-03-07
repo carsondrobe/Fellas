@@ -207,12 +207,18 @@ function getClosestStation(position) {
             `<b>Elevation: ${closestStationElevation}m</b><br>` +
             `<b>Install Date: ${closestStationInstallDate}</b>`
         );
+        // Add click event listener to update station name and code on click
+        marker.on('click', function() {
+            currentStationCode = closestStationCode;
+            document.getElementById('station-name-code').innerText = closestStationName + " - #" + closestStationCode;
+            updateData(currentStationCode);
+        });
+        // Open current station's popup
+        marker.fire('click');
         // Add current station's name and code to the dashboard
         document.getElementById('station-name-code').innerText = closestStationName + " - #" + closestStationCode;
         // Display current station's data
         updateData(currentStationCode);
-        // Open current station's popup
-        marker.fire('click');
 }
 
 // Function to compute the distance between 2 points using longitude and latitude
