@@ -9,8 +9,8 @@ from .models import WeatherStation
 
 
 # Create your views here.
-def home(request):
-    return render(request, "home.html", {})
+def home(request, *args, **kwargs):
+    return render(request, "home.html", kwargs)
   
 def login_user(request):
     if request.method == 'POST':
@@ -28,7 +28,7 @@ def login_user(request):
             return redirect(reverse('home'))
         else:
             # Invalid username or password
-            return HttpResponse('Invalid username or password', status=400)
+            return home(request, error='Invalid username or password')
     
     return render(request, 'home')
 
