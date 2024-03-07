@@ -1,5 +1,5 @@
 // Assume value is retrieved from the database and passed to the template
-let value = 100; // Example value
+let value = 92; // Example value
 
 if (value > 100) {
     value = 100;
@@ -15,9 +15,9 @@ const arrowValue = document.getElementById('arrowValue');
 let topPosition;
 
 if (value < 80) {
-    topPosition = 'calc(' + (100 - (value / 80) * 60) + '% - 20px)'; // Calculate the top position
+    topPosition = 'calc(' + (100 - (value / 80) * 60) + '% - 15px)'; // Calculate the top position
 } else {
-    topPosition = 'calc(' + (100 - value) * 2 + '% - 20px)'; // Calculate the top position
+    topPosition = 'calc(' + (100 - value) * 2 + '% - 15px)'; // Calculate the top position
 
 }
 
