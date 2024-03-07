@@ -77,64 +77,73 @@ function updateData(stationCode) {
 
 // Update HTML elements on right side
 function updateDataHTML(currentStationData) {
+    // Reset all values to "N/A"
+    document.getElementById('temperature').innerHTML = "N/A";
+    document.getElementById('relative-humidity').innerHTML = "N/A";
+    document.getElementById('precipitation').innerHTML = "N/A";
+    document.getElementById('snow-depth').innerHTML = "N/A";
+    document.getElementById('snow-quality').innerHTML = "N/A";
+    document.getElementById('wind-speed').innerHTML = "N/A";
+    document.getElementById('wind-direction').innerHTML = "N/A";
+    document.getElementById('wind-gust').innerHTML = "N/A";
     // Update the HTML elements with the station's temperature data
     if (currentStationData.HOURLY_TEMPERATURE) {
         document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE + " &deg;C";
-    } else {
-        document.getElementById('temperature').innerHTML = "...";
     }
 
     // Update the HTML elements with the station's relative humidity data
     if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
         document.getElementById('relative-humidity').innerHTML = currentStationData.HOURLY_RELATIVE_HUMIDITY + " %";
-    } else {
-        document.getElementById('relative-humidity').innerHTML = "...";
     }
 
     // Update the HTML elements with the station's precipitation data
     if (currentStationData.HOURLY_PRECIPITATION) {
         document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
-    } else {
-        document.getElementById('precipitation').innerHTML = "...";
     }
 
     // Update the HTML elements with the station's snow depth data
     if (currentStationData.SNOW_DEPTH) {
         document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
-    } else {
-        document.getElementById('snow-depth').innerHTML = "...";
     }
 
     // Update the HTML elements with the station's snow quality data
     if (currentStationData.SNOW_DEPTH_QUALITY) {
         document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
-    } else {
-        document.getElementById('snow-quality').innerHTML = "...";
     }
 
     // Update the HTML elements with the station's wind speed data
     if (currentStationData.HOURLY_WIND_SPEED) {
         document.getElementById('wind-speed').innerHTML = currentStationData.HOURLY_WIND_SPEED + " km/h";
-    } else {
-        document.getElementById('wind-speed').innerHTML = "...";
     }
 
     // Update the HTML elements with the station's wind direction data
     if (currentStationData.HOURLY_WIND_DIRECTION) {
         document.getElementById('wind-direction').innerHTML = currentStationData.HOURLY_WIND_DIRECTION + "&deg;";
-    } else {
-        document.getElementById('wind-direction').innerHTML = "...";
     }
 
     // Update the HTML elements with the station's wind gust data
     if (currentStationData.HOURLY_WIND_GUST) {
         document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
-    } else {
-        document.getElementById('wind-gust').innerHTML = "...";
     }
 }
 
-// Add event listener for date picker
+// Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
 document.getElementById('date_selector').addEventListener('change', function() {
+    // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
+    document.getElementById('temperature').innerHTML = "N/A";
+    document.getElementById('relative-humidity').innerHTML = "N/A";
+    document.getElementById('precipitation').innerHTML = "N/A";
+    document.getElementById('snow-depth').innerHTML = "N/A";
+    document.getElementById('snow-quality').innerHTML = "N/A";
+    document.getElementById('wind-speed').innerHTML = "N/A";
+    document.getElementById('wind-direction').innerHTML = "N/A";
+    document.getElementById('wind-gust').innerHTML = "N/A";
+    // Update all data since date time is changing
     updateData(currentStationCode);
+});
+
+// Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
+document.getElementById('map').addEventListener('click', function() {
+    // Only need to update the HTML since date time is not changing
+    updateDataHTML(currentStationCode);
 });
