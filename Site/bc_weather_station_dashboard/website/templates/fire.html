@@ -18,6 +18,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+    <!-- CSS for widgets -->
+    <link rel="stylesheet" type="text/css" href="{% static 'danger_rating.css' %}">
+
     <title>Dashboard</title>
 
 
@@ -86,11 +89,19 @@
                 </div>
 
                 <!-- Row 3 -->
-                <div class="row pt-4 justify-content-center">
-                    <!-- FWI Card -->
-                    <div class="col-md-8">
-                        <div class="card ">
-                            <img src="{%  static 'placeholder_widgets/FWI.png' %}" width="100%">
+                <div class="row justify-content-center pt-4">
+                    <!-- Danger Rating Card -->
+                    <div class="col-md-10">
+                        <div class="card text-center p-2">
+                            <h5 class="card-title">Fire Danger Rating</h5>
+                            <div class="">
+                                <div class="box low">LOW</div>
+                                <div class="box moderate">MODERATE</div>
+                                <div class="box high">HIGH</div>
+                                <div class="box extreme">EXTREME</div>
+                            </div>
+                            <div class="line mt-1"></div>
+                            <div class="arrowDR" id="arrowDR"></div>
                         </div>
                     </div>
                 </div>
@@ -158,6 +169,9 @@
 {#            $("#navbar").load("/website/templates/navbar.html");#}
 {#        });#}
 {#    </script>#}
+
+    <!-- JS for widgets -->
+    <script src="{% static 'danger_rating.js' %}"></script>
 </body>
 
 </html>
