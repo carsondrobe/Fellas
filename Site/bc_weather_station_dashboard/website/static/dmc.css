@@ -1,5 +1,5 @@
 .widget {
-    width: 200px;
+    width: 170px;
   }
 .axis-widget {
     border: none;
@@ -11,7 +11,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 25%;
+    left: 35px;
     width: 3px;
   }
 
@@ -52,17 +52,17 @@
   }
   .arrow {
     position: absolute;
-    right: 40%;
+    right: 70px;
     width: 0;
     height: 0;
-    border-top: 20px solid transparent;
-    border-bottom: 20px solid transparent;
-    border-right: 30px solid black; /* Width and color of the arrow */
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 20px solid black; /* Width and color of the arrow */
   }
   .arrow-value {
     position: absolute;
     top: -3px;
-    left: 45px; /* Position the value 30px to the left of the arrow */
+    left: 30px; /* Position the value 30px to the left of the arrow */
     transform: translateY(-50%);
     font-size: 30px;
     color: black;
