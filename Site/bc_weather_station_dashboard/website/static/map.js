@@ -60,7 +60,7 @@ function updateData(stationCode) {
         var year = new Date().getFullYear();
         var month = (new Date().getMonth() + 1).toString().padStart(2, '0');
         var day = new Date().getDate().toString().padStart(2, '0');
-        datePicker = `${year}-${month}-${day}` + " 12:00:00";
+        datePicker = `${year}-${month}-${day}`;
     }
     var selectedDate = datePicker + " 12:00:00";
     // Fetch all of the data for the clicked station
