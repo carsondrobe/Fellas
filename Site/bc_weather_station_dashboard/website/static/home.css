@@ -18,3 +18,13 @@
     opacity: 0.5;
     cursor: pointer;
 }
+
+/* For the cards */
+.muted-white {
+    color: #f8f9fa57;
+}
+
+.less-prominent {
+    color: #dddddddd;
+    font-weight: normal;
+}
