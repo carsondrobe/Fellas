@@ -88,7 +88,7 @@ function updateDataHTML(currentStationData) {
     document.getElementById('wind-gust').innerHTML = "N/A";
     // Update the HTML elements with the station's temperature data
     if (currentStationData.HOURLY_TEMPERATURE) {
-        document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE + " &deg;C";
+        document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
     }
 
     // Update the HTML elements with the station's relative humidity data
