@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
@@ -8,19 +8,21 @@ from django.http import JsonResponse
 from .models import WeatherStation
 
 
-def home(request):
-    return render(request, "home.html", {})
-  
+def weather(request):
+    return render(request, "weather.html", {})
+
+
 def fire(request):
     return render(request, "fire.html", {})
-  
+
+
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         if not username or not password:
             return HttpResponse('Please fill in all fields', status=400)
-        
+
         # Authenticate the user
         user = authenticate(request, username=username, password=password)
         if user is not None:
@@ -31,8 +33,9 @@ def login(request):
         else:
             # Invalid username or password
             return HttpResponse('Invalid username or password', status=400)
-    
+
     return render(request, 'login.html')
+
 
 def weather_stations_data(request):
     stations = WeatherStation.objects.all()
