@@ -9,7 +9,7 @@ from .models import WeatherStation
 
 
 def home(request):
-    return render(request, "home.html", {})
+    return render(request, "weather.html", {})
   
 def fire(request):
     return render(request, "fire.html", {})
