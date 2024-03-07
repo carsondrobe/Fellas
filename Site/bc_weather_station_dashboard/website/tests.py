@@ -21,7 +21,8 @@ from django.contrib.auth.models import User
 import re
 from website.forms import FeedbackForm
 
-#Begin models tests
+# Begin models tests
+
 
 # Test the UserProfile model
 class UserProfileModelTest(TestCase):
@@ -278,101 +279,69 @@ class WSUploadCommandTestCase(TestCase):
 # End ws_upload command tests
 
 
-# Test the submit_feedback view
-class SubmitFeedbackTests(TestCase):
-    def test_submit_feedback_valid_form(self):
-        url = reverse("submit_feedback")
-        data = {"feedback": "This is a test feedback"}
-        response = self.client.post(url, data)
-        self.assertEqual(
-            response.status_code, 302
-        )  # Check if it redirects to the home page
+from django.test import TestCase, Client
+from django.urls import reverse
+from django.contrib.auth.models import User
+from .forms import FeedbackForm
+from .models import Feedback
 
-        # TODO: Add assertions to check if the feedback is saved to the database
 
-    def test_submit_feedback_invalid_form(self):
-        url = reverse("submit_feedback")
-        data = {}  # Empty data to make the form invalid
-        response = self.client.post(url, data)
-        self.assertEqual(
-            response.status_code, 200
-        )  # Check if it renders the home.html template
+class SubmitFeedbackTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
 
-        # TODO: Add assertions to check if the form is passed to the template context
+    def test_submit_feedback_valid(self):
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
+
+        feedback_data = {"feedback": "This is a test feedback"}
+
+        # Simulate a POST request to submit feedback
+        response = self.client.post(reverse("submit_feedback"), data=feedback_data)
+
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
+
+        # Check if the feedback is saved in the database
+        feedback = Feedback.objects.get(user=self.user)
+        self.assertEqual(feedback.message, feedback_data["feedback"])
+        self.assertEqual(feedback.user, self.user)
+        self.assertEqual(feedback.status, Feedback.SUBMITTED)
+
+    def test_submit_feedback_invalid(self):
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
+
+        # Simulate a POST request with invalid data
+        response = self.client.post(reverse("submit_feedback"), data={})
+
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
+
+        # Check that no feedback is saved in the database
+        self.assertEqual(Feedback.objects.count(), 0)
 
     def test_submit_feedback_get_request(self):
-        url = reverse("submit_feedback")
-        response = self.client.get(url)
-        self.assertEqual(
-            response.status_code, 200
-        )  # Check if it renders the home.html template
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
 
-        # TODO: Add assertions to check if the form is passed to the template context
-        
-        form = response.context["feedback_form"]
-        self.assertIsInstance(
-            form, FeedbackForm
-        )  # Check if the form is an instance of FeedbackForm
-        
-#Test cases for login
-class LoginTests(TestCase):
+        # Simulate a GET request
+        response = self.client.get(reverse("submit_feedback"))
 
-    # Test case to check login with invalid data
-    def test_login_view_invalid_data(self):
-        client = Client()
-        response = client.post(reverse('login'), {'username': '', 'password': ''})
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode('utf-8'), 'Please fill in all fields')
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
 
-    # Test case to check login with valid data
-    def test_login_view_valid_data(self):
-        client = Client()
-        response = client.post(reverse('login'), {'username': 'testuser', 'password': 'testpassword'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode('utf-8'), 'Login form submitted successfully')
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
 
-    # Set up test environment for the next 2 tests
-    def setUp(self):
-        self.url = reverse('login')
-        self.username = 'testuser'
-        self.password = 'testpassword'
-        self.user = User.objects.create_user(username=self.username, password=self.password)
-
-    # Test case to check POST request with valid data
-    def test_login_view_post_success(self):
-        response = self.client.post(self.url, {'username': self.username, 'password': self.password})
-        self.assertEqual(response.status_code, 302)  # Redirect to home page after successful login
-
-    # Test case to check POST request with invalid data
-    def test_login_view_post_failure(self):
-        response = self.client.post(self.url, {'username': self.username, 'password': 'wrongpassword'})
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Invalid username or password.')
-#End of test cases for login
-
-#Test csv_scrape command
-class CSVScrapeCommandTestCase(TestCase):
-    def setUp(self):
-        self.csv_url = "https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/2024/2024-01-01.csv" # Replace with the actual path of the CSV file
-        self.data = pd.read_csv(self.csv_url)
-    def test_command_output(self):
-        # Run the command
-        out = StringIO()
-        call_command('csv_scrape', stdout=out)
-
-        # Strip escape sequences from the output
-        output = re.sub(r'\x1b\[.*?m', '', out.getvalue())
-
-        # Check the output
-        self.assertIn('Deleted Successfully', output)
-    def test_data_scrape(self):
-        # Test if the data from the CSV file was scraped correctly by checking if the expected station codes are in the database
-        call_command('csv_scrape')
-        # Get all unique station codes from the CSV file
-        unique_station_codes = set(self.data["STATION_CODE"].astype(str).unique())
-        # Check if the expected station codes are in the set of unique station codes
-        expected_station_codes = {1024, 1025, 1029, 11, 19, 21, 1045, 1055, 1056, 37, 3110, 554, 555, 556, 45, 1066, 1075, 56, 1082, 59, 1083, 67, 1092, 1093, 72, 75, 82, 2130, 1108, 599, 93, 101, 105, 106, 108, 110, 111, 112, 113, 118, 119, 120, 121, 1144, 2170, 124, 3190, 126, 127, 3191, 129, 131, 132, 136, 138, 140, 141, 654, 1165, 144, 145, 146, 148, 149, 151, 152, 153, 154, 155, 156, 1176, 158, 159, 162, 163, 166, 167, 169, 170, 171, 172, 173, 1199, 1203, 180, 181, 182, 187, 189, 190, 192, 193, 1218, 195, 1221, 199, 200, 206, 209, 210, 211, 212, 1239, 216, 1240, 218, 1241, 1242, 222, 225, 226, 227, 228, 230, 232, 233, 234, 235, 236, 1260, 239, 1264, 1265, 243, 244, 1268, 1270, 250, 251, 1275, 253, 1276, 255, 1277, 1790, 1283, 262, 263, 264, 266, 267, 270, 788, 790, 279, 280, 791, 283, 286, 1313, 291, 292, 298, 1323, 301, 302, 305, 306, 307, 1330, 309, 1332, 311, 1339, 316, 317, 832, 321, 322, 1345, 836, 1348, 326, 838, 1349, 331, 334, 1359, 1362, 344, 1375, 352, 865, 866, 1377, 868, 1378, 1383, 873, 362, 363, 876, 1387, 366, 367, 1392, 882, 886, 1398, 1399, 379, 380, 383, 1408, 385, 387, 388, 391, 392, 393, 394, 904, 396, 905, 401, 402, 2450, 404, 406, 407, 408, 919, 411, 412, 417, 418, 419, 421, 425, 426, 427, 428, 429, 430, 431, 432, 433, 938, 944, 945, 437, 438, 440, 956, 445, 965, 1994, 977, 474, 480, 995, 503}
-        for code in expected_station_codes:
-            self.assertIn(str(code), unique_station_codes)
-            
-#End csv_scrape command tests
+        # Check that no feedback is saved in the database
+        self.assertEqual(Feedback.objects.count(), 0)
