@@ -18,6 +18,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
+    <!-- CSS for widgets -->
+    <link rel="stylesheet" type="text/css" href="{% static 'dmc.css' %}">
+
     <title>Dashboard</title>
 
 
@@ -56,8 +59,27 @@
                     <div class="col-md-1"></div> {# Spacer #}
                     <!-- DMC Card -->
                     <div class="col-md-3">
-                        <div class="card">
-                            <img src="{%  static 'placeholder_widgets/DMC.png' %}">
+                        <div class="card text-center widget p-2">
+                            <h5 class="card-title">Duff Moisture Code</h5>
+                            <div class="axis-widget mt-3 mb-4">
+                                <div class="axis" id="axis">
+                                    <!-- Color-coded segments -->
+                                    <div class="segment red" style="height: 22.5%; top: 0;"></div>
+                                    <div class="segment orange" style="height: 26.25%; top: 22.5%;"></div>
+                                    <div class="segment yellow" style="height: 17.5%; top: 48.75%;"></div>
+                                    <div class="segment blue" style="height: 18.75%; top: 66.25%;"></div>
+                                    <div class="segment green" style="height: 15%; top: 85%;"></div>
+                                    <!-- Ticks -->
+                                    <div class="tick" style="top: 100%;"><label>0</label></div>
+                                    <div class="tick" style="top: 85%;"><label>12</label></div>
+                                    <div class="tick" style="top: 66.25%;"><label>27</label></div>
+                                    <div class="tick" style="top: 48.75%;"><label>41</label></div>
+                                    <div class="tick" style="top: 22.5%;"><label>62</label></div>
+                                </div>
+                                <div class="arrow" id="arrow">
+                                    <div class="arrow-value" id="arrowValue"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-1"></div>{# Spacer #}
@@ -158,6 +180,9 @@
 {#            $("#navbar").load("/website/templates/navbar.html");#}
 {#        });#}
 {#    </script>#}
+
+    <!-- JS for widgets -->
+    <script src="{% static 'dmc.js' %}"></script>
 </body>
 
 </html>
