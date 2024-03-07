@@ -1,5 +1,5 @@
 .widget {
-    width: 200px;
+    width: 170px;
   }
 .axis-widget {
     border: none;
@@ -11,7 +11,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 25%;
+    left: 35px;
     width: 3px;
   }
 
@@ -52,7 +52,7 @@
   }
   .arrow {
     position: absolute;
-    right: 50%;
+    right: 70px;
     width: 0;
     height: 0;
     border-top: 15px solid transparent;
