@@ -20,6 +20,7 @@
 
     <!-- CSS for widgets -->
     <link rel="stylesheet" type="text/css" href="{% static 'dmc.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dc.css' %}">
 
     <title>Dashboard</title>
 
@@ -83,10 +84,29 @@
                         </div>
                     </div>
                     <div class="col-md-1"></div>{# Spacer #}
-                    <!-- FFMC Card -->
+                    <!-- DC Card -->
                     <div class="col-md-3">
-                        <div class="card">
-                            <img src="{%  static 'placeholder_widgets/DC.png' %}">
+                        <div class="card text-center widget p-2">
+                            <h5 class="card-title">Drought Code</h5>
+                            <div class="axis-widget mt-3 mb-4">
+                                <div class="axis" id="axis">
+                                    <!-- Color-coded segments -->
+                                    <div class="segment red" style="height: 28%; top: 0;"></div>
+                                    <div class="segment orange" style="height: 17%; top: 28%;"></div>
+                                    <div class="segment yellow" style="height: 8%; top: 45%;"></div>
+                                    <div class="segment blue" style="height: 31%; top: 53%;"></div>
+                                    <div class="segment green" style="height: 16%; top: 84%;"></div>
+                                    <!-- Ticks -->
+                                    <div class="tick" style="top: 100%;"><label>0</label></div>
+                                    <div class="tick" style="top: 84%;"><label>80</label></div>
+                                    <div class="tick" style="top: 53%;"><label>210</label></div>
+                                    <div class="tick" style="top: 45%;"><label>275</label></div>
+                                    <div class="tick" style="top: 28%;"><label>360</label></div>
+                                </div>
+                                <div class="arrow" id="arrow">
+                                    <div class="arrow-value" id="arrowValue"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -183,6 +203,7 @@
 
     <!-- JS for widgets -->
     <script src="{% static 'dmc.js' %}"></script>
+    <script src="{% static 'dc.js' %}"></script>
 </body>
 
 </html>
