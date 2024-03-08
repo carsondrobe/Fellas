@@ -25,12 +25,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'dc.css' %}">
 
     <title>Dashboard</title>
-
-
 </head>
 
 <body>
-
     <!-- NAVBAR -->
     {% include 'navbar.html' %}
 
@@ -169,53 +166,15 @@
         </div>
     </div>
 
+    <!-- Popups -->
+    {% include 'modals.html' %}
+
     <!-- Swap pages button -->
     <a href="{% url 'weather' %}">
         <img id="swapPageIcon" src="{%  static 'weather_icon.svg' %}" alt="weather_icon" >
     </a>
 
-    <!-- The Modal -->
-    <div class="modal" id="feedbackModal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Submit Feedback</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <form method="post" action="{% url 'submit_feedback' %}" autocomplete="off"
-                        onsubmit="return validateForm()">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Feedback:</label>
-                            <textarea name="feedback" class="form-control" id="exampleFormControlTextarea1"
-                                rows="3"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-                <script>
-                    function validateForm() {
-                        var feedback = document.getElementById('exampleFormControlTextarea1').value;
-                        if (feedback.trim() === '') {
-                            alert('Feedback is empty. Please enter your feedback.');
-                            return false;
-                        }
-                        return true;
-                    }
-                </script>
-            </div>
-        </div>
-    </div>
-
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -223,12 +182,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-{#    <script>#}
-{#        $(function () {#}
-{#            console.log('current path: ' + window.location.pathname);#}
-{#            $("#navbar").load("/website/templates/navbar.html");#}
-{#        });#}
-{#    </script>#}
+    <script>
+        {% if error %}
+            alert("{{error}}");
+        {% endif %}
+    </script>
 
     <!-- JS for widgets -->
     <script src="{% static 'danger_rating.js' %}"></script>

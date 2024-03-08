@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.urls import reverse
 
 from .forms import FeedbackForm
@@ -15,23 +16,23 @@ from django.views.decorators.csrf import csrf_exempt
 test_feedback_user, created = User.objects.get_or_create(username="test_feedback_user")
 
 
-def weather(request):
-    return render(request, "weather.html", {})
+def weather(request, **kwargs):
+    return render(request, "weather.html", kwargs)
 
 
-def fire(request):
-    return render(request, "fire.html", {})
+def fire(request, **kwargs):
+    return render(request, "fire.html", kwargs)
 
 
-def login(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        if not username or not password:
-            return HttpResponse("Please fill in all fields", status=400)
+def login_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        if not email or not password:
+            return HttpResponse('Please fill in all fields', status=400)
 
         # Authenticate the user
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=email, password=password)
         if user is not None:
             # User is valid, log them in
             login(request, user)
@@ -39,9 +40,33 @@ def login(request):
             return redirect(reverse("home"))
         else:
             # Invalid username or password
-            return HttpResponse('Invalid username or password', status=400)
+            return weather(request, error='Invalid username or password')
 
-    return render(request, 'login.html')
+    return render(request, 'home')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect(reverse('home'))
+
+
+def register(request):
+    print("register", request.POST)
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    if not username or not email or not password:
+        return HttpResponse('Please fill in all fields', status=400)
+
+    # Create the user
+    user = User.objects.create_user(username, email, password)
+    user.save()
+    # Log the user in
+    login(request, user)
+    # Redirect to the home page
+
+    return redirect(reverse('home'))
+
 
 def weather_stations_information(request):
     # Get all stations
@@ -64,7 +89,7 @@ def weather_stations_information(request):
         }
         for station in stations
     ]
-    # Return the data as a json resonse
+    # Return the data as a json response
     return JsonResponse(data, safe=False)
 
 
@@ -91,6 +116,7 @@ def submit_feedback(request):
 
     return redirect("home")
 
+
 def station_data(request):
     # Get the selected date from the query
     selected_date = request.GET.get('datetime', None)
@@ -98,8 +124,8 @@ def station_data(request):
     if selected_date == "undefined":
         return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
     # Filter the station data to only retrieve data from specified date
-    data = StationData.objects.filter(DATE_TIME = selected_date)
-     # Check if the data is empty
+    data = StationData.objects.filter(DATE_TIME=selected_date)
+    # Check if the data is empty
     if not data.exists():
         # Return an empty JSON response of an error message indicating no data was found
         return JsonResponse({"error": "No data found for the specified date and time"}, status=404)

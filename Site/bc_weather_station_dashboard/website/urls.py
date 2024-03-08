@@ -23,7 +23,9 @@ from .views import station_data
 
 urlpatterns = [
     path("", views.weather, name="home"),
-    path("login/", views.login, name="login"),
+    path("login/", views.login_user, name="login"),
+    path("logout/", views.logout_user, name="logout"),
+    path("register/", views.register, name="register"),
     path("weather_stations_information/", weather_stations_information, name="weather_stations_information"),
     path("submit_feedback/", views.submit_feedback, name="submit_feedback"),
     path("weather/", views.weather, name="weather"),
