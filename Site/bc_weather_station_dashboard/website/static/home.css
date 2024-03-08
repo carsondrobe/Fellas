@@ -35,3 +35,13 @@
 #swapPageIcon:hover {
     background-color: #9d9d9d;
 }
+
+/* For the cards */
+.muted-white {
+    color: #f8f9fa57;
+}
+
+.less-prominent {
+    color: #dddddddd;
+    font-weight: normal;
+}
