@@ -93,7 +93,7 @@ def station_data(request):
     # Get the selected date from the query
     selected_date = request.GET.get('datetime', None)
     # Check if date is undefined
-    if selected_date is "undefined":
+    if selected_date == "undefined":
         return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
     # Filter the station data to only retrieve data from specified date
     data = StationData.objects.filter(DATE_TIME = selected_date)
