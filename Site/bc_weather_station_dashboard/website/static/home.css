@@ -19,6 +19,23 @@
     cursor: pointer;
 }
 
+#swapPageIcon {
+    width: 5em;
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+    cursor: pointer;
+
+    border:3px solid black;
+    border-radius:75%;
+    -moz-border-radius:75%;
+    -webkit-border-radius:75%;
+}
+
+#swapPageIcon:hover {
+    background-color: #9d9d9d;
+}
+
 /* For the cards */
 .muted-white {
     color: #f8f9fa57;
