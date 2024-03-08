@@ -23,11 +23,13 @@ from .views import station_data
 
 urlpatterns = [
     path("", views.weather, name="home"),
-    path("login/", views.login, name="login"),
+    path("login/", views.login_user, name="login"),
+    path("logout/", views.logout_user, name="logout"),
+    path("register/", views.register, name="register"),
     path("weather_stations_information/", weather_stations_information, name="weather_stations_information"),
     path("submit_feedback/", views.submit_feedback, name="submit_feedback"),
-    path("weather/", views.weather, name="weather"),
-    path("fire/", views.fire, name="fire"),
+    path("", views.weather, name="weather"),
+    path("", views.fire, name="fire"),
     path("station_data/", station_data, name="station_data"),
     path("station_data/<str:datetime>/", views.station_data, name="station_data_with_date"),
 ]

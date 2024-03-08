@@ -17,12 +17,13 @@ from django.views.decorators.csrf import csrf_exempt
 test_feedback_user, created = User.objects.get_or_create(username="test_feedback_user")
 
 
-def weather(request):
-    return render(request, "weather.html", {})
+def weather(request, **kwargs):
+    return render(request, "weather.html", kwargs)
 
 
-def fire(request):
-    return render(request, "fire.html", {})
+def fire(request, **kwargs):
+    return render(request, "fire.html", kwargs)
+
 
 def login_user(request):
     if request.method == 'POST':
@@ -43,14 +44,12 @@ def login_user(request):
             return weather(request, error='Invalid username or password')
 
     return render(request, 'home')
-            return HttpResponse('Invalid username or password', status=400)
 
 
-def weather_stations_information(request):
-    # Get all stations
 def logout_user(request):
     logout(request)
     return redirect(reverse('home'))
+
 
 def register(request):
     print("register", request.POST)
@@ -68,7 +67,9 @@ def register(request):
 
     return redirect(reverse('home'))
 
-def weather_stations_data(request):
+
+def weather_stations_information(request):
+    # Get all stations
     stations = WeatherStation.objects.all()
     # Check if stations is empty
     if not stations.exists():
@@ -88,7 +89,7 @@ def weather_stations_data(request):
         }
         for station in stations
     ]
-    # Return the data as a json resonse
+    # Return the data as a json response
     return JsonResponse(data, safe=False)
 
 
@@ -115,6 +116,7 @@ def submit_feedback(request):
 
     return redirect("home")
 
+
 def station_data(request):
     # Get the selected date from the query
     selected_date = request.GET.get('datetime', None)
@@ -122,8 +124,8 @@ def station_data(request):
     if selected_date == "undefined":
         return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
     # Filter the station data to only retrieve data from specified date
-    data = StationData.objects.filter(DATE_TIME = selected_date)
-     # Check if the data is empty
+    data = StationData.objects.filter(DATE_TIME=selected_date)
+    # Check if the data is empty
     if not data.exists():
         # Return an empty JSON response of an error message indicating no data was found
         return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
