@@ -1,4 +1,4 @@
-// Create new JSDOM object to test home.html and map.js
+// Create new JSDOM object to test weather.html and map.js
 const { JSDOM } = require('jsdom');
 const dom = new JSDOM(`
 {% load static %}

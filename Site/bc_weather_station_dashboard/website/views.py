@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
@@ -14,10 +15,13 @@ from django.views.decorators.csrf import csrf_exempt
 # Using a Dummy User for now
 test_feedback_user, created = User.objects.get_or_create(username="test_feedback_user")
 
-# Create your views here.
-# @login_required
-def home(request):
-    return render(request, "home.html", {})
+
+def weather(request):
+    return render(request, "weather.html", {})
+
+
+def fire(request):
+    return render(request, "fire.html", {})
 
 
 def login(request):
@@ -36,10 +40,9 @@ def login(request):
             return redirect(reverse("home"))
         else:
             # Invalid username or password
-            return HttpResponse("Invalid username or password", status=400)
+            return HttpResponse('Invalid username or password', status=400)
 
-    return render(request, "login.html")
-
+    return render(request, 'login.html')
 
 def weather_stations_information(request):
     # Get all stations
