@@ -52,13 +52,14 @@ def logout_user(request):
 
 def register(request):
     print("register", request.POST)
+    username = request.POST.get('username')
     email = request.POST.get('email')
     password = request.POST.get('password')
-    if not email or not password:
+    if not username or not email or not password:
         return HttpResponse('Please fill in all fields', status=400)
 
     # Create the user
-    user = User.objects.create_user(email, email, password)
+    user = User.objects.create_user(username, email, password)
     user.save()
     # Log the user in
     login(request, user)

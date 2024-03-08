@@ -28,8 +28,8 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path("weather_stations_information/", weather_stations_information, name="weather_stations_information"),
     path("submit_feedback/", views.submit_feedback, name="submit_feedback"),
-    path("", views.weather, name="weather"),
-    path("", views.fire, name="fire"),
+    path("weather/", views.weather, name="weather"),
+    path("fire/", views.fire, name="fire"),
     path("station_data/", station_data, name="station_data"),
     path("station_data/<str:datetime>/", views.station_data, name="station_data_with_date"),
 ]
