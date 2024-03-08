@@ -17,14 +17,17 @@ Including another URLconf
 
 from . import views
 from django.urls import path
-from .views import weather_stations_data
+from .views import weather_stations_information
+from .views import station_data
 
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("", views.weather, name="home"),
     path("login/", views.login, name="login"),
-    path("weather_stations_data/", weather_stations_data, name="weather_stations_data"),
+    path("weather_stations_information/", weather_stations_information, name="weather_stations_information"),
     path("submit_feedback/", views.submit_feedback, name="submit_feedback"),
-    path("weather", views.home, name="weather"),
+    path("weather/", views.weather, name="weather"),
     path("fire/", views.fire, name="fire"),
+    path("station_data/", station_data, name="station_data"),
+    path("station_data/<str:datetime>/", views.station_data, name="station_data_with_date"),
 ]
