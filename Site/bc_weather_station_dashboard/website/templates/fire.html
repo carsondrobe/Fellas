@@ -19,6 +19,9 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <!-- CSS for widgets -->
+    <link rel="stylesheet" type="text/css" href="{% static 'danger_rating.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'dmc.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'ffmc.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'dc.css' %}">
 
     <title>Dashboard</title>
@@ -34,7 +37,7 @@
     <div class="container-fluid">
         <div class="row pt-3">
             <!-- Station Map Column -->
-            <div class="col-6 text-center border-right">
+            <div class="col-4 text-center border-right">
                 <h2 id="station-name-code"></h2>
                 <hr>
                 <!-- Leaflet Map Implementation -->
@@ -42,7 +45,7 @@
                 <script src="{% static 'map.js' %}"></script>
             </div>
             <!-- Weather Data Column -->
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <h2>
                     Fire Information
                 </h2>
@@ -52,15 +55,53 @@
                 <div class="row justify-content-center">
                     <!-- FFMC Card -->
                     <div class="col-md-3">
-                        <div class="card">
-                            <img src="{%  static 'placeholder_widgets/FFMC.png' %}">
+                        <div class="card text-center widget p-2">
+                            <h5 class="card-title">Fine Fuel Moisture Code</h5>
+                            <div class="axis-widget mt-3 mb-4">
+                                <div class="axis" id="axis">
+                                    <!-- Color-coded segments -->
+                                    <div class="segment red" style="height: 16%; top: 0;"></div>
+                                    <div class="segment orange" style="height: 4%; top: 16%;"></div>
+                                    <div class="segment yellow" style="height: 6%; top: 20%;"></div>
+                                    <div class="segment blue" style="height: 14%; top: 26%;"></div>
+                                    <div class="segment green" style="height: 60%; top: 40%;"></div>
+                                    <!-- Ticks -->
+                                    <div class="tick" style="top: 100%;"><label>0</label></div>
+                                    <div class="tick" style="top: 40%;"><label>80</label></div>
+                                    <div class="tick" style="top: 26%;"><label>87</label></div>
+                                    <div class="tick" style="top: 20%;"><label>90</label></div>
+                                    <div class="tick" style="top: 16%;"><label>92</label></div>
+                                </div>
+                                <div class="arrow" id="arrow">
+                                    <div class="arrow-value" id="arrowValue"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-1"></div> {# Spacer #}
                     <!-- DMC Card -->
                     <div class="col-md-3">
-                        <div class="card">
-                            <img src="{%  static 'placeholder_widgets/DMC.png' %}">
+                        <div class="card text-center widget p-2">
+                            <h5 class="card-title">Duff Moisture Code</h5>
+                            <div class="axis-widget mt-3 mb-4">
+                                <div class="axis" id="axis">
+                                    <!-- Color-coded segments -->
+                                    <div class="segment red" style="height: 22.5%; top: 0;"></div>
+                                    <div class="segment orange" style="height: 26.25%; top: 22.5%;"></div>
+                                    <div class="segment yellow" style="height: 17.5%; top: 48.75%;"></div>
+                                    <div class="segment blue" style="height: 18.75%; top: 66.25%;"></div>
+                                    <div class="segment green" style="height: 15%; top: 85%;"></div>
+                                    <!-- Ticks -->
+                                    <div class="tick" style="top: 100%;"><label>0</label></div>
+                                    <div class="tick" style="top: 85%;"><label>12</label></div>
+                                    <div class="tick" style="top: 66.25%;"><label>27</label></div>
+                                    <div class="tick" style="top: 48.75%;"><label>41</label></div>
+                                    <div class="tick" style="top: 22.5%;"><label>62</label></div>
+                                </div>
+                                <div class="arrow" id="arrow">
+                                    <div class="arrow-value" id="arrowValue"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-1"></div>{# Spacer #}
@@ -108,11 +149,19 @@
                 </div>
 
                 <!-- Row 3 -->
-                <div class="row pt-4 justify-content-center">
-                    <!-- FWI Card -->
-                    <div class="col-md-8">
-                        <div class="card ">
-                            <img src="{%  static 'placeholder_widgets/FWI.png' %}" width="100%">
+                <div class="row justify-content-center pt-4">
+                    <!-- Danger Rating Card -->
+                    <div class="col-md-9">
+                        <div class="card d-flex justify-content-center align-items-center text-center p-1">
+                            <h5 class="card-title">Fire Danger Rating</h5>
+                            <div class="fire-danger-widget">
+                                <div class="box low">LOW</div>
+                                <div class="box moderate">MODERATE</div>
+                                <div class="box high">HIGH</div>
+                                <div class="box extreme">EXTREME</div>
+                                <div class="line"></div>
+                                <div class="arrowDR" id="arrow-fire-rating"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -182,6 +231,9 @@
 {#    </script>#}
 
     <!-- JS for widgets -->
+    <script src="{% static 'danger_rating.js' %}"></script>
+    <script src="{% static 'dmc.js' %}"></script>
+    <script src="{% static 'ffmc.js' %}"></script>
     <script src="{% static 'dc.js' %}"></script>
 </body>
 

@@ -6,7 +6,6 @@ from django.urls import reverse
 
 from .forms import FeedbackForm
 from django.http import JsonResponse
-
 from .models import WeatherStation, Feedback, StationData
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse

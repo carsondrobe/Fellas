@@ -18,8 +18,6 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <script src="{% static 'home.js' %}"></script>
-
-
     <title>Dashboard</title>
 
 </head>
@@ -61,7 +59,7 @@
                             </h5>
                             <!-- Current (hourly?) temperature -->
                             <div class="d-flex align-items-center justify-content-center">
-                                <h2 class="card-text mr-2 display-4 mb-0" id="temperature">15</h2>
+                                <h2 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h2>
                                 <span class="display-4 align-bottom muted-white">°C</span>
                             </div>
                             <!-- Current daily high/low -->
@@ -249,7 +247,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -272,6 +269,9 @@
         {% endif %}
     </script>
 
+
+    <!-- JS for widgets -->
+    <script src="{% static 'ffmc.js' %}"></script>
 </body>
 
 </html>

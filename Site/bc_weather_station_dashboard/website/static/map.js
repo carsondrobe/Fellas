@@ -75,16 +75,6 @@ function updateData(stationCode) {
 
 // Update HTML elements on right side
 function updateDataHTML(currentStationData) {
-    // Reset all values to "N/A"
-    document.getElementById('temperature').innerHTML = "N/A";
-    document.getElementById('relative-humidity').innerHTML = "N/A";
-    document.getElementById('precipitation').innerHTML = "N/A";
-    document.getElementById('snow-depth').innerHTML = "N/A";
-    document.getElementById('snow-quality').innerHTML = "N/A";
-    document.getElementById('wind-speed').innerHTML = "N/A";
-    document.getElementById('wind-direction').innerHTML = "N/A";
-    document.getElementById('wind-gust').innerHTML = "N/A";
-    // Update the HTML elements with the station's temperature data
     if (currentStationData.HOURLY_TEMPERATURE) {
         document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
     }
