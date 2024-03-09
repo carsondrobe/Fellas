@@ -145,7 +145,7 @@
 }
 .arrow-danger-rating{
   position: absolute;
-  top: 130px; /* Adjust the position of the triangle */
+  top: 135px; /* Adjust the position of the triangle */
   width: 0;
   height: 0;
   border-left: 25px solid transparent;

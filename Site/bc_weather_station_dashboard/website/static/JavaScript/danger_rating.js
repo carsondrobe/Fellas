@@ -1,21 +1,21 @@
-// Assume value is retrieved from the database and passed to the template
-var value = 1; // Example value
+// Assume value_danger_rating is retrieved from the database and passed to the template
+var value_danger_rating = 4; // Example value
   
 // Get the arrow and arrow value elements
-const arrow = document.getElementById('arrow-danger-rating');
+const arrow_danger_rating = document.getElementById('arrow-danger-rating');
 
-if (value === 1 || value === 2){
-    value = 64;
-}else if (value === 3){
-    value = 168;    
-} else if (value === 4){
-    value = 272;    
-}else if (value === 5){
-    value = 376;
+if (value_danger_rating === 1 || value_danger_rating === 2){
+    value_danger_rating = 60;
+}else if (value_danger_rating === 3){
+    value_danger_rating = 164;    
+} else if (value_danger_rating === 4){
+    value_danger_rating = 268;    
+}else if (value_danger_rating === 5){
+    value_danger_rating = 372;
 }
 
-// Calculate the position of the arrow based on the value
-const position = value + 'px';
+// Calculate the position of the arrow based on the value_danger_rating
+const position_danger_rating = value_danger_rating + 'px';
 
 // Set the position of the arrow relative to the left
-arrow.style.left = position;
+arrow_danger_rating.style.left = position_danger_rating;
