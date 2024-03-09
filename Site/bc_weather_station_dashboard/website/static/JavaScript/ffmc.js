@@ -9,8 +9,8 @@ if (position > 100) {
 }
   
 // Get the arrow and arrow value elements
-const arrow = document.getElementById('arrow');
-const arrowValue = document.getElementById('arrowValue');
+const arrow = document.getElementById('arrow-ffmc');
+const arrowValue = document.getElementById('arrowValue-ffmc');
 
 // Calculate the top position of the arrow based on the value
 let topPosition;

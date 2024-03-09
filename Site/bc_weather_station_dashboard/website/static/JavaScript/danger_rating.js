@@ -2,7 +2,7 @@
 var value = 1; // Example value
   
 // Get the arrow and arrow value elements
-const arrow = document.getElementById('arrow-fire-rating');
+const arrow = document.getElementById('arrow-danger-rating');
 
 if (value === 1 || value === 2){
     value = 64;
