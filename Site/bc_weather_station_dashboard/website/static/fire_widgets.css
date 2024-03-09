@@ -1,6 +1,9 @@
 .widget {
     width: 170px;
   }
+:root {
+  --light: #c5c5c5;
+}
 .axis-widget {
     border: none;
     position: relative;
@@ -38,7 +41,7 @@
     left: -5px;
     width: 20px;
     height: 2px;
-    background-color: black;
+    background-color: var(--light);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -48,7 +51,7 @@
     margin-top: -8px;
     margin-right: 25px;
     font-size: 12px;
-    color: black;
+    color: var(--light);
   }
   .arrow {
     position: absolute;
@@ -57,7 +60,7 @@
     height: 0;
     border-top: 15px solid transparent;
     border-bottom: 15px solid transparent;
-    border-right: 20px solid black; /* Width and color of the arrow */
+    border-right: 20px solid var(--light); /* Width and color of the arrow */
   }
   .arrow-value {
     position: absolute;
@@ -65,5 +68,5 @@
     left: 30px; /* Position the value 30px to the left of the arrow */
     transform: translateY(-50%);
     font-size: 30px;
-    color: black;
+    color: var(--light);
   }
