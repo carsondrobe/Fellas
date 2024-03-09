@@ -6,7 +6,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Create customer marker icon
 const markerIcon = L.icon({
-    iconUrl: '../static/marker-icon.png',
+    iconUrl: '../static/images/weather_station_icon.svg',
     shadowUrl: "../static/marker-shadow.png",
     iconSize:    [25, 41],
     iconAnchor:  [12, 41],
