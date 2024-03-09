@@ -10,13 +10,13 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/home.css">
 
     <!-- Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
 
     <!-- CSS for widgets -->
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/fire_widgets.css' %}">
@@ -24,7 +24,7 @@
     <title>Dashboard</title>
 </head>
 
-<body>
+<body class="background">
     <!-- NAVBAR -->
     {% include 'navbar.html' %}
 
@@ -32,7 +32,7 @@
         <div class="row pt-3">
             <!-- Station Map Column -->
             <div class="col-4 text-center border-right">
-                <h2 id="station-name-code"></h2>
+                <h2 id="station-name-code" class="foreground"></h2>
                 <hr>
                 <!-- Leaflet Map Implementation -->
                 <div id="map" style="height: 50em; width: 100%;"></div>
@@ -40,7 +40,7 @@
             </div>
             <!-- Fire Information Column -->
             <div class="col-md-8">
-                <h2>
+                <h2 class="foreground text-center">
                     Fire Information
                 </h2>
                 <hr>
@@ -195,7 +195,7 @@
 
     <!-- Swap pages button -->
     <a href="{% url 'weather' %}">
-        <img id="swapPageIcon" src="{%  static 'weather_icon.svg' %}" alt="weather_icon" >
+        <img id="swapPageIcon" src="{%  static 'images/weather_icon.svg' %}" alt="weather_icon" >
     </a>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
