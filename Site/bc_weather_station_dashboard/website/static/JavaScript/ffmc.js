@@ -1,5 +1,5 @@
 // Assume value_ffmc is retrieved from the database and passed to the template
-const value_ffmc = 100; // Example value_ffmc
+const value_ffmc = 0; // Example value_ffmc
 let position_ffmc = value_ffmc;
 
 if (position_ffmc > 100) {
@@ -16,9 +16,9 @@ const arrowvalue_ffmc = document.getElementById('arrowValue-ffmc');
 let topposition_ffmc;
 
 if (value_ffmc < 80) {
-    topposition_ffmc = 'calc(' + (100 - (position_ffmc / 80) * 60) + '% - 15px)'; // Calculate the position_ffmc relative to the top
+    topposition_ffmc = 'calc(' + (100 - (position_ffmc / 80) * 60) + '% - 5px)'; // Calculate the position_ffmc relative to the top
 } else {
-    topposition_ffmc = 'calc(' + (100 - position_ffmc) * 2 + '% - 15px)'; // Calculate the position_ffmc position_ffmc relative to the top
+    topposition_ffmc = 'calc(' + (100 - position_ffmc) * 2 + '% - 5px)'; // Calculate the position_ffmc position_ffmc relative to the top
 
 }
 

@@ -14,7 +14,7 @@ const arrow_dc = document.getElementById('arrow-dc');
 const arrowValue_dc = document.getElementById('arrowValue-dc');
 
 // Calculate the top position of the arrow based on the value_dc
-const topPosition_dc = 'calc(' + (500 - value_dc) / 5 + '% - 15px)'; // Calculate the top position
+const topPosition_dc = 'calc(' + (500 - value_dc) / 5 + '% - 5px)'; // Calculate the top position
 
 // Set the top position of the arrow and display the value_dc
 arrow_dc.style.top = topPosition_dc;

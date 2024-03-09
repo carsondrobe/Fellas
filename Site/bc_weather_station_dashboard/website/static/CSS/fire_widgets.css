@@ -16,6 +16,8 @@
   bottom: 0;
   left: 35px;
   width: 3px;
+  height: 250px;
+  margin-top: 10px;
 }
 
 .segment {
@@ -106,7 +108,7 @@
 }
 .fire-danger-widget {
   width: 450px;
-  margin-top: 20px;
+  margin-top: 5px;
   margin-bottom: 20px;
 }
 
@@ -145,7 +147,7 @@
 }
 .arrow-danger-rating{
   position: absolute;
-  top: 135px; /* Adjust the position of the triangle */
+  top: 120px; /* Adjust the position of the triangle */
   width: 0;
   height: 0;
   border-left: 25px solid transparent;
