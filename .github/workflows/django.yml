@@ -27,7 +27,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python manage.py test
+         python Site/bc_weather_station_dashboard/manage.py test
 
     - name: Python Django Coverage GitHub Action
       # You may pin to the exact commit or the version.
