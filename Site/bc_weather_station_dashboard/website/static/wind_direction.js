@@ -86,11 +86,11 @@ class WindArrow {
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillText('S', 0, 140);  // position of the letter
-        this.ctx.fillText('W', 140, 0);  
+        this.ctx.fillText('E', 140, 0);  
         this.ctx.fillStyle = 'red'; // Change fillStyle to red for 'N'
         this.ctx.fillText('N', 0, -140);  
-        this.ctx.fillStyle = 'black'; // Change fillStyle back to black for 'E'
-        this.ctx.fillText('E', -140, 0);
+        this.ctx.fillStyle = 'black'; // Change fillStyle back to black for 'W'
+        this.ctx.fillText('W', -140, 0);
         this.ctx.restore();
     }
     drawAngleLabels() {
