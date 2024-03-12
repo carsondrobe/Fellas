@@ -25,11 +25,11 @@ def fire(request, **kwargs):
 
 
 def login_user(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
         if not email or not password:
-            return HttpResponse('Please fill in all fields', status=400)
+            return HttpResponse("Please fill in all fields", status=400)
 
         # Authenticate the user
         user = authenticate(request, username=email, password=password)
@@ -40,23 +40,23 @@ def login_user(request):
             return redirect(reverse("home"))
         else:
             # Invalid username or password
-            return weather(request, error='Invalid username or password')
+            return weather(request, error="Invalid username or password")
 
-    return render(request, 'home')
+    return render(request, "home")
 
 
 def logout_user(request):
     logout(request)
-    return redirect(reverse('home'))
+    return redirect(reverse("home"))
 
 
 def register(request):
     print("register", request.POST)
-    username = request.POST.get('username')
-    email = request.POST.get('email')
-    password = request.POST.get('password')
+    username = request.POST.get("username")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
     if not username or not email or not password:
-        return HttpResponse('Please fill in all fields', status=400)
+        return HttpResponse("Please fill in all fields", status=400)
 
     # Create the user
     user = User.objects.create_user(username, email, password)
@@ -65,7 +65,7 @@ def register(request):
     login(request, user)
     # Redirect to the home page
 
-    return redirect(reverse('home'))
+    return redirect(reverse("home"))
 
 
 def weather_stations_information(request):
@@ -74,7 +74,9 @@ def weather_stations_information(request):
     # Check if stations is empty
     if not stations.exists():
         # Return an empty JSON response of an error message indicating no data was found
-        return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        return JsonResponse(
+            {"error": "No data found for the specified date and time"}, status=404
+        )
     # Create dictionary of data
     data = [
         {
@@ -107,7 +109,7 @@ def submit_feedback(request):
             feedback = Feedback(
                 message=form.cleaned_data["feedback"],
                 # TODO: Replace with the actual user
-                user=test_feedback_user,
+                user=request.user,
                 status=Feedback.SUBMITTED,
             )
             feedback.save()
@@ -119,16 +121,20 @@ def submit_feedback(request):
 
 def station_data(request):
     # Get the selected date from the query
-    selected_date = request.GET.get('datetime', None)
+    selected_date = request.GET.get("datetime", None)
     # Check if date is undefined
     if selected_date == "undefined":
-        return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        return JsonResponse(
+            {"error": "No data found for the specified date and time"}, status=404
+        )
     # Filter the station data to only retrieve data from specified date
     data = StationData.objects.filter(DATE_TIME=selected_date)
     # Check if the data is empty
     if not data.exists():
         # Return an empty JSON response of an error message indicating no data was found
-        return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        return JsonResponse(
+            {"error": "No data found for the specified date and time"}, status=404
+        )
     # Create dictionary of data
     measures = [
         {
