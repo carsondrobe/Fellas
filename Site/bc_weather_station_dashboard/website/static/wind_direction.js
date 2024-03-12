@@ -23,34 +23,21 @@ class WindArrow {
     }
 
     drawMainArrow() {
-        // Draw the main arrow in red
+        // Where the wind is coming from
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(this.x * 0.9, this.y * 0.9); // Shorten the line
-        this.ctx.strokeStyle = 'red';
+        this.ctx.strokeStyle = 'grey';
         this.ctx.lineWidth = 4;
         this.ctx.stroke();
-
-        // Draw the arrowhead for the main arrow
-        this.ctx.save();
-        this.ctx.translate(this.x, this.y);
-        this.ctx.rotate(this.radians);
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, 0);
-        this.ctx.lineTo(-15, -10);
-        this.ctx.lineTo(-15, 10);
-        this.ctx.closePath();
-        this.ctx.fillStyle = 'red';
-        this.ctx.fill();
-        this.ctx.restore();
     }
 
     drawSecondaryArrow() {
-        // Draw the secondary arrow in grey
+        // where the wind is going
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(-this.x * 0.9, -this.y * 0.9); // Shorten the line
-        this.ctx.strokeStyle = 'grey';
+        this.ctx.strokeStyle = 'red';
         this.ctx.lineWidth = 4;
         this.ctx.stroke();
 
@@ -63,7 +50,7 @@ class WindArrow {
         this.ctx.lineTo(-15, -10);
         this.ctx.lineTo(-15, 10);
         this.ctx.closePath();
-        this.ctx.fillStyle = 'grey';
+        this.ctx.fillStyle = 'red';
         this.ctx.fill();
         this.ctx.restore();
     }
