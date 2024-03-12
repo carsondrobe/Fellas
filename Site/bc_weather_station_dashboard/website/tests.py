@@ -321,6 +321,7 @@ class SubmitFeedbackTests(TestCase):
 
 #Test cases for login
 class LoginTests(TestCase):
+    pass
 
 
 class SubmitFeedbackTestCase(TestCase):
