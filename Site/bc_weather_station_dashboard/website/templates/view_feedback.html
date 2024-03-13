@@ -1,0 +1,85 @@
+<!-- View Feedback Modal -->
+
+<div class="modal" id="viewFeedbackModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Feedback</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row" id="feedback-cards-container" style="margin-bottom: 1em;">
+                        <!-- Feedback cards will be added here -->
+                        {% for feedback in feedbacks %}
+                        <!-- print feedback -->
+                        <p>{{feedback}}</p>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Feedback from {{feedback.user}}</h5>
+                                    <p class="card-text">{{feedback.message}}</p>
+                                    <p class="card-text"><small class="text-muted">
+                                            Status: {{
+                                            feedback.status
+                                            }}</small></p>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#viewFeedbackButton").click(function () {
+            $.ajax({
+                url: "{% url 'view_feedback' %}",
+                type: 'GET',
+                success: function (response) {
+                    const feedbackContainer = $("#feedback-cards-container");
+                    feedbackContainer.empty(); // Clear any previous content
+
+                    for (let fb of response) {
+                        let buttonHtml = '';
+                        if (fb.status == "REV") {
+                            buttonHtml = '<button type="button" class="btn btn-success">Addressed</button>';
+                        } else if (fb.status == "SUB") {
+                            buttonHtml = `
+                            <div class="row justify-content-center">
+                                <button type="button" class="btn btn-warning" style="margin-right: 0.5em;">Review</button>
+                                <button type="button" class="btn btn-success">Addressed</button>
+                            </div>
+                        `;
+                        }
+
+                        const cardHtml = `
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Feedback from ${fb.user}</h5>
+                                    <p class="card-text">${fb.message}</p>
+                                    <p class="card-text"><small class="text-muted">Status: ${fb.status}</small></p>
+                                    ${buttonHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                        feedbackContainer.append(cardHtml);
+                    }
+                }
+            });
+        });
+    });
+</script>
