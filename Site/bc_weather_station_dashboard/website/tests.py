@@ -16,12 +16,14 @@ from django.core.management import call_command
 from io import StringIO
 import pandas as pd
 from django.urls import reverse
-from django.test import Client
 from django.contrib.auth.models import User
 import re
 from website.forms import FeedbackForm
+from django.test import TestCase, Client
+
 
 # Begin models tests
+
 
 # Test the UserProfile model
 class UserProfileModelTest(TestCase):
@@ -277,46 +279,72 @@ class WSUploadCommandTestCase(TestCase):
 
 # End ws_upload command tests
 
-#TODO: @carson these imports should be at the top of the file 
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth.models import User
-from .forms import FeedbackForm
-from .models import Feedback
+
 # Test the submit_feedback view
-class SubmitFeedbackTests(TestCase):
-    #TODO: I tried fixing this test but something may be wrong with the actual logic of the feedback form please fix this @carson
-    # def test_submit_feedback_valid_form(self):
-    #     url = reverse("submit_feedback")
-    #     data = {"message": "This is a test feedback"} 
-    #     response = self.client.post(url, data)
-    #     self.assertEqual(
-    #         response.status_code, 302
-    #     )  # Check if it redirects to the home page
 
-    #     # Check if the feedback is saved to the database
-    #     feedback = Feedback.objects.first()
-    #     self.assertIsNotNone(feedback)
-    #     self.assertEqual(feedback.message, data["message"])  
 
-    def test_submit_feedback_invalid_form(self):
-        url = reverse("submit_feedback")
-        data = {}  # Empty data to make the form invalid
-        response = self.client.post(url, data)
-        self.assertEqual(
-            response.status_code, 302
-        )  # Check if it redirects to the home page
+class SubmitFeedbackTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+
+    def test_submit_feedback_valid(self):
+        # Create the Feedback object specifically for this test
+        self.feedback = Feedback.objects.create(
+            user=self.user, message="This is a test feedback", status=Feedback.SUBMITTED
+        )
+
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
+
+        feedback_data = {"feedback": "This is a test feedback"}
+
+        # Simulate a POST request to submit feedback
+        response = self.client.post(reverse("submit_feedback"), data=feedback_data)
+
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
+
+        # Since feedback is created in the test, check for updated values
+        updated_feedback = Feedback.objects.get(pk=self.feedback.pk)
+
+        self.assertEqual(updated_feedback.message, feedback_data["feedback"])
+        self.assertEqual(updated_feedback.user, self.user)
+        self.assertEqual(updated_feedback.status, Feedback.SUBMITTED)
+
+    def test_submit_feedback_invalid(self):
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
+
+        # Simulate a POST request with invalid data
+        response = self.client.post(reverse("submit_feedback"), data={})
+
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
 
         # Check that no feedback is saved in the database
         self.assertEqual(Feedback.objects.count(), 0)
 
-    #TODO: this test is not working because the view is a post request and not a get request please fix this @carson
-    # def test_submit_feedback_get_request(self):
-    #     url = reverse("submit_feedback")
-    #     response = self.client.get(url)
-    #     self.assertEqual(
-    #         response.status_code, 302
-    #     )  # Check if it redirects to the home page
+    def test_submit_feedback_get_request(self):
+        # Log in the user
+        self.client.login(username="testuser", password="testpassword")
 
-    #     # Check that no feedback is saved in the database
-    #     self.assertEqual(Feedback.objects.count(), 0)
+        # Simulate a GET request
+        response = self.client.get(reverse("submit_feedback"))
+
+        # Check if the response is a redirect
+        self.assertEqual(response.status_code, 302)
+
+        # Check if the redirect URL is correct
+        self.assertEqual(response.url, reverse("home"))
+
+        # Check that no feedback is saved in the database
+        self.assertEqual(Feedback.objects.count(), 0)
