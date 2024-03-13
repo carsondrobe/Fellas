@@ -104,8 +104,6 @@ class WindArrow {
     }
 
     draw() {
-        console.log('draw method called');
-
         // Create a new canvas and set its dimensions
         this.canvas = document.createElement('canvas');
         this.canvas.width = this.canvas.height = 350; //this dictates the size of the canvas (still responsive)
@@ -129,6 +127,5 @@ class WindArrow {
         this.canvas.style.maxWidth = '100%'; // for responsive canvas
         this.canvas.style.height = 'auto'; // for responsive canvas
         container.appendChild(this.canvas);
-        console.log(this.ctx, container);
     }
 }
