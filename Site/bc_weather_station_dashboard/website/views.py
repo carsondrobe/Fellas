@@ -12,27 +12,39 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
-# Using a Dummy User for now
-test_feedback_user, created = User.objects.get_or_create(username="test_feedback_user")
+current_page = "weather"
+
+
+def home(request, **kwargs):
+    if current_page == "weather":
+        return weather(request, **kwargs)
+    elif current_page == "fire":
+        return fire(request, **kwargs)
+    else:
+        raise ValueError("Invalid page", current_page)
 
 
 def weather(request, **kwargs):
+    global current_page
+    current_page = "weather"
     return render(request, "weather.html", kwargs)
 
 
 def fire(request, **kwargs):
+    global current_page
+    current_page = "fire"
     return render(request, "fire.html", kwargs)
 
 
 def login_user(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
-        if not email or not password:
+        if not username or not password:
             return HttpResponse('Please fill in all fields', status=400)
 
         # Authenticate the user
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             # User is valid, log them in
             login(request, user)
@@ -40,14 +52,14 @@ def login_user(request):
             return redirect(reverse("home"))
         else:
             # Invalid username or password
-            return weather(request, error='Invalid username or password')
+            return home(request, error='Invalid username or password')
 
-    return render(request, 'home')
+    return home(request, error='Invalid request')
 
 
 def logout_user(request):
     logout(request)
-    return redirect(reverse('home'))
+    return home(request)
 
 
 def register(request):
@@ -63,9 +75,8 @@ def register(request):
     user.save()
     # Log the user in
     login(request, user)
-    # Redirect to the home page
 
-    return redirect(reverse('home'))
+    return redirect(reverse("home"))
 
 
 def weather_stations_information(request):
@@ -112,9 +123,9 @@ def submit_feedback(request):
             )
             feedback.save()
 
-            return redirect("home")
+            return home(request)
 
-    return redirect("home")
+    return home(request, error="Invalid request")
 
 
 def station_data(request):
