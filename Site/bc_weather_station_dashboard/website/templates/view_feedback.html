@@ -11,25 +11,6 @@
                 <div class="container">
                     <div class="row" id="feedback-cards-container" style="margin-bottom: 1em;">
                         <!-- Feedback cards will be added here -->
-                        {% for feedback in feedbacks %}
-                        <!-- print feedback -->
-                        <p>{{feedback}}</p>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Feedback from {{feedback.user}}</h5>
-                                    <p class="card-text">{{feedback.message}}</p>
-                                    <p class="card-text"><small class="text-muted">
-                                            Status: {{
-                                            feedback.status
-                                            }}</small></p>
-
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -53,12 +34,15 @@
                     for (let fb of response) {
                         let buttonHtml = '';
                         if (fb.status == "REV") {
-                            buttonHtml = '<button type="button" class="btn btn-success">Addressed</button>';
-                        } else if (fb.status == "SUB") {
+                            buttonHtml = `<button type="button" class="btn btn-success  addressed-btn" data-id="${fb.id}">Addressed</button>`;
+                        } else if (fb.status == "ADD") {
+                            continue;
+                        }
+                        else if (fb.status == "SUB") {
                             buttonHtml = `
                             <div class="row justify-content-center">
-                                <button type="button" class="btn btn-warning" style="margin-right: 0.5em;">Review</button>
-                                <button type="button" class="btn btn-success">Addressed</button>
+                                <button type="button" class="btn btn-warning review-btn" data-id="${fb.id}" style="margin-right: 0.5em;">Review</button>
+                                <button type="button" class="btn btn-success  addressed-btn" data-id="${fb.id}">Addressed</button>
                             </div>
                         `;
                         }
@@ -78,8 +62,40 @@
 
                         feedbackContainer.append(cardHtml);
                     }
+                    if (feedbackContainer.is(":empty")) {
+                        feedbackContainer.append("<p>No feedback available.</p>");
+                    }
+
+                    $(".addressed-btn").click(function () {
+                        const feedbackId = $(this).data("id");
+                        changeStatus(feedbackId, "ADD");
+                    });
+                    $(".review-btn").click(function () {
+                        const feedbackId = $(this).data("id");
+                        changeStatus(feedbackId, "REV");
+                    });
                 }
             });
         });
     });
+
+    function changeStatus(feedbackId, newStatus) {
+        $.ajax({
+            url: "{% url 'update_feedback_status' %}",
+            type: 'POST',
+            data: {
+                feedback_id: feedbackId,
+                new_status: newStatus,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert("Status changed successfully");
+                    location.reload();
+                } else {
+                    alert("Failed to change status");
+                }
+            }
+        });
+    }
 </script>

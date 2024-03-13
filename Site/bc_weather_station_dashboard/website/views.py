@@ -123,6 +123,7 @@ def view_feedback(request):
     feedback = Feedback.objects.all()
     feedback_data = [
         {
+            "id": fb.id,
             "message": fb.message,
             "user": fb.user.username,
             "status": fb.status,
@@ -130,6 +131,16 @@ def view_feedback(request):
         for fb in feedback
     ]
     return JsonResponse(feedback_data, safe=False)
+
+
+def update_feedback_status(request):
+    if request.method == "POST":
+        feedback_id = request.POST.get("feedback_id")
+        status = request.POST.get("new_status")
+        feedback = Feedback.objects.get(id=feedback_id)
+        feedback.status = status
+        feedback.save()
+        return JsonResponse({"success": True})
 
 
 def station_data(request):

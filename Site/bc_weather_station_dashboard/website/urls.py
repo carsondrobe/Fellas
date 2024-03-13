@@ -41,4 +41,9 @@ urlpatterns = [
         name="station_data_with_date",
     ),
     path("view_feedback/", views.view_feedback, name="view_feedback"),
+    path(
+        "update_feedback_status/",
+        views.update_feedback_status,
+        name="update_feedback_status",
+    ),
 ]
