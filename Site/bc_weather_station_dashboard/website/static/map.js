@@ -54,6 +54,7 @@ function updateData(stationCode) {
             return response.json();
         // If station data for this datetime is not found
         } else if(response.status === 404) {
+            alert("There is no data found for this station on " + datePicker + ". Please select another date.");
             throw new Error("There is no station data for this date or this station is missing some of its' data. Error code " + response.status + ".");
         // If any other error occurs
         } else {
