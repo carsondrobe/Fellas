@@ -1,16 +1,22 @@
 .border-right {
     border-right: 2px solid #000;
 }
-.widget {
+.border-bottom {
+    border-bottom: 2px solid #000;
+}
+.widget-y {
   width: 170px;
 }
-.axis-widget {
+.widget-x {
+  height: 150px;
+}
+.axis-y-container {
   border: none;
   position: relative;
   height: 250px;
 }
 
-.axis {
+.axis-y {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -20,13 +26,42 @@
   margin-top: 10px;
 }
 
-.segment {
+.segment-y {
   position: absolute;
   left: 0;
   right: 0;
   height: 100%;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
+  z-index: 1;
+}
+
+.axis-x-container {
+  border: none;
+  position: relative;
+  width: 250px;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.axis-x {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0px;
+  width: 250px;
+  height: 3px;
+  margin-top: 0px;
+}
+
+.segment-x {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
   z-index: 1;
 }
 
@@ -38,7 +73,7 @@
 .red { border-color: red; }
 
 /* Tick styles */
-.tick {
+.tick-y {
   position: absolute;
   left: -5px;
   width: 20px;
@@ -47,14 +82,38 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  z-index: 2; /* Ensure ticks appear above segments */
+  z-index: 2;
 }
-.tick label {
+.tick-y label {
   margin-top: -8px;
   margin-right: 25px;
   font-size: 12px;
   color: black;
 }
+
+.tick-x {
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  top: -5px;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+.tick-x label {
+  position: absolute;
+  transform: translateX(-50%);
+  top: -15px;
+  width: 20px; /* Add this line */
+  text-align: center; /* Add this line */
+  right: -19px;
+  font-size: 12px;
+  color: black;
+}
+
+/* Arrow Styles */
 .arrow-ffmc {
   position: absolute;
   right: 70px;
@@ -62,12 +121,12 @@
   height: 0;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 20px solid black; /* Width and color of the arrow */
+  border-right: 20px solid black;
 }
 .arrow-value-ffmc {
   position: absolute;
   top: -3px;
-  left: 30px; /* Position the value 30px to the left of the arrow */
+  left: 30px;
   transform: translateY(-50%);
   font-size: 30px;
   color: black;
@@ -79,12 +138,12 @@
   height: 0;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 20px solid black; /* Width and color of the arrow */
+  border-right: 20px solid black;
 }
 .arrow-value-dmc {
   position: absolute;
   top: -3px;
-  left: 30px; /* Position the value 30px to the left of the arrow */
+  left: 30px;
   transform: translateY(-50%);
   font-size: 30px;
   color: black;
@@ -96,13 +155,31 @@
   height: 0;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 20px solid black; /* Width and color of the arrow */
+  border-right: 20px solid black;
 }
 .arrow-value-dc {
   position: absolute;
   top: -3px;
-  left: 30px; /* Position the value 30px to the left of the arrow */
+  left: 30px;
   transform: translateY(-50%);
+  font-size: 30px;
+  color: black;
+}
+.arrow-bui {
+  position: absolute;
+  right: 70px;
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 20px solid black;
+}
+.arrow-value-bui {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 30px;
   color: black;
 }
@@ -112,6 +189,7 @@
   margin-bottom: 20px;
 }
 
+/* Fire Danger Rating Styles */
 .box {
   display: inline-block;
   width: 100px;
@@ -147,10 +225,10 @@
 }
 .arrow-danger-rating{
   position: absolute;
-  top: 120px; /* Adjust the position of the triangle */
+  top: 120px;
   width: 0;
   height: 0;
   border-left: 25px solid transparent;
   border-right: 25px solid transparent;
-  border-bottom: 35px solid black; /* Adjust the size of the triangle */
+  border-bottom: 35px solid black;
 }
