@@ -185,7 +185,7 @@
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-bottom: 20px solid black;
+  border-bottom: 20px solid #e5e5e5;
 }
 .arrow-value-isi {
   position: absolute;
@@ -193,7 +193,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 30px;
-  color: black;
+  color: #e5e5e5;
 }
 .fire-danger-widget {
   width: 450px;
