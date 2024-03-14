@@ -106,9 +106,9 @@
   position: absolute;
   transform: translateX(-50%);
   top: -15px;
-  width: 20px; /* Add this line */
-  text-align: center; /* Add this line */
-  right: -19px;
+  width: 20px;
+  text-align: center;
+  right: -20px;
   font-size: 12px;
   color: black;
 }
@@ -176,6 +176,24 @@
   border-bottom: 20px solid black;
 }
 .arrow-value-bui {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  color: black;
+}
+.arrow-isi {
+  position: absolute;
+  right: 70px;
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 20px solid black;
+}
+.arrow-value-isi {
   position: absolute;
   top: 15px;
   left: 50%;
