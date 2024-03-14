@@ -17,6 +17,7 @@ const markerIcon = L.icon({
 // Create variable to hold current station's station code
 var currentStationCode;
 var weatherStations;
+
 // Fetch weather station information from Django backend
 fetch('/weather_stations_information/')
     .then(response => response.json())
@@ -60,17 +61,33 @@ function updateData(stationCode) {
         var day = new Date().getDate().toString().padStart(2, '0');
         datePicker = `${year}-${month}-${day}`;
     }
-    var selectedDate = datePicker + " 12:00:00";
+    // var selectedDate = datePicker + " 12:00:00";
+    var selectedDate = "2024-03-5 12:00:00";
     // Fetch all of the data for the clicked station
     fetch(`/station_data/?datetime=${selectedDate}`)
-        .then(response => response.json())
+    // Check if station data is found
+    .then(response => {
+        // If station data is found
+        if (response.ok) {
+            return response.json();
+        // If station data for this datetime is not found
+        } else if(response.status === 404) {
+            throw new Error("There is no station data for this date or this station is missing some of its' data. Error code " + response.status + ".");
+        // If any other error occurs
+        } else {
+            throw new Error("Error");
+        }
+        // TO DO: suppress get error and supress "RuntimeWarning: DateTimeField StationData.DATE_TIME received a naive datetime (2024-03-05 12:00:00) while time zone support is active."
+    })
         .then(stationData => {
+            if(stationData != null) {
             // Set the current station's data dependant on the station code
             var currentStationData = stationData.find(measure => measure.STATION_CODE === stationCode);
             // Update HTML elements on right col
             updateDataHTML(currentStationData);
+            }
         })
-    .catch(error => console.error('Error fetching station data:', error));
+    .catch(error => console.log(error));
 }
 
 // Update HTML elements on right side
@@ -168,6 +185,8 @@ function getClosestStation(position) {
     var closestStationElevation;
     var closestStationInstallDate;
     var max = Number.MAX_VALUE;
+    // Set a variable for search suggestions datalist
+    let datalist = document.getElementById('search-suggestions');
     // Go through all of the weather stations
     weatherStations.forEach(station => {
         // Get stations longitude and latitude
@@ -189,6 +208,10 @@ function getClosestStation(position) {
             closestStationElevation = station.elevation;
             closestStationInstallDate = station.install_date; 
         }
+        // Create an option element and add it to the datalist
+        let option = document.createElement('option');
+        option.value = station.name;
+        datalist.appendChild(option);
     });
     // Add current station's marker to the map
     var marker = L.marker([closestStationLatitude, closestStationLongitude], {icon: markerIcon})
@@ -203,18 +226,18 @@ function getClosestStation(position) {
             `<b>Elevation: ${closestStationElevation}m</b><br>` +
             `<b>Install Date: ${closestStationInstallDate}</b>`
         );
-        // Add click event listener to update station name and code on click
-        marker.on('click', function() {
-            currentStationCode = closestStationCode;
-            document.getElementById('station-name-code').innerText = closestStationName + " - #" + closestStationCode;
-            updateData(currentStationCode);
-        });
-        // Open current station's popup
-        marker.fire('click');
-        // Add current station's name and code to the dashboard
+    // Add click event listener to update station name and code on click
+    marker.on('click', function() {
+        currentStationCode = closestStationCode;
         document.getElementById('station-name-code').innerText = closestStationName + " - #" + closestStationCode;
-        // Display current station's data
         updateData(currentStationCode);
+    });
+    // Open current station's popup
+    marker.fire('click');
+    // Add current station's name and code to the dashboard
+    document.getElementById('station-name-code').innerText = closestStationName + " - #" + closestStationCode;
+    // Display current station's data
+    updateData(currentStationCode);
 }
 
 // Function to compute the distance between 2 points using longitude and latitude
@@ -226,4 +249,21 @@ function computeDistance(longitude1, latitude1, longitude2, latitude2) {
     var a = Math.sin(distLatitude/2) * Math.sin(distLatitude/2) + Math.cos((latitude1) * (Math.PI/180)) * Math.cos((latitude2)* (Math.PI/180)) *  Math.sin(distLongitude/2) * Math.sin(distLongitude/2);
     var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return radius * b;
+}
+
+// Function for displaying search bar station
+function searchBar() { 
+    // Set variable for input
+    let input = document.getElementById('searchInput').value;
+    console.log('Search input:', input);
+    // Get this station's code
+    // Go through all of the weather stations
+    weatherStations.forEach(station => {
+        if(station.name === input) {
+            // Display new current station's data
+            currentStationCode = station.code;
+            updateData(currentStationCode);
+            console.log("HERE");
+        }
+    });
 }
