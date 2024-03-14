@@ -45,7 +45,6 @@ function updateData(stationCode) {
         datePicker = `${year}-${month}-${day}`;
     }
     var selectedDate = datePicker + " 12:00:00";
-    // var selectedDate = "2024-03-5 12:00:00";
     // Fetch all of the data for the clicked station
     fetch(`/station_data/?datetime=${selectedDate}`)
     // Check if station data is found
