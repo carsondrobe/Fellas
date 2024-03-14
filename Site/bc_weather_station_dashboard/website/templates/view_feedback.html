@@ -1,5 +1,6 @@
+{% load static %}
 <!-- View Feedback Modal -->
-
+<link rel="stylesheet" type="text/css" href="{% static 'feedback_card.css' %}">
 <div class="modal" id="viewFeedbackModal">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -11,9 +12,6 @@
                 <div class="container">
                     <div class="row" id="feedback-cards-container" style="margin-bottom: 1em;">
                         <!-- Feedback cards will be added here -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -52,7 +50,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Feedback from ${fb.user}</h5>
-                                    <p class="card-text">${fb.message}</p>
+                                    <p class="card-text feedback-text">${fb.message}</p>
                                     <p class="card-text"><small class="text-muted">Status: ${fb.status}</small></p>
                                     ${buttonHtml}
                                 </div>
@@ -76,6 +74,11 @@
                     });
                 }
             });
+        });
+        $("#feedback-cards-container").on("click", ".card", function () {
+            // Toggle a class to show/hide more text
+            $(this).find(".feedback-text").toggleClass("display-full");
+            $(this).toggleClass("wider-card");
         });
     });
 
