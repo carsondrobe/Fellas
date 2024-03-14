@@ -1,9 +1,3 @@
-.border-right {
-    border-right: 2px solid #000;
-}
-.border-bottom {
-    border-bottom: 2px solid #000;
-}
 .widget-y {
   width: 170px;
 }
@@ -78,7 +72,7 @@
   left: -5px;
   width: 20px;
   height: 2px;
-  background-color: black;
+  background-color: #e5e5e5;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -88,7 +82,7 @@
   margin-top: -8px;
   margin-right: 25px;
   font-size: 12px;
-  color: black;
+  color: #e5e5e5;
 }
 
 .tick-x {
@@ -96,7 +90,7 @@
   width: 2px;
   height: 20px;
   top: -5px;
-  background-color: black;
+  background-color: #e5e5e5;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,7 +104,7 @@
   text-align: center;
   right: -20px;
   font-size: 12px;
-  color: black;
+  color: #e5e5e5;
 }
 
 /* Arrow Styles */
@@ -121,7 +115,7 @@
   height: 0;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 20px solid black;
+  border-right: 20px solid #e5e5e5;
 }
 .arrow-value-ffmc {
   position: absolute;
@@ -129,7 +123,7 @@
   left: 30px;
   transform: translateY(-50%);
   font-size: 30px;
-  color: black;
+  color: #e5e5e5;
 }
 .arrow-dmc {
   position: absolute;
@@ -138,7 +132,7 @@
   height: 0;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 20px solid black;
+  border-right: 20px solid #e5e5e5;
 }
 .arrow-value-dmc {
   position: absolute;
@@ -146,7 +140,7 @@
   left: 30px;
   transform: translateY(-50%);
   font-size: 30px;
-  color: black;
+  color: #e5e5e5;
 }
 .arrow-dc {
   position: absolute;
@@ -155,7 +149,7 @@
   height: 0;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-right: 20px solid black;
+  border-right: 20px solid #e5e5e5;
 }
 .arrow-value-dc {
   position: absolute;
@@ -163,7 +157,7 @@
   left: 30px;
   transform: translateY(-50%);
   font-size: 30px;
-  color: black;
+  color: #e5e5e5;
 }
 .arrow-bui {
   position: absolute;
@@ -173,7 +167,7 @@
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-bottom: 20px solid black;
+  border-bottom: 20px solid #e5e5e5;
 }
 .arrow-value-bui {
   position: absolute;
@@ -181,7 +175,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 30px;
-  color: black;
+  color: #e5e5e5;
 }
 .arrow-isi {
   position: absolute;
@@ -205,6 +199,8 @@
   width: 450px;
   margin-top: 5px;
   margin-bottom: 20px;
+  color: #e5e5e5;
+  text-shadow: black 3px 0 10px;
 }
 
 /* Fire Danger Rating Styles */
@@ -216,7 +212,7 @@
   line-height: 100px;
   font-size: 16px;
   font-weight: bold;
-  border: 2px solid black;
+  border: 2px solid #e5e5e5;
   border-radius: 3px;
 }
 
@@ -238,7 +234,7 @@
 .line {
   width: 100%;
   height: 6px;
-  background-color: black;
+  background-color: #e5e5e5;
   margin-top: 5px;
 }
 .arrow-danger-rating{
@@ -248,5 +244,5 @@
   height: 0;
   border-left: 25px solid transparent;
   border-right: 25px solid transparent;
-  border-bottom: 35px solid black;
+  border-bottom: 35px solid #e5e5e5;
 }

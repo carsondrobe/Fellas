@@ -16,7 +16,6 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
 
     <!-- CSS for widgets -->
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/fire_widgets.css' %}">
@@ -32,7 +31,7 @@
         <div class="row pt-3">
             <!-- Station Map Column -->
             <div class="col-4 text-center border-right">
-                <h2 id="station-name-code" class="foreground"></h2>
+                <h2 id="station-name-code"></h2>
                 <hr>
                 <!-- Leaflet Map Implementation -->
                 <div id="map" style="height: 50em; width: 100%;"></div>
@@ -40,7 +39,7 @@
             </div>
             <!-- Fire Information Column -->
             <div class="col-md-8">
-                <h2 class="foreground text-center">
+                <h2>
                     Fire Information
                 </h2>
                 <hr>
@@ -147,7 +146,7 @@
                             </div>
                         </div>
                     <!-- BI Card -->
-                        <div class="text-center widget-x border-bottom w-auto p-2">
+                        <div class="text-center widget-x mb-2 w-auto p-2 foreground">
                             <h5 class="card-title">Buildup Index</h5>
                             <div class="axis-x-container">
                                 <div class="axis-x">
@@ -172,9 +171,9 @@
                     </div>
                 </div>
                 <!-- Row 2 -->
-                <div class="row w-auto mt-3 ml-3">
+                <div class="row w-auto mt-3 ml-3 ">
                 <!-- Danger Rating Card -->
-                    <div class="card d-flex justify-content-center align-items-center text-center px-3 pt-2">
+                    <div class="card d-flex justify-content-center align-items-center text-center px-3 pt-2 foreground">
                         <h5 class="card-title">Fire Danger Rating</h5>
                         <div class="fire-danger-widget">
                             <div class="box low">LOW</div>
