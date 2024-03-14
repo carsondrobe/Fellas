@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 100 100">
+    <path d="M10,10 L10,80 Q10,97 30,97 L70,97 Q90,97 90,80 L90,10 " fill="none" stroke="white" stroke-width="4"/>
+    <path d="M18,70 L18,75 Q18,89 38,89 L62,89 Q82,89 82,75 L82,70 " fill="white" stroke="white" stroke-width="4"/>
+    <path d="M18,70 L18,50
+    Q25,50 28,53
+    31,55 34,55
+    38,55 41,53
+    44,50 50,50
+    56,50 59,53
+    62,55 65,55
+    68,55 71,53
+    75,50 82,50
+    L82,70" fill="white" stroke="white" stroke-width="4"/>
+</svg>

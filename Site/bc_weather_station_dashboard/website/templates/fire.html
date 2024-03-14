@@ -24,7 +24,7 @@
     <title>Dashboard</title>
 </head>
 
-<body>
+<body class="background">
     <!-- NAVBAR -->
     {% include 'navbar.html' %}
 
@@ -45,13 +45,13 @@
                 </h2>
                 <hr>
 
-                
+
                 <div class="row">
                 <!-- Moisture Codes -->
-                    <div class="card w-auto p-2 ml-3">
-                        <div class="row">             
+                    <div class="card w-auto p-2 ml-3 background">
+                        <div class="row">
                         <!-- FFMC Card -->
-                            <div class="text-center widget-y border-right p-2">
+                            <div class="text-center widget-y mr-2 p-2 foreground">
                                 <h5 class="card-title">Fine Fuel Moisture Code</h5>
                                 <div class="axis-y-container mt-3 mb-4">
                                     <div class="axis-y">
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                         <!-- DMC Card -->
-                            <div class="text-center widget-y border-right p-2">
+                            <div class="text-center widget-y mr-2 p-2 foreground">
                                 <h5 class="card-title">Duff Moisture Code</h5>
                                 <div class="axis-y-container mt-3 mb-4">
                                     <div class="axis-y">
@@ -97,7 +97,7 @@
                                 </div>
                             </div>
                         <!-- DC Card -->
-                            <div class="text-center widget-y p-2">
+                            <div class="text-center widget-y p-2 foreground">
                                 <h5 class="card-title">Drought<br>Code</h5>
                                 <div class="axis-y-container mt-3 mb-4">
                                     <div class="axis-y">
@@ -122,11 +122,11 @@
                         </div>
                     </div>
                 <!-- Indexes -->
-                    <div class="card w-auto p-2 ml-3">
+                    <div class="card w-auto p-2 ml-3 background">
                     <!-- ISI Card -->
-                        
+
                     <!-- BI Card -->
-                        <div class="text-center widget-x border-bottom w-auto p-2">
+                        <div class="text-center widget-x mb-2 w-auto p-2 foreground">
                             <h5 class="card-title">Buildup Index</h5>
                             <div class="axis-x-container">
                                 <div class="axis-x">
@@ -151,9 +151,9 @@
                     </div>
                 </div>
                 <!-- Row 2 -->
-                <div class="row w-auto mt-3 ml-3">
+                <div class="row w-auto mt-3 ml-3 ">
                 <!-- Danger Rating Card -->
-                    <div class="card d-flex justify-content-center align-items-center text-center px-3 pt-2">
+                    <div class="card d-flex justify-content-center align-items-center text-center px-3 pt-2 foreground">
                         <h5 class="card-title">Fire Danger Rating</h5>
                         <div class="fire-danger-widget">
                             <div class="box low">LOW</div>
@@ -174,7 +174,7 @@
 
     <!-- Swap pages button -->
     <a href="{% url 'weather' %}">
-        <img id="swapPageIcon" src="{%  static 'weather_icon.svg' %}" alt="weather_icon" >
+        <img id="swapPageIcon" src="{%  static 'images/weather_icon.svg' %}" alt="weather_icon" >
     </a>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
