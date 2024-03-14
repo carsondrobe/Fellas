@@ -124,7 +124,28 @@
                 <!-- Indexes -->
                     <div class="card w-auto p-2 ml-3 background">
                     <!-- ISI Card -->
-
+                        <div class="text-center widget-x w-auto p-2 mb-2 foreground">
+                            <h5 class="card-title">Initial Spread Index</h5>
+                            <div class="axis-x-container">
+                                <div class="axis-x">
+                                    <!-- Color-coded segments -->
+                                    <div class="segment-x green" style="width: 8%; left: 0;"></div>
+                                    <div class="segment-x blue" style="width: 12%; left: 8%;"></div>
+                                    <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
+                                    <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
+                                    <div class="segment-x red" style="width: 41%; left: 60%;"></div>
+                                    <!-- ticks -->
+                                    <div class="tick-x" style="left: 0;"><label>0</label></div>
+                                    <div class="tick-x" style="left: 8%;"><label>2</label></div>
+                                    <div class="tick-x" style="left: 20%;"><label>5</label></div>
+                                    <div class="tick-x" style="left: 40%;"><label>10</label></div>
+                                    <div class="tick-x" style="left: 60%;"><label>15</label></div>
+                                </div>
+                                <div class="arrow-isi" id="arrow-isi">
+                                    <div class="arrow-value-isi" id="arrowValue-isi"></div>
+                                </div>
+                            </div>
+                        </div>
                     <!-- BI Card -->
                         <div class="text-center widget-x mb-2 w-auto p-2 foreground">
                             <h5 class="card-title">Buildup Index</h5>
@@ -196,6 +217,7 @@
     <script src="{% static 'JavaScript/dmc.js' %}"></script>
     <script src="{% static 'JavaScript/ffmc.js' %}"></script>
     <script src="{% static 'JavaScript/dc.js' %}"></script>
+    <script src="{% static 'JavaScript/isi.js' %}"></script>
     <script src="{% static 'JavaScript/bui.js' %}"></script>
 </body>
 
