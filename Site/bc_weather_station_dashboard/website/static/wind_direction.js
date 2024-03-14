@@ -28,7 +28,7 @@ class WindArrow {
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(this.x * 0.9, this.y * 0.9); // Shorten the line
         this.ctx.strokeStyle = 'grey';
-        this.ctx.lineWidth = 4;
+        this.ctx.lineWidth = 8;
         this.ctx.stroke();
     }
 
@@ -38,7 +38,7 @@ class WindArrow {
         this.ctx.moveTo(0, 0);
         this.ctx.lineTo(-this.x * 0.9, -this.y * 0.9); // Shorten the line
         this.ctx.strokeStyle = 'red';
-        this.ctx.lineWidth = 4;
+        this.ctx.lineWidth = 8;
         this.ctx.stroke();
 
         // Draw the arrowhead for the secondary arrow
@@ -47,8 +47,8 @@ class WindArrow {
         this.ctx.rotate(this.radians + Math.PI); // Add 180 degrees to rotate in the opposite direction
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
-        this.ctx.lineTo(-15, -10);
-        this.ctx.lineTo(-15, 10);
+        this.ctx.lineTo(-22.5, -15);
+        this.ctx.lineTo(-22.5, 15);
         this.ctx.closePath();
         this.ctx.fillStyle = 'red';
         this.ctx.fill();
@@ -58,9 +58,9 @@ class WindArrow {
     drawCircle() {
         // Draw a circle
         this.ctx.beginPath();
-        this.ctx.arc(0, 0, 160, 0, 2 * Math.PI);
-        this.ctx.strokeStyle = 'black';
-        this.ctx.lineWidth = 4; 
+        this.ctx.arc(0, 0, 168, 0, 2 * Math.PI);
+        this.ctx.strokeStyle = '#e5e5e5';
+        this.ctx.lineWidth = 6;
         this.ctx.stroke();
     }
 
@@ -68,15 +68,15 @@ class WindArrow {
         // Draw labels for cardinal directions
         this.ctx.save();
         this.ctx.scale(1, -1);
-        this.ctx.font = '30px Arial'; // font for the letters
-        this.ctx.fillStyle = 'black';
+        this.ctx.font = '36px Arial'; // font for the letters
+        this.ctx.fillStyle = '#e5e5e5';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillText('S', 0, 140);  // position of the letter
         this.ctx.fillText('E', 140, 0);  
         this.ctx.fillStyle = 'red'; // Change fillStyle to red for 'N'
         this.ctx.fillText('N', 0, -140);  
-        this.ctx.fillStyle = 'black'; // Change fillStyle back to black for 'W'
+        this.ctx.fillStyle = '#e5e5e5'; // Change fillStyle back to black for 'W'
         this.ctx.fillText('W', -140, 0);
         this.ctx.restore();
     }
@@ -94,8 +94,8 @@ class WindArrow {
             let angleRad = adjustedAngle * (Math.PI / 180);
             let x = 1.40 * 100 * Math.cos(angleRad); 
             let y = 1.40 * 100 * Math.sin(angleRad); 
-            let fontsize = angle % 30 === 0 ? '16px' : '12px';
-            let color = angle % 30 === 0 ? 'black' : 'grey';
+            let fontsize = angle % 30 === 0 ? '20px' : '14px';
+            let color = angle % 30 === 0 ? '#e5e5e5' : '#c0c0c0';
             this.ctx.font = fontsize + ' Arial';
             this.ctx.fillStyle = color;
             this.ctx.fillText(angle.toString(), x, -y);
