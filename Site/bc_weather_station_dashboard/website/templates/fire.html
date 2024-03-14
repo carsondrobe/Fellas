@@ -19,11 +19,7 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <!-- CSS for widgets -->
-    <link rel="stylesheet" type="text/css" href="{% static 'danger_rating.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'dmc.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'ffmc.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'dc.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'fire_widgets.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/fire_widgets.css' %}">
 
     <title>Dashboard</title>
 </head>
@@ -72,8 +68,8 @@
                                         <div class="tick" style="top: 20%;"><label>90</label></div>
                                         <div class="tick" style="top: 16%;"><label>92</label></div>
                                     </div>
-                                    <div class="arrow" id="arrow">
-                                        <div class="arrow-value" id="arrowValue"></div>
+                                    <div class="arrow-ffmc" id="arrow-ffmc">
+                                        <div class="arrow-value-ffmc" id="arrowValue-ffmc"></div>
                                     </div>
                                 </div>
                             </div>
@@ -95,14 +91,14 @@
                                         <div class="tick" style="top: 48.75%;"><label>41</label></div>
                                         <div class="tick" style="top: 22.5%;"><label>62</label></div>
                                     </div>
-                                    <div class="arrow" id="arrow">
-                                        <div class="arrow-value" id="arrowValue"></div>
+                                    <div class="arrow-dmc" id="arrow-dmc">
+                                        <div class="arrow-value-dmc" id="arrowValue-dmc"></div>
                                     </div>
                                 </div>
                             </div>
                         <!-- DC Card -->
                             <div class="text-center widget p-2">
-                                <h5 class="card-title">Drought Code</h5>
+                                <h5 class="card-title">Drought<br>Code</h5>
                                 <div class="axis-widget mt-3 mb-4">
                                     <div class="axis" id="axis">
                                         <!-- Color-coded segments -->
@@ -118,8 +114,8 @@
                                         <div class="tick" style="top: 45%;"><label>275</label></div>
                                         <div class="tick" style="top: 28%;"><label>360</label></div>
                                     </div>
-                                    <div class="arrow" id="arrow">
-                                        <div class="arrow-value" id="arrowValue"></div>
+                                    <div class="arrow-dc" id="arrow-dc">
+                                        <div class="arrow-value-dc" id="arrowValue-dc"></div>
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +143,7 @@
                             <div class="box high">HIGH</div>
                             <div class="box extreme">EXTREME</div>
                             <div class="line"></div>
-                            <div class="arrowDR" id="arrow-fire-rating"></div>
+                            <div class="arrow-danger-rating" id="arrow-danger-rating"></div>
                         </div>
                     </div>
                 </div>
@@ -178,10 +174,10 @@
     </script>
 
     <!-- JS for widgets -->
-    <script src="{% static 'danger_rating.js' %}"></script>
-    <script src="{% static 'dmc.js' %}"></script>
-    <script src="{% static 'ffmc.js' %}"></script>
-    <script src="{% static 'dc.js' %}"></script>
+    <script src="{% static 'JavaScript/danger_rating.js' %}"></script>
+    <script src="{% static 'JavaScript/dmc.js' %}"></script>
+    <script src="{% static 'JavaScript/ffmc.js' %}"></script>
+    <script src="{% static 'JavaScript/dc.js' %}"></script>
 </body>
 
 </html>
