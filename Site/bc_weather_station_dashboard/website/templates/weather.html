@@ -18,6 +18,7 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <script src="{% static 'home.js' %}"></script>
+    <script src="{% static 'wind_direction.js' %}"></script>
     <title>Dashboard</title>
 
 </head>
@@ -43,6 +44,7 @@
 
                 <!-- Row 1 -->
                 <div class="row pt-4 justify-content-center">
+
                     <!-- Temperature Card -->
                     <div class="foreground">
                         <div class="card rounded shadow bg-info text-white mb-md-0 mb-4">
@@ -129,10 +131,9 @@
                     </div>
                     <!-- Wind Direction Card -->
                     <div class="col-md-4">
-                        <div class="card foreground">
-                            <div class="card-body text-center">
+                        <div class="card rounded shadow mb-md-0 mb-4 foreground">
+                            <div class="card-body text-center" id="wind-direction">
                                 <h5 class="card-title">Wind Direction</h5>
-                                <h2 class="card-text" id="wind-direction">N/A</h2>
                             </div>
                         </div>
                     </div>
@@ -170,7 +171,7 @@
         crossorigin="anonymous"></script>
     <script>
         {% if error %}
-            alert("{{error}}");
+        alert("{{error}}");
         {% endif %}
     </script>
 
