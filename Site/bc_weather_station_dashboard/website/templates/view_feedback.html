@@ -1,6 +1,8 @@
 {% load static %}
 <!-- View Feedback Modal -->
 <link rel="stylesheet" type="text/css" href="{% static 'feedback_card.css' %}">
+
+
 <div class="modal" id="viewFeedbackModal">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -46,12 +48,18 @@
                         }
 
                         const cardHtml = `
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Feedback from ${fb.user}</h5>
-                                    <p class="card-text feedback-text">${fb.message}</p>
-                                    <p class="card-text"><small class="text-muted">Status: ${fb.status}</small></p>
+                                    <div style="transform: rotate(0);">
+                                        <h5 class="card-title">Feedback from ${fb.user}</h5>
+                                        
+                                        <p class="card-text"><small class="text-muted">Status: ${fb.status}</small></p>
+                                        <a href="#myCollapse${fb.id}" data-toggle="collapse" class="stretched-link"></a>
+                                        <div class="collapse" id="myCollapse${fb.id}">
+                                            <p class="card card-body">${fb.message}</p>
+                                        </div>
+                                    </div>
                                     ${buttonHtml}
                                 </div>
                             </div>
@@ -74,11 +82,6 @@
                     });
                 }
             });
-        });
-        $("#feedback-cards-container").on("click", ".card", function () {
-            // Toggle a class to show/hide more text
-            $(this).find(".feedback-text").toggleClass("display-full");
-            $(this).toggleClass("wider-card");
         });
     });
 
