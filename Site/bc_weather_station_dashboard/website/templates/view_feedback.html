@@ -76,11 +76,15 @@
                     $(".addressed-btn").click(function () {
                         const feedbackId = $(this).data("id");
                         changeStatus(feedbackId, "ADD");
+                        $("#viewFeedbackButton").click();
                     });
                     $(".review-btn").click(function () {
                         const feedbackId = $(this).data("id");
                         changeStatus(feedbackId, "REV");
+                        $("#viewFeedbackButton").click();
                     });
+
+
                 }
             });
         });
@@ -98,7 +102,7 @@
             success: function (response) {
                 if (response.success) {
                     alert("Status changed successfully");
-                    location.reload();
+
                 } else {
                     alert("Failed to change status");
                 }
