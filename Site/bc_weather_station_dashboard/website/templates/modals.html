@@ -1,7 +1,7 @@
 <!-- login popup -->
 <div class="modal" id="loginModal">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content foreground">
             <div class="modal-header">
                 <h4 class="modal-title">Login</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -11,8 +11,8 @@
                       onsubmit="return validateLoginForm()">
                     {% csrf_token %}
                     <div class="mb-3 mt-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
@@ -32,7 +32,7 @@
 <!-- register popup -->
 <div class="modal" id="registerModal">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content foreground">
             <div class="modal-header">
                 <h4 class="modal-title">Create Account</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>

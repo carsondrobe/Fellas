@@ -1,0 +1,230 @@
+.widget-y {
+  width: 170px;
+}
+.widget-x {
+  height: 150px;
+}
+.axis-y-container {
+  border: none;
+  position: relative;
+  height: 250px;
+}
+
+.axis-y {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 35px;
+  width: 3px;
+  height: 250px;
+  margin-top: 10px;
+}
+
+.segment-y {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 100%;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  z-index: 1;
+}
+
+.axis-x-container {
+  border: none;
+  position: relative;
+  width: 250px;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.axis-x {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0px;
+  width: 250px;
+  height: 3px;
+  margin-top: 0px;
+}
+
+.segment-x {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  z-index: 1;
+}
+
+/* Color segments */
+.green { border-color: green; }
+.blue { border-color: blue; }
+.yellow { border-color: yellow; }
+.orange { border-color: orange; }
+.red { border-color: red; }
+
+/* Tick styles */
+.tick-y {
+  position: absolute;
+  left: -5px;
+  width: 20px;
+  height: 2px;
+  background-color: #e5e5e5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 2;
+}
+.tick-y label {
+  margin-top: -8px;
+  margin-right: 25px;
+  font-size: 12px;
+  color: #e5e5e5;
+}
+
+.tick-x {
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  top: -5px;
+  background-color: #e5e5e5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+.tick-x label {
+  position: absolute;
+  transform: translateX(-50%);
+  top: -15px;
+  width: 20px; /* Add this line */
+  text-align: center; /* Add this line */
+  right: -19px;
+  font-size: 12px;
+  color: #e5e5e5;
+}
+
+/* Arrow Styles */
+.arrow-ffmc {
+  position: absolute;
+  right: 70px;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 20px solid #e5e5e5;
+}
+.arrow-value-ffmc {
+  position: absolute;
+  top: -3px;
+  left: 30px;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: #e5e5e5;
+}
+.arrow-dmc {
+  position: absolute;
+  right: 70px;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 20px solid #e5e5e5;
+}
+.arrow-value-dmc {
+  position: absolute;
+  top: -3px;
+  left: 30px;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: #e5e5e5;
+}
+.arrow-dc {
+  position: absolute;
+  right: 70px;
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 20px solid #e5e5e5;
+}
+.arrow-value-dc {
+  position: absolute;
+  top: -3px;
+  left: 30px;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: #e5e5e5;
+}
+.arrow-bui {
+  position: absolute;
+  right: 70px;
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 20px solid #e5e5e5;
+}
+.arrow-value-bui {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  color: #e5e5e5;
+}
+.fire-danger-widget {
+  width: 450px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  color: #e5e5e5;
+  text-shadow: black 3px 0 10px;
+}
+
+/* Fire Danger Rating Styles */
+.box {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #e5e5e5;
+  border-radius: 3px;
+}
+
+.low {
+  background-color: green;
+}
+
+.moderate {
+  background-color: yellow;
+}
+
+.high {
+  background-color: orange;
+}
+
+.extreme {
+  background-color: red;
+}
+.line {
+  width: 100%;
+  height: 6px;
+  background-color: #e5e5e5;
+  margin-top: 5px;
+}
+.arrow-danger-rating{
+  position: absolute;
+  top: 120px;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 35px solid #e5e5e5;
+}

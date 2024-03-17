@@ -13,3 +13,4 @@ sqlparse==0.4.4
 typing_extensions==4.9.0
 tzdata==2024.1
 urllib3==2.2.1
+coverage==7.4.3

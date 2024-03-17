@@ -6,9 +6,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Create customer marker icon
 const markerIcon = L.icon({
-    iconUrl: '../static/marker-icon.png',
+    iconUrl: '../static/images/weather_station_icon.svg',
     shadowUrl: "../static/marker-shadow.png",
-    iconSize:    [25, 41],
+    iconSize:    [35, 65],
     iconAnchor:  [12, 41],
     popupAnchor: [1, -34],
     shadowSize:  [41, 41]
@@ -106,7 +106,13 @@ function updateDataHTML(currentStationData) {
 
     // Update the HTML elements with the station's wind direction data
     if (currentStationData.HOURLY_WIND_DIRECTION) {
-        document.getElementById('wind-direction').innerHTML = currentStationData.HOURLY_WIND_DIRECTION + "&deg;";
+        // Get the wind direction in degrees
+        var windDirectionDegrees = currentStationData.HOURLY_WIND_DIRECTION;
+        // Update the text display append to the wind direction widget
+        document.getElementById('wind-direction').innerHTML = "<h5>Wind Direction " + windDirectionDegrees + "&deg;</h5>";
+        // Create a new WindArrow with the updated wind direction
+        var windArrow = new WindArrow(windDirectionDegrees);
+        windArrow.draw();
     }
 
     // Update the HTML elements with the station's wind gust data

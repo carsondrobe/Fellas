@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">BC Weather and Wildfire</a>
+<nav class="navbar navbar-expand-lg navbar-dark foreground">
+    <a class="navbar-brand foreground" href="#">BC Weather and Wildfire</a>
     <div id="date_selector" class="ml-auto">
         <strong><span id="selected_date" class="text-white p-2">Today</span></strong>
-        <img class="datepicker-toggle-button" src="../static/calendar_icon.svg" alt="calendar icon" width="30">
+        <img class="datepicker-toggle-button" src="../static/images/calendar_icon.svg" alt="calendar icon" width="30">
         <input type="date" class="datepicker-input">
     </div>
     <script> // should be moved to a separate file when we make one
@@ -39,20 +39,19 @@
 
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                <!-- If user is not logged in, hide the link -->
+                {% else %}
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Log in</a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#registerModal">Register</a>
+                {% endif %}
             </div>
-            <!-- If user is not logged in, hide the link -->
-            {% else %}
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Log in</a>
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#registerModal">Register</a>
-            {% endif %}
         </div>
-    </div>
 </nav>
 
 <!-- The Feedback popup Modal -->
 <div class="modal" id="feedbackModal">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content foreground">
             <!-- Modal Header -->
             <div class="modal-header">
                 <h4 class="modal-title">Submit Feedback</h4>
