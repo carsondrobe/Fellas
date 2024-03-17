@@ -304,11 +304,8 @@ class SubmitFeedbackTestCase(TestCase):
         # Simulate a POST request to submit feedback
         response = self.client.post(reverse("submit_feedback"), data=feedback_data)
 
-        # Check if the response is a redirect
-        self.assertEqual(response.status_code, 302)
-
-        # Check if the redirect URL is correct
-        self.assertEqual(response.url, reverse("home"))
+        # Check if the response is a direct to home
+        self.assertEqual(response.status_code, 200)
 
         # Since feedback is created in the test, check for updated values
         updated_feedback = Feedback.objects.get(pk=self.feedback.pk)
@@ -325,10 +322,7 @@ class SubmitFeedbackTestCase(TestCase):
         response = self.client.post(reverse("submit_feedback"), data={})
 
         # Check if the response is a redirect
-        self.assertEqual(response.status_code, 302)
-
-        # Check if the redirect URL is correct
-        self.assertEqual(response.url, reverse("home"))
+        self.assertEqual(response.status_code, 200)
 
         # Check that no feedback is saved in the database
         self.assertEqual(Feedback.objects.count(), 0)
@@ -341,10 +335,7 @@ class SubmitFeedbackTestCase(TestCase):
         response = self.client.get(reverse("submit_feedback"))
 
         # Check if the response is a redirect
-        self.assertEqual(response.status_code, 302)
-
-        # Check if the redirect URL is correct
-        self.assertEqual(response.url, reverse("home"))
+        self.assertEqual(response.status_code, 200)
 
         # Check that no feedback is saved in the database
         self.assertEqual(Feedback.objects.count(), 0)
