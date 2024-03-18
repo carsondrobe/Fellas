@@ -62,14 +62,14 @@ function updateData(stationCode) {
         }
         // TO DO: suppress get error and supress "RuntimeWarning: DateTimeField StationData.DATE_TIME received a naive datetime (2024-03-05 12:00:00) while time zone support is active."
     })
-        .then(stationData => {
-            if(stationData != null) {
+    .then(stationData => {
+        if(stationData != undefined) {
             // Set the current station's data dependant on the station code
             var currentStationData = stationData.find(measure => measure.STATION_CODE === stationCode);
             // Update HTML elements on right col
             updateDataHTML(currentStationData);
-            }
-        })
+        }
+    })
     .catch(error => console.log(error));
 }
 
@@ -204,12 +204,10 @@ function createMarker(station, display) {
     });
     // If display is 1, display
     if(display === 1) {
-        // Open current station's popup
+        // Display current station's data and open its popup
         marker.fire('click');
         // Add current station's name and code to the dashboard
         document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
-        // Display current station's data
-        updateData(currentStationCode);
     }
 }
 
