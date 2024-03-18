@@ -1,5 +1,5 @@
 class SemiCircleProgressBar {
-    constructor(element, initialValue = 0, strokeColor = '#4d4dff', trailColor = '#ddd', borderColor = '#c0c0c0') {
+    constructor(element, initialValue = 0, strokeColor = '#0dcaf0', trailColor = '#ddd', borderColor = '#c0c0c0') {
         element.innerHTML = ''; // Clear the element
         // Create SVG element
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Get element
     const elem = document.querySelector('#humidity-progress-bar');
     // Initialize the progress bar
-    const progressBar = new SemiCircleProgressBar(elem, 0, '#4d4dff', '#ddd', '#c0c0c0');
+    const progressBar = new SemiCircleProgressBar(elem, 0, '#0dcaf0', '#ddd', '#c0c0c0');
     // Update the value
     progressBar.setValue(0); // sets the value of the bar
 });
