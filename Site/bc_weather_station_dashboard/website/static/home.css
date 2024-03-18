@@ -26,14 +26,14 @@
     bottom: 1em;
     cursor: pointer;
 
-    border:3px solid black;
-    border-radius:75%;
-    -moz-border-radius:75%;
-    -webkit-border-radius:75%;
+    border: 3px solid #5e5e5e;
+    border-radius: 75%;
+    -moz-border-radius: 75%;
+    -webkit-border-radius: 75%;
 }
 
 #swapPageIcon:hover {
-    background-color: #9d9d9d;
+    background-color: #5e5e5e;
 }
 
 /* For the cards */
@@ -44,4 +44,30 @@
 .less-prominent {
     color: #dddddddd;
     font-weight: normal;
+}
+
+.background {
+    background-color: #1e1e1e;
+    color: #e5e5e5;
+}
+
+.foreground {
+    border-radius: 5px;
+    background-color: #333333;
+    color: #e5e5e5;
+    /*background-color: #088678;*/
+    padding: 10px;
+}
+
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.leaflet-popup-content-wrapper {
+    background-color: #333333;
+    padding: 10px;
+    color: #e5e5e5;
 }

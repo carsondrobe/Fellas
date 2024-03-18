@@ -24,18 +24,17 @@
 
 </head>
 
-<body>
+<body class="background">
     <!-- NAVBAR -->
     {% include 'navbar.html' %}
 
     <div class="container-fluid">
         <div class="row pt-3">
             <!-- Station Map Column -->
-            <div class="col-6 text-center border-right">
-                <h2 id="station-name-code"></h2>
-                <hr>
+            <div class="col-6 text-center border-right border-dark">
+                <h2 id="station-name-code" class="foreground"></h2>
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 50em; width: 100%;"></div>
+                <div id="map" style="height: 60em; width: 100%;"></div>
                 <script src="{% static 'map.js' %}"></script>
                 <!-- Search bar -->
                 <div class="container mt-4">
@@ -52,40 +51,41 @@
                 <hr>
             </div>
             <!-- Weather Data Column -->
-            <div class="col-6">
-                <h2>
+            <div class="col-6 ">
+                <h2 class="foreground text-center">
                     Weather
                 </h2>
-                <hr>
 
                 <!-- Row 1 -->
                 <div class="row pt-4 justify-content-center">
 
                     <!-- Temperature Card -->
-                    <div class="card rounded shadow bg-info text-white mb-md-0 mb-4">
-                        <div class="card-body text-center p-4">
-                            <!-- Temp icon and title -->
-                            <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
-                                <span class="mr-2">
-                                    <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
-                                </span>
-                                <span aria-label="Hourly Temperature">Hourly Temperature</span>
-                            </h5>
-                            <!-- Current (hourly?) temperature -->
-                            <div class="d-flex align-items-center justify-content-center">
-                                <h2 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h2>
-                                <span class="display-4 align-bottom muted-white">°C</span>
-                            </div>
-                            <!-- Current daily high/low -->
-                            <div class="d-flex justify-content-center align-items-center mt-2">
-                                <span class="less-prominent" title="Current daily high">High: 20°C</span>
-                                <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
-                            </div>
-                            <!-- Last updated time -->
-                            <div class="d-md-flex justify-content-end mt-2">
-                                <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
-                                    onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
-                                    style="cursor: default;">12:00 PM</span>
+                    <div class="foreground">
+                        <div class="card rounded shadow bg-info text-white mb-md-0 mb-4">
+                            <div class="card-body text-center p-4">
+                                <!-- Temp icon and title -->
+                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
+                                    <span class="mr-2">
+                                        <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
+                                    </span>
+                                    <span aria-label="Hourly Temperature">Hourly Temperature</span>
+                                </h5>
+                                <!-- Current (hourly?) temperature -->
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <h2 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h2>
+                                    <span class="display-4 align-bottom muted-white">°C</span>
+                                </div>
+                                <!-- Current daily high/low -->
+                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                    <span class="less-prominent" title="Current daily high">High: 20°C</span>
+                                    <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
+                                </div>
+                                <!-- Last updated time -->
+                                <div class="d-md-flex justify-content-end mt-2">
+                                    <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
+                                        onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
+                                        style="cursor: default;">12:00 PM</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
 
                     <!-- Relative Humidity Card -->
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Relative Humidity</h5>
                                 <h2 class="card-text" id="relative-humidity">N/A</h2>
@@ -105,7 +105,7 @@
                 <div class="row pt-4 justify-content-center">
                     <!-- Precipitation Card -->
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Precipitation</h5>
                                 <h2 class="card-text" id="precipitation">N/A</h2>
@@ -114,7 +114,7 @@
                     </div>
                     <!-- Snow Depth Card -->
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Snow Depth</h5>
                                 <h2 class="card-text" id="snow-depth">N/A</h2>
@@ -123,7 +123,7 @@
                     </div>
                     <!-- Snow Quality Card -->
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Snow Quality</h5>
                                 <h2 class="card-text" id="snow-quality">N/A</h2>
@@ -136,7 +136,7 @@
                 <div class="row pt-4 justify-content-center">
                     <!-- Wind Speed Card -->
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Wind Speed</h5>
                                 <h2 class="card-text" id="wind-speed">N/A</h2>
@@ -145,7 +145,7 @@
                     </div>
                     <!-- Wind Direction Card -->
                     <div class="col-md-4">
-                        <div class="card rounded shadow mb-md-0 mb-4">
+                        <div class="card rounded shadow mb-md-0 mb-4 foreground">
                             <div class="card-body text-center" id="wind-direction">
                                 <h5 class="card-title">Wind Direction</h5>
                                 <h2 class="card-text" id="wind-direction">N/A</h2>
@@ -154,7 +154,7 @@
                     </div>
                     <!-- Wind Gust Card -->
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Wind Gust</h5>
                                 <h2 class="card-text" id="wind-gust">N/A</h2>
@@ -166,13 +166,12 @@
         </div>
     </div>
 
-
     <!-- Popups -->
     {% include 'modals.html' %}
 
     <!-- Swap pages button -->
     <a href="{% url 'fire' %}">
-        <img id="swapPageIcon" src="{%  static 'flame_icon.svg' %}" alt="fire_icon" >
+        <img id="swapPageIcon" src="{%  static 'images/flame_icon.svg' %}" alt="fire_icon" >
     </a>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

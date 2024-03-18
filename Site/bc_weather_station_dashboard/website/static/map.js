@@ -6,9 +6,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Create custom marker icon
 const markerIcon = L.icon({
-    iconUrl: '../static/marker-icon.png',
+    iconUrl: '../static/images/weather_station_icon.svg',
     shadowUrl: "../static/marker-shadow.png",
-    iconSize:    [25, 41],
+    iconSize:    [35, 65],
     iconAnchor:  [12, 41],
     popupAnchor: [1, -34],
     shadowSize:  [41, 41]
