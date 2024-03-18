@@ -1,0 +1,16 @@
+{
+  "name": "bc_weather_station_dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "qunit website/tests/*.js",
+    "test:coverage": "nyc --reporter=text npm test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jsdom": "^24.0.0",
+    "nyc": "^15.1.0"
+  }
+}
