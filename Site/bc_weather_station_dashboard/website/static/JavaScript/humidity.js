@@ -102,13 +102,17 @@ class SemiCircleProgressBar {
         this.arc.setAttribute('stroke-dashoffset', offset);
     }
 }
+// export for tests
+module.exports = SemiCircleProgressBar;
 
 // Usage:
 document.addEventListener('DOMContentLoaded', (event) => {
     // Get element
     const elem = document.querySelector('#humidity-progress-bar');
-    // Initialize the progress bar
-    const progressBar = new SemiCircleProgressBar(elem, 0, '#0dcaf0', '#ddd', '#c0c0c0');
-    // Update the value
-    progressBar.setValue(0); // sets the value of the bar
+    if (elem) {
+        // Initialize the progress bar
+        const progressBar = new SemiCircleProgressBar(elem, 0, '#0dcaf0', '#ddd', '#c0c0c0');
+        // Update the value
+        progressBar.setValue(0); // sets the value of the bar
+    }
 });
