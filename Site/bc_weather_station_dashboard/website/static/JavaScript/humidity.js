@@ -1,5 +1,6 @@
 class SemiCircleProgressBar {
     constructor(element, initialValue = 0, strokeColor = '#4d4dff', trailColor = '#ddd', borderColor = '#c0c0c0') {
+        element.innerHTML = ''; // Clear the element
         // Create SVG element
         this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.svg.setAttribute('viewBox', '0 0 100 50');
