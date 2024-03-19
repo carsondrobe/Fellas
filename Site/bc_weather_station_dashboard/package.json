@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "qunit website/tests/*.js",
+    "test": "qunit website/tests/Qunit/*.js",
+    "test:jest": "jest",
     "test:coverage": "nyc --reporter=text npm test"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3",
     "jsdom": "^24.0.0",
     "nyc": "^15.1.0"
   }

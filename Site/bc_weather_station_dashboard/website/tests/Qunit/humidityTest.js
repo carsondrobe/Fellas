@@ -4,7 +4,7 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 
 // Import the SemiCircleProgressBar class
-const SemiCircleProgressBar = require('../static/JavaScript/humidity');
+const SemiCircleProgressBar = require('../../static/JavaScript/humidity');
 
 // Define a test suite for the SemiCircleProgressBar class
 QUnit.module('SemiCircleProgressBar', function() {
