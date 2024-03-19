@@ -36,13 +36,13 @@
                 <h2 id="station-name-code" class="foreground"></h2>
                 <!-- Leaflet Map Implementation -->
                 <div id="map" style="height: 60em; width: 100%;"></div>
-                <script src="{% static 'map.js' %}"></script>
+                <script src="{% static 'JavaScript/map.js' %}"></script>
                 <!-- Search bar -->
                 <div class="container mt-4">
                     <div class="input-group">
                         <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..." list="search-suggestions" autocomplete="on">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button" onclick="searchBar()">Search</button>
+                            <button class="btn btn-primary" type="button" id="search-btn">Search</button>
                         </div>
                     </div>
                         <datalist id="search-suggestions">
