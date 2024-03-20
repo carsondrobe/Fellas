@@ -37,11 +37,11 @@ def fire(request, **kwargs):
 
 
 def login_user(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         if not username or not password:
-            return HttpResponse('Please fill in all fields', status=400)
+            return HttpResponse("Please fill in all fields", status=400)
 
         # Authenticate the user
         user = authenticate(request, username=username, password=password)
@@ -52,9 +52,9 @@ def login_user(request):
             return redirect(reverse("home"))
         else:
             # Invalid username or password
-            return home(request, error='Invalid username or password')
+            return home(request, error="Invalid username or password")
 
-    return home(request, error='Invalid request')
+    return home(request, error="Invalid request")
 
 
 def logout_user(request):
@@ -64,11 +64,11 @@ def logout_user(request):
 
 def register(request):
     print("register", request.POST)
-    username = request.POST.get('username')
-    email = request.POST.get('email')
-    password = request.POST.get('password')
+    username = request.POST.get("username")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
     if not username or not email or not password:
-        return HttpResponse('Please fill in all fields', status=400)
+        return HttpResponse("Please fill in all fields", status=400)
 
     # Create the user
     user = User.objects.create_user(username, email, password)
@@ -85,7 +85,9 @@ def weather_stations_information(request):
     # Check if stations is empty
     if not stations.exists():
         # Return an empty JSON response of an error message indicating no data was found
-        return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        return JsonResponse(
+            {"error": "No data found for the specified date and time"}, status=404
+        )
     # Create dictionary of data
     data = [
         {
@@ -110,15 +112,11 @@ def weather_stations_information(request):
 def submit_feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
-        # Using a Dummy User for now
-        test_feedback_user, created = User.objects.get_or_create(
-            username="test_feedback_user"
-        )
         if form.is_valid():
             feedback = Feedback(
                 message=form.cleaned_data["feedback"],
                 # TODO: Replace with the actual user
-                user=test_feedback_user,
+                user=request.user,
                 status=Feedback.SUBMITTED,
             )
             feedback.save()
@@ -128,18 +126,46 @@ def submit_feedback(request):
     return home(request, error="Invalid request")
 
 
+def view_feedback(request):
+    feedback = Feedback.objects.all()
+    feedback_data = [
+        {
+            "id": fb.id,
+            "message": fb.message,
+            "user": fb.user.username,
+            "status": fb.status,
+        }
+        for fb in feedback
+    ]
+    return JsonResponse(feedback_data, safe=False)
+
+
+def update_feedback_status(request):
+    if request.method == "POST":
+        feedback_id = request.POST.get("feedback_id")
+        status = request.POST.get("new_status")
+        feedback = Feedback.objects.get(id=feedback_id)
+        feedback.status = status
+        feedback.save()
+        return JsonResponse({"success": True})
+
+
 def station_data(request):
     # Get the selected date from the query
-    selected_date = request.GET.get('datetime', None)
+    selected_date = request.GET.get("datetime", None)
     # Check if date is undefined
     if selected_date == "undefined":
-        return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        return JsonResponse(
+            {"error": "No data found for the specified date and time"}, status=404
+        )
     # Filter the station data to only retrieve data from specified date
     data = StationData.objects.filter(DATE_TIME=selected_date)
     # Check if the data is empty
     if not data.exists():
         # Return an empty JSON response of an error message indicating no data was found
-        return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        return JsonResponse(
+            {"error": "No data found for the specified date and time"}, status=404
+        )
     # Create dictionary of data
     measures = [
         {
