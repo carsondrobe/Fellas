@@ -37,6 +37,8 @@ jobs:
     - name: Install Node.js dependencies
       run: |
         npm ci
+      working-directory: Site/bc_weather_station_dashboard
     - name: Run JavaScript tests
       run: |
         npm test
+      working-directory: Site/bc_weather_station_dashboard
