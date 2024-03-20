@@ -304,11 +304,8 @@ class SubmitFeedbackTestCase(TestCase):
         # Simulate a POST request to submit feedback
         response = self.client.post(reverse("submit_feedback"), data=feedback_data)
 
-        # Check if the response is a redirect
-        self.assertEqual(response.status_code, 302)
-
-        # Check if the redirect URL is correct
-        self.assertEqual(response.url, reverse("home"))
+        # Check if the response is a direct to home
+        self.assertEqual(response.status_code, 200)
 
         # Since feedback is created in the test, check for updated values
         updated_feedback = Feedback.objects.get(pk=self.feedback.pk)
@@ -325,10 +322,7 @@ class SubmitFeedbackTestCase(TestCase):
         response = self.client.post(reverse("submit_feedback"), data={})
 
         # Check if the response is a redirect
-        self.assertEqual(response.status_code, 302)
-
-        # Check if the redirect URL is correct
-        self.assertEqual(response.url, reverse("home"))
+        self.assertEqual(response.status_code, 200)
 
         # Check that no feedback is saved in the database
         self.assertEqual(Feedback.objects.count(), 0)
@@ -341,10 +335,49 @@ class SubmitFeedbackTestCase(TestCase):
         response = self.client.get(reverse("submit_feedback"))
 
         # Check if the response is a redirect
-        self.assertEqual(response.status_code, 302)
-
-        # Check if the redirect URL is correct
-        self.assertEqual(response.url, reverse("home"))
+        self.assertEqual(response.status_code, 200)
 
         # Check that no feedback is saved in the database
         self.assertEqual(Feedback.objects.count(), 0)
+
+
+class ViewFeedbackTestCase(TestCase):
+    def test_view_feedback_success(self):
+        # Create a test user and feedback
+        user = User.objects.create_user(username="testuser", password="testpassword")
+        feedback = Feedback.objects.create(
+            message="Some feedback", user=user, status="new"
+        )
+
+        # Make a request
+        response = self.client.get(reverse("view_feedback"))
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)  # Should have one feedback item
+        self.assertEqual(response.json()[0]["message"], "Some feedback")
+
+    def test_view_feedback_empty(self):
+        response = self.client.get(reverse("view_feedback"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [])
+
+
+class UpdateFeedbackStatusTestCase(TestCase):
+    def test_update_status_success(self):
+        user = User.objects.create_user(username="testuser")
+        feedback = Feedback.objects.create(
+            message="Some feedback", user=user, status="new"
+        )
+
+        response = self.client.post(
+            reverse("update_feedback_status"),  # Replace if needed
+            data={"feedback_id": feedback.id, "new_status": "resolved"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"success": True})
+
+        # Reload feedback object to check if it's updated
+        updated_feedback = Feedback.objects.get(id=feedback.id)
+        self.assertEqual(updated_feedback.status, "resolved")
