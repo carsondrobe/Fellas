@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "qunit website/tests/Qunit/*.js",
+    "test:jest": "jest",
     "test:coverage": "nyc --reporter=text npm test"
   },
   "author": "",
