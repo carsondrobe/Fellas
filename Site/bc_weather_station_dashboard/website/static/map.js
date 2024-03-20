@@ -88,7 +88,9 @@ function updateDataHTML(currentStationData) {
     }
     // Update the HTML elements with the station's snow depth data
     if (currentStationData.SNOW_DEPTH) {
-        document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
+        drawSnowDepth(currentStationData.SNOW_DEPTH);
+    } else {
+        drawSnowDepth(0);
     }
     // Update the HTML elements with the station's snow quality data
     if (currentStationData.SNOW_DEPTH_QUALITY) {
@@ -100,6 +102,7 @@ function updateDataHTML(currentStationData) {
     }
     // Update the HTML elements with the station's wind direction data
     if (currentStationData.HOURLY_WIND_DIRECTION) {
+        console.log("wind " + currentStationData.SNOW_DEPTH);
         // Get the wind direction in degrees
         var windDirectionDegrees = currentStationData.HOURLY_WIND_DIRECTION;
         // Update the text display append to the wind direction widget
@@ -113,6 +116,27 @@ function updateDataHTML(currentStationData) {
         document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
     }
 }
+
+// Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
+document.getElementById('date_selector').addEventListener('change', function() {
+    // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
+    document.getElementById('temperature').innerHTML = "N/A";
+    document.getElementById('relative-humidity').innerHTML = "N/A";
+    document.getElementById('precipitation').innerHTML = "N/A";
+    // document.getElementById('snow-depth').innerHTML = "N/A"; // Snow depth self updates
+    document.getElementById('snow-quality').innerHTML = "N/A";
+    document.getElementById('wind-speed').innerHTML = "N/A";
+    document.getElementById('wind-direction').innerHTML = "N/A";
+    document.getElementById('wind-gust').innerHTML = "N/A";
+    // Update all data since date time is changing
+    updateData(currentStationCode);
+});
+
+// Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
+document.getElementById('map').addEventListener('click', function() {
+    // Only need to update the HTML since date time is not changing
+    updateDataHTML(currentStationCode);
+});
 
 // Function to check if geolocation is available
 function checkLocation() {
@@ -170,7 +194,7 @@ function computeDistance(longitude1, latitude1, longitude2, latitude2) {
 }
 
 // Function for displaying search bar station
-function searchBar() { 
+function searchBar() {
     // Set variable for input
     let input = document.getElementById('searchInput').value;
     // Go through all of the weather stations
