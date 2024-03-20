@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "qunit website/tests/*.js",
+    "test": "npx qunit website/tests/*.js",
     "test:coverage": "nyc --reporter=text npm test"
   },
   "author": "",
