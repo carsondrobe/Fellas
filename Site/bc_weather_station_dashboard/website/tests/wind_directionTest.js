@@ -1,4 +1,3 @@
-const QUnit = require('qunit');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const WindArrow = require('../static/wind_direction.js');
