@@ -50,6 +50,25 @@
                         <input type="email" class="form-control" id="registerEmail" name="email">
                     </div>
                     <div class="mb-3">
+                        <label for="phone_number" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="registerPhoneNumber" name="phone_number">
+                    </div>
+                    <div class="mb-3">
+                        <label>User Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="user_type" id="commonUser" value="CU" checked>
+                            <label class="form-check-label" for="commonUser">
+                                Common User
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="user_type" id="fireStaff" value="FS">
+                            <label class="form-check-label" for="fireStaff">
+                                Fire Staff
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="registerPassword" name="password">
                     </div>
