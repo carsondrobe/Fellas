@@ -20,7 +20,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <script src="{% static 'home.js' %}"></script>
     <script src="{% static 'wind_direction.js' %}"></script>
-    <script src="{% static 'JavaScript/humidity.js' %}"></script>
+    <script src="{% static 'JavaScript/humidity.js' %}"></script>   
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/search_bar.css' %}">
+
+
     <title>Dashboard</title>
 
 </head>
@@ -32,6 +35,8 @@
     <div class="container-fluid">
         <div class="row pt-3">
             <!-- Station Map Column -->
+            {% comment %} If you want to make map only take up 1/3 of page, use line below {% endcomment %}
+            {% comment %} <div class="col-4 text-center border-right border-dark"> {% endcomment %}
             <div class="col-6 text-center border-right border-dark">
                 <h2 id="station-name-code" class="foreground"></h2>
                 <!-- Leaflet Map Implementation -->
@@ -49,7 +54,6 @@
                             <option value="1">1</option>
                         </datalist>
                 </div>
-                <hr>
             </div>
             <!-- Weather Data Column -->
             <div class="col-6 ">
