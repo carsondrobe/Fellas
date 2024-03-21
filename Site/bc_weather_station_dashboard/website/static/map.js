@@ -14,18 +14,7 @@ const markerIcon = L.icon({
     shadowSize: [41, 41]
 });
 
-const lightBlue = '#0dcaf0';
-const lightYellow = '#e0e064'; // Slightly darker yellow
-const lightOrange = '#e68e47'; // Slightly darker orange
-const lightRed = '#e64c4c';    // Slightly darker red
 
-
-const colorRanges = [
-    { maxSpeed: 10, color: lightBlue },
-    { maxSpeed: 15, color: lightYellow },
-    { maxSpeed: 20, color: lightOrange },
-    { maxSpeed: 35, color: lightRed }
-];
 // Create variables to hold current station's station code and all weather stations
 var currentStationCode;
 var weatherStations;
@@ -116,24 +105,7 @@ function updateDataHTML(currentStationData) {
     // Update the HTML elements with the station's wind speed data
     if (currentStationData.HOURLY_WIND_SPEED) {
         document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
-
-
-        const windSpeed = currentStationData.HOURLY_WIND_SPEED;
-        const maxWindSpeed = 35;
-
-        let currentColor;
-        for (const range of colorRanges) {
-            if (windSpeed <= range.maxSpeed) {
-                currentColor = range.color;
-                break;
-            }
-        }
-
-        const progressPercentage = (windSpeed / maxWindSpeed) * 100;
-        const progressCircle = document.querySelector('circle:last-of-type');
-        const circumference = progressCircle.getTotalLength();
-        progressCircle.style.strokeDashoffset = circumference - (progressPercentage / 100) * circumference;
-        progressCircle.style.stroke = currentColor;
+        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED);
     }
     // Update the HTML elements with the station's wind direction data
     if (currentStationData.HOURLY_WIND_DIRECTION) {
