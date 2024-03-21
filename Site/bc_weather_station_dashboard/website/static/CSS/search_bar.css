@@ -1,5 +1,5 @@
 .form-control {
-    background-color: #464545;
+    background-color: #f8f9fa57;
     color: #fff;
     border: 1px solid #868585; 
     height: 3em;
@@ -10,7 +10,7 @@
 }
 
 #searchButton {
-    background-color: #464545;
+    background-color: #f8f9fa57;
     color: #fff; 
     border: 1px solid #868585; 
     padding: 10px;

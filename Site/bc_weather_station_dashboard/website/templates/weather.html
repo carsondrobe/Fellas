@@ -21,7 +21,9 @@
     <script src="{% static 'home.js' %}"></script>
     <script src="{% static 'wind_direction.js' %}"></script>
     <script src="{% static 'JavaScript/humidity.js' %}"></script>   
+    <script src="{% static 'JavaScript/precipitation.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/search_bar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/precipitation_card.css' %}">
 
 
     <title>Dashboard</title>
@@ -123,10 +125,15 @@
                 <!-- Row 2 -->
                 <div class="row pt-4 justify-content-center">
                     <!-- Precipitation Card -->
-                    <div class="col-md-4">
+                    <div class="col-md-4" id="precipitation-card">
                         <div class="card foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Precipitation</h5>
+                                <div class="container">
+                                    <div class="cloud">
+
+                                    </div>
+                                </div>
                                 <h2 class="card-text" id="precipitation">N/A</h2>
                             </div>
                         </div>
