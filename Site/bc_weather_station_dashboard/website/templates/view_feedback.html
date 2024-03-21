@@ -5,14 +5,14 @@
 
 <div class="modal" id="viewFeedbackModal">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
+        <div class="modal-content background">
             <div class="modal-header">
                 <h4 class="modal-title">Feedback</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="row flex-nowrap overflow-auto" id="feedback-cards-container"
+                    <div class="row flex-nowrap overflow-auto feedback-modal" id="feedback-cards-container"
                         style="margin-bottom: 1em;">
                         <!-- Feedback cards will be added here -->
                     </div>
@@ -35,7 +35,7 @@
                     for (let fb of response) {
                         let buttonHtml = '';
                         if (fb.status == "REV") {
-                            buttonHtml = `<button type="button" class="btn btn-success  addressed-btn" data-id="${fb.id}">Addressed</button>`;
+                            buttonHtml = `<button type="button" class="btn btn-success  addressed-btn" data-id="${fb.id}" style="color: black;">Addressed</button>`;
                         } else if (fb.status == "ADD") {
                             continue;
                         }
@@ -43,22 +43,22 @@
                             buttonHtml = `
                             <div class="row justify-content-center">
                                 <button type="button" class="btn btn-warning review-btn" data-id="${fb.id}" style="margin-right: 0.5em;">Review</button>
-                                <button type="button" class="btn btn-success  addressed-btn" data-id="${fb.id}">Addressed</button>
+                                <button type="button" class="btn btn-success  addressed-btn" data-id="${fb.id}" style="color: black;">Addressed</button>
                             </div>
                         `;
                         }
 
                         const cardHtml = `
                         <div class="col-6">
-                            <div class="card">
-                                <div class="card-body">
+                            <div class="card foreground">
+                                <div class="card-body feedback-card">
                                     <div style="transform: rotate(0);">
                                         <h5 class="card-title">Feedback from ${fb.user}</h5>
                                         
-                                        <p class="card-text"><small class="text-muted">Status: ${fb.status}</small></p>
+                                        <p class="card-text"><small class="less-prominent">Status: ${fb.status}</small></p>
                                         <a href="#myCollapse${fb.id}" data-toggle="collapse" class="stretched-link"></a>
                                         <div class="collapse" id="myCollapse${fb.id}">
-                                            <p class="card card-body">${fb.message}</p>
+                                            <p class="card card-body background">${fb.message}</p>
                                         </div>
                                     </div>
                                     ${buttonHtml}
@@ -88,6 +88,7 @@
                 }
             });
         });
+
     });
 
     function changeStatus(feedbackId, newStatus) {

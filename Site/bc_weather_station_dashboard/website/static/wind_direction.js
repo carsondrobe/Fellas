@@ -3,17 +3,29 @@ class WindArrow {
         // Adjust the degrees for compass-like behavior and convert to radians
         this.degrees = -(degrees - 90) % 360;
         this.radians = this.degrees * (Math.PI / 180);
+    }
 
-        // Create a new canvas and set its dimensions
+    createCanvas(size) {
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.canvas.height = 100;
+        this.canvas.width = this.canvas.height = size;
+        return this.canvas;
+    }
 
-        // 2D rendering context for the canvas
+    getContext() {
         this.ctx = this.canvas.getContext('2d');
+        return this.ctx;
+    }
 
-        // Move the origin to the center of the canvas and invert the y-axis
+    translateAndScaleContext() {
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.scale(1, -1);
+    }
+
+    appendCanvasToContainer(containerId) {
+        let container = document.getElementById(containerId);
+        this.canvas.style.maxWidth = '100%'; // for responsive canvas
+        this.canvas.style.height = 'auto'; // for responsive canvas
+        container.appendChild(this.canvas);
     }
 
     calculateComponents() {
@@ -80,6 +92,7 @@ class WindArrow {
         this.ctx.fillText('W', -140, 0);
         this.ctx.restore();
     }
+
     drawAngleLabels() {
         // Draw smaller, grey labels for each 15 degrees
         // larger labels for each 30 degrees black
@@ -104,17 +117,10 @@ class WindArrow {
     }
 
     draw() {
-        // Create a new canvas and set its dimensions
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = this.canvas.height = 350; //this dictates the size of the canvas (still responsive)
-        // Get the 2D rendering context for the canvas
-        this.ctx = this.canvas.getContext('2d');
+        this.createCanvas(350);
+        this.getContext();
+        this.translateAndScaleContext();
 
-        // Move the origin to the center of the canvas and invert the y-axis
-        this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-        this.ctx.scale(1, -1);
-
-        // Draw the wind arrow
         this.calculateComponents();
         this.drawMainArrow();
         this.drawSecondaryArrow();
@@ -122,10 +128,8 @@ class WindArrow {
         this.drawLabels();
         this.drawAngleLabels();
 
-        // Append the canvas to the card with id 'wind-direction'
-        let container = document.getElementById('wind-direction');
-        this.canvas.style.maxWidth = '100%'; // for responsive canvas
-        this.canvas.style.height = 'auto'; // for responsive canvas
-        container.appendChild(this.canvas);
+        this.appendCanvasToContainer('wind-direction');
     }
 }
+
+module.exports = WindArrow;
