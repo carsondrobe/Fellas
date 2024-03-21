@@ -2,9 +2,9 @@
     min-width: 200px;
 }
 
-.container {
+.precipitation-container {
     position: relative;
-    width: 135px;
+    width: 115px;
     height: 160px;
     display: flex;
     justify-content: center;
@@ -12,7 +12,7 @@
     margin-bottom: 10px;
 }
 
-.container .cloud {
+.precipitation-container .cloud {
     position: relative;
     width: 150px;
     height: 40px;
@@ -27,13 +27,13 @@
     0% {
         filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 0 #fff) brightness(1);
     }
-    95% {
-        filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 50px #fff5) brightness(2);
+    50% {
+        filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 50px #fff5) brightness(1.5);
     }
 }
 
 
-.container .cloud::before {
+.precipitation-container .cloud::before {
     content: '';
     position: absolute;
     top: -15px;
@@ -42,10 +42,10 @@
     height: 30px;
     border-radius: 50%;
     background: #484f59;
-    box-shadow: 30px 2px 0px 15px #484f59;
+    box-shadow: 35px 2px 0px 15px #484f59;
 }
 
-.container .cloud::after {
+.precipitation-container .cloud::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -54,7 +54,7 @@
     z-index: 1000;
 }
 
-.container .cloud .raindrop {
+.precipitation-container .cloud .raindrop {
     position: absolute;
     top: 40px;
     background: #05a2eb;
