@@ -20,7 +20,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
     <script src="{% static 'home.js' %}"></script>
     <script src="{% static 'wind_direction.js' %}"></script>
+<<<<<<< HEAD
     <script src="{% static 'JavaScript/humidity.js' %}"></script>
+=======
+  
+>>>>>>> origin/main
     <title>Dashboard</title>
 
 </head>
@@ -62,8 +66,6 @@
                     <!-- Temperature Card -->
                     <div class="foreground mr-md-4 mb-4">
                         <div class="card rounded shadow bg-info text-white">
-                    <div class="foreground mr-md-4 mb-4">
-                        <div class="card rounded shadow bg-info text-white">
                             <div class="card-body text-center p-4">
                                 <!-- Temp icon and title -->
                                 <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
@@ -74,7 +76,6 @@
                                 </h5>
                                 <!-- Current (hourly?) temperature -->
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
                                     <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
                                     <span class="display-4 align-bottom muted-white">°C</span>
                                 </div>
@@ -96,25 +97,6 @@
                     <!-- End Temperature card -->
 
                     <!-- Relative Humidity Card -->
-                    <div class="card rounded text-white foreground mb-4">
-                        <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
-                            <!-- Humidity icon and title -->
-                            <div>
-                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
-                                    <span class="mr-2">
-                                        <img src="{% static 'images/humidity.svg' %}" alt="Humidity Icon"
-                                            class="weather-icon">
-                                    </span>
-                                    <span>Relative Humidity</span>
-                                </h5>
-                                <!-- Humidity progress bar -->
-                                <div id="humidity-progress-bar"></div> <!-- Container for the progress bar -->
-                            </div>
-                            <!-- Last updated time -->
-                            <div class="d-flex justify-content-end mt-2">
-                                <span class="badge badge-pill badge-light expand-on-hover"
-                                    id="last-updated-time-humidity" onmouseover="showUpdatedTime(this)"
-                                    onmouseout="hideUpdatedTime(this)" style="cursor: default;">12:00 PM</span>
                     <div class="card rounded text-white foreground mb-4">
                         <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
                             <!-- Humidity icon and title -->
