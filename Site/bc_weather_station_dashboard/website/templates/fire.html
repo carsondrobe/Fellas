@@ -21,6 +21,7 @@
 
     <!-- CSS for widgets -->
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/fire_widgets.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/search_bar.css' %}">
 
     <title>Dashboard</title>
 </head>
@@ -32,7 +33,7 @@
     <div class="container-fluid">
         <div class="row pt-3">
             <!-- Station Map Column -->
-            <div class="col-4 text-center border-right">
+            <div class="col-4 text-center border-right border-dark">
                 <h2 id="station-name-code"></h2>
                 <hr>
                 <!-- Leaflet Map Implementation -->
@@ -43,14 +44,13 @@
                     <div class="input-group">
                         <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..." list="search-suggestions" autocomplete="on">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button" onclick="searchBar()">Search</button>
+                            <button class="searchButton" type="button" onclick="searchBar()" id="searchButton">Search</button>
                         </div>
                     </div>
                         <datalist id="search-suggestions">
                             <option value="1">1</option>
                         </datalist>
                 </div>
-                <hr>
             </div>
             <!-- Fire Information Column -->
             <div class="col-md-8">

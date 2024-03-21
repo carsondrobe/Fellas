@@ -1,0 +1,20 @@
+.form-control {
+    background-color: #464545;
+    color: #fff;
+    border: 1px solid #868585; 
+    height: 3em;
+}
+
+.form-control::placeholder {
+    color: #fff;
+}
+
+#searchButton {
+    background-color: #464545;
+    color: #fff; 
+    border: 1px solid #868585; 
+    padding: 10px;
+    cursor: pointer;
+    height: 3em;
+    position: relative;
+}
