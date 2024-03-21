@@ -5,12 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "qunit website/tests/*.js",
-    "test:coverage": "nyc --reporter=text npm test"
+    "test:coverage": "nyc --reporter=text npm test",
+    
+    "test:fire": "npx qunit website/tests/fire_tests.js",
+    "test:fire:coverage": "npx nyc --reporter=text npm run test:fire"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "jsdom": "^24.0.0",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "qunit": "^2.20.1"
   }
 }
