@@ -4,11 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "qunit website/tests/*.js",
-    "test:coverage": "nyc --reporter=text npm test",
+    "test:robert": "qunit website/tests/robert/*.js",
+    "test:robert:coverage": "nyc --reporter=text npm run test:robert",
     
-    "test:fire": "npx qunit website/tests/fire_tests.js",
-    "test:fire:coverage": "npx nyc --reporter=text npm run test:fire"
+    "test:davis": "npx qunit website/tests/davis/*.js",
+    "test:davis:coverage": "npx nyc --reporter=text npm run test:davis",
+
+    "test:connor": "npx qunit website/tests/connor/*.js",
+    "test:connor:coverage": "npx nyc --reporter=text npm run test:connor",
+
+    "test:carson": "npx qunit website/tests/carson/*.js",
+    "test:carson:coverage": "npx nyc --reporter=text npm run test:carson",
+
+    "test:abi": "npx qunit website/tests/abi/*.js",
+    "test:abi:coverage": "npx nyc --reporter=text npm run test:abi"
   },
   "author": "",
   "license": "ISC",
