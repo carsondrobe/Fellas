@@ -2,7 +2,11 @@
     overflow-x: auto;
 }
 
-#feedback-card {
-    height: 200px;
-    transition: all 0.2s ease-in-out;
+.feedback-card {
+    height: 100%;
+}
+
+.feedback-modal {
+    height: fit-content;
+    padding-bottom: 2em;
 }
