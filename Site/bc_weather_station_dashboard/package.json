@@ -7,8 +7,8 @@
     "test": "qunit website/tests/*.js",
     "test:coverage": "nyc --reporter=text npm test",
     
-    "test:fire": "qunit website/tests/fire_tests.js",
-    "test:fire:coverage": "nyc --reporter=text npm run test:fire"
+    "test:fire": "npx qunit website/tests/fire_tests.js",
+    "test:fire:coverage": "npx nyc --reporter=text npm run test:fire"
   },
   "author": "",
   "license": "ISC",
