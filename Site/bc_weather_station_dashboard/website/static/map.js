@@ -80,7 +80,14 @@ function updateDataHTML(currentStationData) {
     }
     // Update the HTML elements with the station's relative humidity data
     if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
-        document.getElementById('relative-humidity').innerHTML = currentStationData.HOURLY_RELATIVE_HUMIDITY + " %";
+        // Get the relative humidity
+        var relativeHumidity = currentStationData.HOURLY_RELATIVE_HUMIDITY;
+        // Get the progress bar element
+        const progressBarElement = document.querySelector('#humidity-progress-bar');
+        // Create a new SemiCircleProgressBar with the progress bar element
+        const progressBar = new SemiCircleProgressBar(progressBarElement);
+        // Set the value of the progress bar to the relative humidity
+        progressBar.setValue(relativeHumidity);
     }
     // Update the HTML elements with the station's precipitation data
     if (currentStationData.HOURLY_PRECIPITATION) {
