@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
 <!-- login popup -->
 <div class="modal" id="loginModal">
     <div class="modal-dialog modal-dialog-centered">
@@ -8,7 +11,7 @@
             </div>
             <div class="row justify-content-center">
                 <form class="col-lg-8 col-md-8 col-sm-10" action="{% url 'login' %}" method="post"
-                      onsubmit="return validateLoginForm()">
+                    onsubmit="return validateLoginForm()">
                     {% csrf_token %}
                     <div class="mb-3 mt-3">
                         <label for="username" class="form-label">Username</label>
@@ -31,7 +34,7 @@
 
 <!-- register popup -->
 <div class="modal" id="registerModal">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content foreground">
             <div class="modal-header">
                 <h4 class="modal-title">Create Account</h4>
@@ -39,45 +42,55 @@
             </div>
             <div class="row justify-content-center">
                 <form class="col-lg-8 col-md-8 col-sm-10" action="{% url 'register' %}" method="post"
-                      onsubmit="return validateRegisterForm()">
+                    onsubmit="return validateRegisterForm()">
                     {% csrf_token %}
-                    <div class="mb-3 mt-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="registerUsername" name="username">
-                    </div>
-                    <div class="mb-3 mt-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="registerEmail" name="email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone_number" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="registerPhoneNumber" name="phone_number">
-                    </div>
-                    <div class="mb-3">
-                        <label>User Type</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="user_type" id="commonUser" value="CU" checked>
-                            <label class="form-check-label" for="commonUser">
-                                Common User
-                            </label>
+                    <div class="form-row mt-3">
+                        <div class="form-group col-md-6 pr-md-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="registerUsername" name="username">
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="user_type" id="fireStaff" value="FS">
-                            <label class="form-check-label" for="fireStaff">
-                                Fire Staff
-                            </label>
+                        <div class="form-group col-md-6 pl-md-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" name="email">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="registerPassword" name="password">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 pr-md-3">
+                            <label for="phone_number" class="form-label">Phone number</label>
+                            <input id="phone" type="tel" name="phone_number" 
+                                class="form-control" />
+                        </div>
+                        <div class="form-group col-md-6 pl-md-3">
+                            <label>User Type</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="user_type" id="commonUser" value="CU"
+                                    checked>
+                                <label class="form-check-label" for="commonUser">
+                                    Common User
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="user_type" id="fireStaff" value="FS">
+                                <label class="form-check-label" for="fireStaff">
+                                    Fire Staff
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="password">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 pr-md-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" name="password">
+                        </div>
+                        <div class="form-group col-md-6 pl-md-3">
+                            <label for="password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="password">
+                        </div>
                     </div>
-                    <div class="mt-3 mb-3">
-                        <button type="submit" class="btn btn-primary">Register</button>
+                    <div class="form-row">
+                        <div class="text-right form-group col-md-12 mt-3">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -85,3 +98,17 @@
         </div>
     </div>
 </div>
+
+<!-- Phone number script stuff needs to be in this file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+
+<script>
+    const phoneInputField = document.querySelector("#phone");
+    const iti = window.intlTelInput(phoneInputField, {
+        initialCountry: "ca",
+        preferredCountries: ["ca", "us"],
+        nationalMode: false,
+        autoFormat: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+</script>
