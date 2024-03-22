@@ -71,3 +71,49 @@ function validateRegisterForm() {
 
     return true;
 }
+
+// Phone number validation
+$(document).ready(function() {
+    var phone = $('#phone');
+    const e164Format = /^\+1\d{10}$/;
+
+    // Initializing tooltip
+    phone.tooltip({
+        trigger: 'manual',
+        title: 'Invalid phone number'
+    });
+
+    // Adding event listener to form submit event
+    $('#registerForm').on('submit', function(e) {
+        if (phone.val() && !e164Format.test(phone.val())) {
+            e.preventDefault();
+            phone.addClass('validation-error');
+            phone.tooltip('show');
+        } else {
+            phone.removeClass('validation-error');
+            phone.tooltip('hide');
+        }
+    });
+
+    // Adding event listener to phone number input event
+    phone.on('input', function() {
+        if (phone.val() && !e164Format.test(phone.val())) {
+            phone.addClass('validation-error');
+            phone.tooltip('show');
+        } else {
+            phone.removeClass('validation-error');
+            phone.tooltip('hide');
+        }
+    });
+
+    // Adding event listener to dynamically filled phone number
+    phone.on('change', function() {
+        if (phone.val() && !e164Format.test(phone.val())) {
+            phone.addClass('validation-error');
+            phone.tooltip('show');
+        } else {
+            phone.removeClass('validation-error');
+            phone.tooltip('hide');
+        }
+    });
+});
