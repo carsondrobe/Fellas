@@ -1,3 +1,26 @@
+//login client side validation
+function validateLoginForm() {
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+
+    // Initializing tooltips
+    $(username).attr('title', 'Please enter your username').tooltip();
+    $(password).attr('title', 'Please enter your password').tooltip();
+
+    if (username.value === '' || password.value === '') {
+        $(username).tooltip('show').addClass('validation-error');
+        $(password).tooltip('show').addClass('validation-error');
+        return false;
+    } else {
+        $(username).tooltip('hide').removeClass('validation-error');
+        $(password).tooltip('hide').removeClass('validation-error');
+    }
+
+    return true;
+}
+
+
+//register client side validation
 function validateRegisterForm() {
     const username = document.getElementById('registerUsername');
     const email = document.getElementById('registerEmail');
