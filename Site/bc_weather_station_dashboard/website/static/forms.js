@@ -1,35 +1,49 @@
 function validateRegisterForm() {
-    const email = document.getElementById('registerEmail').value;
-    const password = document.getElementById('registerPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
+    const username = document.getElementById('registerUsername');
+    const email = document.getElementById('registerEmail');
+    const password = document.getElementById('registerPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
     const phoneNumber = iti.getNumber();
 
     // E.164 format regex
     const e164Format = /^\+[1-9]\d{1,14}$/;
 
-    if (email === '' || password === '' || phoneNumber === '') {
-        alert('Please fill in all fields');
+    // Initializing tooltips
+    $(username).tooltip();
+    $(email).tooltip();
+    $(password).tooltip();
+    $(confirmPassword).tooltip();
+
+    if (username.value === '' || email.value === '' || password.value === '') {
+        $(username).tooltip('show').addClass('validation-error');
+        $(email).tooltip('show').addClass('validation-error');
+        $(password).tooltip('show').addClass('validation-error');
         return false;
+    } else {
+        $(username).tooltip('hide').removeClass('validation-error');
+        $(email).tooltip('hide').removeClass('validation-error');
+        $(password).tooltip('hide').removeClass('validation-error');
     }
 
-    if (email.indexOf('@') === -1) {
-        alert('Invalid email address');
+    if (email.value.indexOf('@') === -1) {
+        $(email).tooltip('show').addClass('validation-error');
         return false;
+    } else {
+        $(email).tooltip('hide').removeClass('validation-error');
     }
 
-    if (password.length < 8) {
-        alert('Password must be at least 8 characters long');
+    if (password.value.length < 8) {
+        $(password).tooltip('show').addClass('validation-error');
         return false;
+    } else {
+        $(password).tooltip('hide').removeClass('validation-error');
     }
 
-    if (password !== confirmPassword) {
-        alert('Passwords do not match');
+    if (password.value !== confirmPassword.value) {
+        $(confirmPassword).tooltip('show').addClass('validation-error');
         return false;
-    }
-
-    if (!iti.isValidNumber() || !e164Format.test(phoneNumber)) {
-        alert("Please enter a valid phone number, ensuring it has a country code (e.g. +1)");
-        return false;
+    } else {
+        $(confirmPassword).tooltip('hide').removeClass('validation-error');
     }
 
     return true;

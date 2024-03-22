@@ -15,11 +15,11 @@
                     {% csrf_token %}
                     <div class="mb-3 mt-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username">
+                        <input type="text" class="form-control" id="username" name="username" data-toggle="tooltip" title="Please enter your username">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password" name="password" data-toggle="tooltip" title="Please enter your password">
                     </div>
                     <div class="mt-3 mb-3">
                         <button type="submit" class="btn btn-primary">Login</button>
@@ -47,18 +47,18 @@
                     <div class="form-row mt-3">
                         <div class="form-group col-md-6 pr-md-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="registerUsername" name="username">
+                            <input type="text" class="form-control" id="registerUsername" name="username" data-toggle="tooltip" title="Please enter your username">
                         </div>
                         <div class="form-group col-md-6 pl-md-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="registerEmail" name="email">
+                            <input type="email" class="form-control" id="registerEmail" name="email" data-toggle="tooltip" title="Please enter a valid email">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6 pr-md-3">
                             <label for="phone_number" class="form-label">Phone number</label>
-                            <input id="phone" type="tel" name="phone_number" 
-                                class="form-control" />
+                            <input id="phone" type="tel" name="phone_number" class="form-control">
+                            <small class="form-text text-muted">Your phone number is used to send weather alerts.</small>
                         </div>
                         <div class="form-group col-md-6 pl-md-3">
                             <label>User Type</label>
@@ -80,11 +80,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-6 pr-md-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="registerPassword" name="password">
+                            <input type="password" class="form-control" id="registerPassword" name="password" data-toggle="tooltip" title="Password must be at least 8 characters">
                         </div>
                         <div class="form-group col-md-6 pl-md-3">
                             <label for="password" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" name="password">
+                            <input type="password" class="form-control" id="confirmPassword" name="password" data-toggle="tooltip" title="Passwords must match">
                         </div>
                     </div>
                     <div class="form-row">
