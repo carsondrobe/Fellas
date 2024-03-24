@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
-
 from .forms import FeedbackForm
 from django.http import JsonResponse
 from .models import UserProfile, WeatherStation, Feedback, StationData
@@ -11,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from twilio.rest import Client
+from django.conf import settings
 
 current_page = "weather"
 
@@ -69,7 +70,7 @@ def register(request):
     phone_number = request.POST.get("phone_number")
     user_type = request.POST.get("user_type")
     password = request.POST.get("password")
-    if not username or not email or not password:
+    if not username or not email or not password or not phone_number:
         return HttpResponse("Please fill in all fields", status=400)
 
     # Create the user
@@ -83,9 +84,16 @@ def register(request):
     # Logs user in 
     login(request, user)
 
+    # Send SMS after successful registration
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    
+    message = client.messages.create(
+        body=f"Hey {username}!\n Thank you for registering with the BC Weather & Wildfire Dashboard for important weather alerts. -Fellas",
+        from_=settings.TWILIO_PHONE_NUMBER,
+        to=phone_number 
+    )
+
     return redirect(reverse("home"))
-
-
 def weather_stations_information(request):
     # Get all stations
     stations = WeatherStation.objects.all()
