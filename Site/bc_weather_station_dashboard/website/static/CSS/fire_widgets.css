@@ -1,3 +1,13 @@
+@media screen and (max-width: 1440px) {
+  body {
+      zoom: 0.90;
+  }
+}
+@media screen and (max-width: 480px) {
+  body {
+      zoom: 0.65;
+  }
+}
 .widget-y {
   width: 170px;
 }
