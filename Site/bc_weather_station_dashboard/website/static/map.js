@@ -236,5 +236,6 @@ document.getElementById('date_selector').addEventListener('change', function() {
 // Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
 document.getElementById('map').addEventListener('click', function() {
     // Only need to update the HTML since date time is not changing
+    document.getElementById('precipitation').innerHTML = "0 mm";
     updateDataHTML(currentStationCode);
 });
