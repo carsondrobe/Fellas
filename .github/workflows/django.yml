@@ -33,12 +33,16 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'
+        node-version: '18'
     - name: Install Node.js dependencies
       run: |
         npm ci
       working-directory: Site/bc_weather_station_dashboard
-    - name: Run JavaScript tests
+    - name: Run Robert JS tests
       run: |
-        npm test
+        npx qunit website/tests/robert/*.js
+      working-directory: Site/bc_weather_station_dashboard
+    - name: Run Davis JS tests
+      run: |
+        npx qunit website/tests/davis/*.js
       working-directory: Site/bc_weather_station_dashboard

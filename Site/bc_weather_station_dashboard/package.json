@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx qunit website/tests/*.js",
-    "test:coverage": "nyc --reporter=text npm test"
+    "test:robert": "qunit website/tests/robert/*.js",
+    "test:robert:coverage": "nyc --reporter=text npm run test:robert",
+    
+    "test:davis": "npx qunit website/tests/davis/*.js",
+    "test:davis:coverage": "npx nyc --reporter=text npm run test:davis"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "jsdom": "^24.0.0",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "qunit": "^2.20.1"
   }
 }
