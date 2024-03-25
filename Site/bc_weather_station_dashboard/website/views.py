@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
 from django.conf import settings
 from .models import UserProfile
+from .forms import UserProfileForm
 
 
 current_page = "weather"
@@ -232,4 +233,13 @@ def station_data(request):
 def view_profile(request):
     user_profile = UserProfile.objects.get(user=request.user)
     non_addressed_feedbacks = request.user.feedbacks.exclude(status='ADD')
-    return render(request, 'profile.html', {'user_profile': user_profile, 'non_addressed_feedbacks': non_addressed_feedbacks})
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            request.user.email = request.POST.get('email')
+            request.user.save()
+            return redirect('view_profile')
+    else:
+        form = UserProfileForm(instance=user_profile)
+    return render(request, 'profile.html', {'form': form, 'user_profile': user_profile, 'non_addressed_feedbacks': non_addressed_feedbacks})
