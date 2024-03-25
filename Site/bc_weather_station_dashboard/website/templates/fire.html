@@ -57,7 +57,7 @@
                 <h2>Fire Information</h2>
                 <hr>
                 <div class="container">
-                    <div class="row">
+                    <div class="row no-gutters">
                         <!-- Column 1 -->
                         <div class="col-md-7">
                             <!-- Row 1 -->
@@ -152,79 +152,80 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
                         </div>
                         <!-- Column 2 -->
-                        <div class="col-md-5 d-flex justify-content-center">
-                            <!-- Indexes -->
-                            <div class="card p-2 ml-3 background">
-                                <!-- ISI Card -->
-                                <div class="text-center widget-x p-3 mb-2 foreground">
-                                    <h5 class="card-title">Initial Spread Index</h5>
-                                    <div class="axis-x-container">
-                                        <div class="axis-x">
-                                            <!-- Color-coded segments -->
-                                            <div class="segment-x blue" style="width: 8%; left: 0;"></div>
-                                            <div class="segment-x green" style="width: 12%; left: 8%;"></div>
-                                            <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
-                                            <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
-                                            <div class="segment-x red" style="width: 41%; left: 60%;"></div>
-                                            <!-- ticks -->
-                                            <div class="tick-x" style="left: 0;"><label>0</label></div>
-                                            <div class="tick-x" style="left: 8%;"><label>2</label></div>
-                                            <div class="tick-x" style="left: 20%;"><label>5</label></div>
-                                            <div class="tick-x" style="left: 40%;"><label>10</label></div>
-                                            <div class="tick-x" style="left: 60%;"><label>15</label></div>
-                                        </div>
-                                        <div class="arrow-isi" id="arrow-isi">
-                                            <div class="arrow-value-isi" id="arrowValue-isi"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                <!-- BUI Card -->
-                                    <div class="text-center widget-x mb-2 p-2 foreground">
-                                        <h5 class="card-title">Buildup Index</h5>
+                        <div class="col-md-5">
+                            <div class="row d-flex justify-content-center">
+                                <!-- Indexes -->
+                                <div class="card p-2 background">
+                                    <!-- ISI Card -->
+                                    <div class="text-center widget-x p-3 mb-2 foreground">
+                                        <h5 class="card-title">Initial Spread Index</h5>
                                         <div class="axis-x-container">
                                             <div class="axis-x">
                                                 <!-- Color-coded segments -->
-                                                <div class="segment-x blue" style="width: 24%; left: 0;"></div>
-                                                <div class="segment-x green" style="width: 24%; left: 24%;"></div>
-                                                <div class="segment-x yellow" style="width: 12%; left: 48%;"></div>
-                                                <div class="segment-x orange" style="width: 20%; left: 60%;"></div>
-                                                <div class="segment-x red" style="width: 20%; left: 80%;"></div>
-                                                <!-- ticks -->
-                                                <div class="tick-x" style="left: 0;"><label>0</label></div>
-                                                <div class="tick-x" style="left: 24%;"><label>60</label></div>
-                                                <div class="tick-x" style="left: 48%;"><label>120</label></div>
-                                                <div class="tick-x" style="left: 60%;"><label>150</label></div>
-                                                <div class="tick-x" style="left: 80%;"><label>200</label></div>
-                                            </div>
-                                            <div class="arrow-bui" id="arrow-bui">
-                                                <div class="arrow-value-bui" id="arrowValue-bui"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <!-- FWI Card -->
-                                    <div class="text-center widget-x mb-2 p-2 foreground">
-                                        <h5 class="card-title">Fire Weather Index</h5>
-                                        <div class="axis-x-container">
-                                            <div class="axis-x">
-                                                <!-- Color-coded segments -->
-                                                <div class="segment-x blue" style="width: 10%; left: 0;"></div>
-                                                <div class="segment-x green" style="width: 10%; left: 10%;"></div>
+                                                <div class="segment-x blue" style="width: 8%; left: 0;"></div>
+                                                <div class="segment-x green" style="width: 12%; left: 8%;"></div>
                                                 <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
                                                 <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
-                                                <div class="segment-x red" style="width: 40%; left: 60%;"></div>
+                                                <div class="segment-x red" style="width: 41%; left: 60%;"></div>
                                                 <!-- ticks -->
                                                 <div class="tick-x" style="left: 0;"><label>0</label></div>
-                                                <div class="tick-x" style="left: 10%;"><label>5</label></div>
-                                                <div class="tick-x" style="left: 20%;"><label>10</label></div>
-                                                <div class="tick-x" style="left: 40%;"><label>20</label></div>
-                                                <div class="tick-x" style="left: 60%;"><label>30</label></div>
+                                                <div class="tick-x" style="left: 8%;"><label>2</label></div>
+                                                <div class="tick-x" style="left: 20%;"><label>5</label></div>
+                                                <div class="tick-x" style="left: 40%;"><label>10</label></div>
+                                                <div class="tick-x" style="left: 60%;"><label>15</label></div>
                                             </div>
-                                            <div class="arrow-fwi" id="arrow-fwi">
-                                                <div class="arrow-value-fwi" id="arrowValue-fwi"></div>
+                                            <div class="arrow-isi" id="arrow-isi">
+                                                <div class="arrow-value-isi" id="arrowValue-isi"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                    <!-- BUI Card -->
+                                        <div class="text-center widget-x mb-2 p-2 foreground">
+                                            <h5 class="card-title">Buildup Index</h5>
+                                            <div class="axis-x-container">
+                                                <div class="axis-x">
+                                                    <!-- Color-coded segments -->
+                                                    <div class="segment-x blue" style="width: 24%; left: 0;"></div>
+                                                    <div class="segment-x green" style="width: 24%; left: 24%;"></div>
+                                                    <div class="segment-x yellow" style="width: 12%; left: 48%;"></div>
+                                                    <div class="segment-x orange" style="width: 20%; left: 60%;"></div>
+                                                    <div class="segment-x red" style="width: 20%; left: 80%;"></div>
+                                                    <!-- ticks -->
+                                                    <div class="tick-x" style="left: 0;"><label>0</label></div>
+                                                    <div class="tick-x" style="left: 24%;"><label>60</label></div>
+                                                    <div class="tick-x" style="left: 48%;"><label>120</label></div>
+                                                    <div class="tick-x" style="left: 60%;"><label>150</label></div>
+                                                    <div class="tick-x" style="left: 80%;"><label>200</label></div>
+                                                </div>
+                                                <div class="arrow-bui" id="arrow-bui">
+                                                    <div class="arrow-value-bui" id="arrowValue-bui"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- FWI Card -->
+                                        <div class="text-center widget-x mb-2 p-2 foreground">
+                                            <h5 class="card-title">Fire Weather Index</h5>
+                                            <div class="axis-x-container">
+                                                <div class="axis-x">
+                                                    <!-- Color-coded segments -->
+                                                    <div class="segment-x blue" style="width: 10%; left: 0;"></div>
+                                                    <div class="segment-x green" style="width: 10%; left: 10%;"></div>
+                                                    <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
+                                                    <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
+                                                    <div class="segment-x red" style="width: 40%; left: 60%;"></div>
+                                                    <!-- ticks -->
+                                                    <div class="tick-x" style="left: 0;"><label>0</label></div>
+                                                    <div class="tick-x" style="left: 10%;"><label>5</label></div>
+                                                    <div class="tick-x" style="left: 20%;"><label>10</label></div>
+                                                    <div class="tick-x" style="left: 40%;"><label>20</label></div>
+                                                    <div class="tick-x" style="left: 60%;"><label>30</label></div>
+                                                </div>
+                                                <div class="arrow-fwi" id="arrow-fwi">
+                                                    <div class="arrow-value-fwi" id="arrowValue-fwi"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
