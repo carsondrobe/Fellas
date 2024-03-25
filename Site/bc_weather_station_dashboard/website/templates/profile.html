@@ -1,0 +1,89 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Leaflet CSS and JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+    <title>User Profile</title>
+</head>
+
+<body class="background">
+    <!-- NAVBAR -->
+    {% include 'navbar.html' %}
+
+    <div class="container mt-4">
+        <!-- Welcome Message -->
+        <div class="card rounded mb-4 foreground">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h4>Welcome, {{ user.username }}!</h4>
+            </div>
+        </div>
+        <!-- User Profile -->
+        <div class="card rounded mb-4 foreground">
+            <div class="card-header rounded bg-secondary">
+                User Profile
+            </div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Phone Number:</strong> {{ user.userprofile.phone_number }}</p>
+                <p><strong>User Type:</strong> {{ user.userprofile.get_user_type_display }}</p>
+            </div>
+        </div>
+
+        <!-- Favorite Stations -->
+        <div class="card text-white foreground mb-3">
+            <div class="card-header rounded bg-secondary">
+                Favorite Stations
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for station in user.userprofile.favorite_stations.all %}
+                <li class="list-group-item list-group-item-dark">
+                    {{ station.STATION_NAME }}
+                </li>
+                {% empty %}
+                <li class="list-group-item foreground rounded">
+                    No favorite stations.
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Submitted Feedback -->
+        <div class="card rounded text-white foreground mb-3">
+            <div class="card-header bg-secondary rounded">
+                Submitted Feedback
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for feedback in non_addressed_feedbacks %}
+                <li class="list-group-item {% if feedback.status == 'SUB' %}list-group-item-success{% elif feedback.status == 'REV' %}list-group-item-warning{% endif %}"
+                    id="feedback-{{ feedback.id }}">
+                    <h5 class="mb-1">Feedback</h5>
+                    <p class="mb-1"><strong>Content:</strong> {{ feedback.message }}</p>
+                    <p class="mb-1"><strong>Status:</strong> {{ feedback.get_status_display }}</p>
+                </li>
+                {% empty %}
+                <li class="list-group-item foreground rounded">
+                    No new feedback submitted. You can submit feedback from the profile
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

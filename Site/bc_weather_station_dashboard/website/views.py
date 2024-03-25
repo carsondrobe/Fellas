@@ -12,6 +12,8 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
 from django.conf import settings
+from .models import UserProfile
+
 
 current_page = "weather"
 
@@ -28,12 +30,14 @@ def home(request, **kwargs):
 def weather(request, **kwargs):
     global current_page
     current_page = "weather"
+    kwargs['template_name'] = 'weather'
     return render(request, "weather.html", kwargs)
 
 
 def fire(request, **kwargs):
     global current_page
     current_page = "fire"
+    kwargs['template_name'] = 'fire'
     return render(request, "fire.html", kwargs)
 
 
@@ -224,3 +228,8 @@ def station_data(request):
     ]
     # Return the data as a json resonse
     return JsonResponse(measures, safe=False)
+@login_required
+def view_profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    non_addressed_feedbacks = request.user.feedbacks.exclude(status='ADD')
+    return render(request, 'profile.html', {'user_profile': user_profile, 'non_addressed_feedbacks': non_addressed_feedbacks})
