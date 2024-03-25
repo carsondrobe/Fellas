@@ -8,7 +8,10 @@
     "test:robert:coverage": "nyc --reporter=text npm run test:robert",
     
     "test:davis": "npx qunit website/tests/davis/*.js",
-    "test:davis:coverage": "npx nyc --reporter=text npm run test:davis"
+    "test:davis:coverage": "npx nyc --reporter=text npm run test:davis",
+
+    "test:abi": "jest",
+    "test:abi:coverage": "npm run test:abi -- --coverage"
   },
   "author": "",
   "license": "ISC",
@@ -23,5 +26,8 @@
     "jsdom": "^24.0.0",
     "nyc": "^15.1.0",
     "qunit": "^2.20.1"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
   }
 }
