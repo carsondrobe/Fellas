@@ -20,6 +20,8 @@ from django.contrib.auth.models import User
 import re
 from website.forms import FeedbackForm
 from django.test import TestCase, Client
+from .models import UserProfile
+
 
 
 # Begin models tests
@@ -381,3 +383,16 @@ class UpdateFeedbackStatusTestCase(TestCase):
         # Reload feedback object to check if it's updated
         updated_feedback = Feedback.objects.get(id=feedback.id)
         self.assertEqual(updated_feedback.status, "resolved")
+        
+# Profile page tests in views.py
+class ProfileViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.user_profile = UserProfile.objects.create(user=self.user)
+        self.client.login(username='testuser', password='12345')
+
+    def test_view_profile(self):
+        response = self.client.get(reverse('view_profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profile.html')
