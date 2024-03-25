@@ -27,5 +27,7 @@ function updateWindSpeed(windSpeed) {
     progressCircle.style.stroke = currentColor;
 }
 
+module.exports.updateWindSpeed = updateWindSpeed;
+
 // Example usage:
 // Call updateWindSpeed(windSpeed) where windSpeed is the value to be displayed.
