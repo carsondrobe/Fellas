@@ -48,14 +48,46 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="phone_number" class="form-label">Phone number:</label>
-                        <input type="tel" class="form-control bg-light" id="phone" name="phone_number"
-                            data-bs-toggle="tooltip" title="Invalid phone number">
-                        <small class="form-text text-muted">We only use your phone number for weather alerts.</small>
+                        <div>
+                            <input type="tel" class="form-control bg-light" id="phone" name="phone_number"
+                                data-bs-toggle="tooltip" title="Invalid phone number">
+                            <small class="form-text text-muted">We only use your phone number for weather alerts.</small>
+                        </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="user_type" class="form-label">{{ form.user_type.label_tag }}</label>
-                        {{ form.user_type }}
+                        <input type="hidden" id="user_type" name="user_type" value="{{ form.user_type.value|default:'' }}">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% if form.user_type.value == "CU" %}
+                                    Common user
+                                {% elif form.user_type.value == "FS" %}
+                                    Fire related staff
+                                {% else %}
+                                    Select User Type
+                                {% endif %}
+                            </button>
+                            <small class="form-text text-muted">This sets your homepage preference.</small>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% for choice in form.user_type.field.choices %}
+                                    <a class="dropdown-item" href="#" onclick="selectUserType('{{ choice.0 }}', '{{ choice.1 }}')">
+                                        {% if choice.0 == "CU" %}
+                                            Common user
+                                        {% elif choice.0 == "FS" %}
+                                            Fire related staff
+                                        {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
+
+                    <script>
+                    function selectUserType(value, text) {
+                        document.getElementById('user_type').value = value;
+                        document.getElementById('dropdownMenuButton').textContent = text;
+                    }
+                    </script>
                     <div class="col-12">
                         <button type="submit" class="btn btn-success">Update</button>
                     </div>
