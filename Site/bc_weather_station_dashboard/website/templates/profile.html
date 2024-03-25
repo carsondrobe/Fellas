@@ -31,28 +31,34 @@
         </div>
         <!-- Edit Profile Form -->
         <div class="card text-white foreground mb-3">
-            <div class="card-header bg-secondary">Edit Profile</div>
-            <div class="card-body foreground">
+            <div class="card-header border rounded">Edit Profile</div>
+            <div class="card-body">
                 {% if form %}
-                <form method="post">
+                <form method="post" class="row g-3">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input type="text" class="form-control bg-tertiary" id="username" value="{{ user.username }}" readonly>
+                    <div class="col-md-6 mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control bg-light py-1" id="username" value="{{ user.username }}"
+                            readonly>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control bg-tertiary" id="email" name="email" value="{{ user.email }}">
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control bg-light py-1" id="email" name="email"
+                            value="{{ user.email }}">
                     </div>
-                    <div class="form-group">
-                        <label for="phone_number">Phone number (optional):</label>
-                        <input type="tel" class="form-control bg-tertiary" id="phone" name="phone_number" data-bs-toggle="tooltip" title="Invalid phone number">
+                    <div class="col-md-6 mb-3">
+                        <label for="phone_number" class="form-label">Phone number:</label>
+                        <input type="tel" class="form-control bg-light" id="phone" name="phone_number"
+                            data-bs-toggle="tooltip" title="Invalid phone number">
                         <small class="form-text text-muted">We only use your phone number for weather alerts.</small>
                     </div>
-                    <div class="form-group">
-                        {{ form.user_type.label_tag }} {{ form.user_type }}
+                    <div class="col-md-6 mb-3">
+                        <label for="user_type" class="form-label">{{ form.user_type.label_tag }}</label>
+                        {{ form.user_type }}
                     </div>
-                    <button type="submit" class="btn btn-outline-success">Update</button>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
                 </form>
                 {% else %}
                 <p class="text-light">No form available</p>
@@ -67,42 +73,57 @@
 
         <!-- Favorite Stations -->
         <div class="card text-white foreground mb-3">
-            <div class="card-header rounded bg-secondary">
+            <div class="card-header border rounded mb-3">
                 Favorite Stations
             </div>
-            <ul class="list-group list-group-flush">
+            <div class="row">
                 {% for station in user.userprofile.favorite_stations.all %}
-                <li class="list-group-item list-group-item-dark">
-                    {{ station.STATION_NAME }}
-                </li>
+                <div class="col-md-4">
+                    <ul class="list-group list-group-flush">
+                        <li class="mb-3 rounded list-group-item bg-info border ">
+                            {{ station.STATION_NAME }}
+                        </li>
+                    </ul>
+                </div>
                 {% empty %}
-                <li class="list-group-item foreground rounded">
-                    No favorite stations.
-                </li>
+                <div class="col-12">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item foreground rounded">
+                            No favorite stations.
+                        </li>
+                    </ul>
+                </div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
         <!-- Submitted Feedback -->
-        <div class="card rounded text-white foreground mb-3">
-            <div class="card-header bg-secondary rounded">
+        <div class="card rounded text-white foreground">
+            <div class="card-header border rounded mb-3">
                 Submitted Feedback
             </div>
-            <ul class="list-group list-group-flush">
+            <div class="row">
                 {% for feedback in non_addressed_feedbacks %}
-                <li class="list-group-item {% if feedback.status == 'SUB' %}list-group-item-success{% elif feedback.status == 'REV' %}list-group-item-warning{% endif %}"
-                    id="feedback-{{ feedback.id }}">
-                    <h5 class="mb-1">Feedback</h5>
-                    <p class="mb-1"><strong>Content:</strong> {{ feedback.message }}</p>
-                    <p class="mb-1"><strong>Status:</strong> {{ feedback.get_status_display }}</p>
-                </li>
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="mb-3 rounded list-group-item {% if feedback.status == 'SUB' %}list-group-item-success{% elif feedback.status == 'REV' %}list-group-item-warning{% endif %}"
+                            id="feedback-{{ feedback.id }}">
+                            <h5 class="mb-1">Feedback</h5>
+                            <p class="mb-1"><strong>Content:</strong> {{ feedback.message }}</p>
+                            <p class="mb-1"><strong>Status:</strong> {{ feedback.get_status_display }}</p>
+                        </li>
+                    </ul>
+                </div>
                 {% empty %}
-                <li class="list-group-item foreground rounded">
-                    No new feedback submitted. You can submit feedback from the profile
-                </li>
+                <div class="col-12">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item foreground rounded">
+                            No new feedback submitted. You can submit feedback from the profile
+                        </li>
+                    </ul>
+                </div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
-    </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -115,8 +136,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             const phoneInputField = document.querySelector("#phone");
+            const emailInputField = document.querySelector("#email");
             const iti = window.intlTelInput(phoneInputField, {
                 initialCountry: "ca",
                 preferredCountries: ["ca", "us"],
@@ -129,10 +151,14 @@
             iti.setNumber("{{ user.userprofile.phone_number }}");
 
             // Add event listener for form submit
-            $('form').on('submit', function(event) {
+            $('form').on('submit', function (event) {
                 if (!iti.isValidNumber()) {
                     event.preventDefault();
                     alert('Please enter a valid phone number.');
+                }
+                if (!emailInputField.value) {
+                    event.preventDefault();
+                    alert('Please enter an email.');
                 }
             });
         });
