@@ -27,11 +27,12 @@
         <div class="card rounded mb-4 foreground">
             <div class="card-body d-flex justify-content-center align-items-center">
                 <h4>Welcome, {{ user.username }}!</h4>
+                <img src="{%  static 'images/thermometer.svg' %}" alt="fire_icon">
             </div>
         </div>
         <!-- Edit Profile Form -->
-        <div class="card text-white foreground mb-3">
-            <div class="card-header border rounded">Edit Profile</div>
+        <div class="card text-white foreground mb-3 border">
+            <div class="card-header rounded">Edit Profile</div>
             <div class="card-body">
                 {% if form %}
                 <form method="post" class="row g-3">
@@ -104,15 +105,15 @@
         </div>
 
         <!-- Favorite Stations -->
-        <div class="card text-white foreground mb-3">
-            <div class="card-header border rounded mb-3">
+        <div class="card text-white border foreground mb-3">
+            <div class="card-header rounded mb-3">
                 Favorite Stations
             </div>
             <div class="row">
                 {% for station in user.userprofile.favorite_stations.all %}
                 <div class="col-md-4">
                     <ul class="list-group list-group-flush">
-                        <li class="mb-3 rounded list-group-item bg-info border ">
+                        <li class="mb-3 rounded list-group-item bg-info">
                             {{ station.STATION_NAME }}
                         </li>
                     </ul>
@@ -129,8 +130,8 @@
             </div>
         </div>
         <!-- Submitted Feedback -->
-        <div class="card rounded text-white foreground">
-            <div class="card-header border rounded mb-3">
+        <div class="card rounded text-white border foreground">
+            <div class="card-header rounded mb-3">
                 Submitted Feedback
             </div>
             <div class="row">
