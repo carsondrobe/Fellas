@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .forms import FeedbackForm
 from django.http import JsonResponse
-from .models import WeatherStation, Feedback, StationData
+from .models import WeatherStation, Feedback, StationData, UserProfile
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -73,6 +73,10 @@ def register(request):
     # Create the user
     user = User.objects.create_user(username, email, password)
     user.save()
+
+    # Create the user profile
+    user_profile = UserProfile(user=user)
+    user_profile.save()
     # Log the user in
     login(request, user)
 
