@@ -48,5 +48,5 @@ jobs:
       working-directory: Site/bc_weather_station_dashboard
     - name: Run Abi JS tests
       run: |
-        npm run test:abi
+        npm run test: abi
       working-directory: Site/bc_weather_station_dashboard
