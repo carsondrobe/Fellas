@@ -209,3 +209,13 @@ def station_data(request):
     ]
     # Return the data as a json resonse
     return JsonResponse(measures, safe=False)
+
+
+def add_to_favourites(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            station_code = request.POST.get("station_code")
+            station = WeatherStation.objects.get(STATION_CODE=station_code)
+            request.user.userprofile.favorite_stations.add(station)
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False})

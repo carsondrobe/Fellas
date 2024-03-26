@@ -46,4 +46,5 @@ urlpatterns = [
         views.update_feedback_status,
         name="update_feedback_status",
     ),
+    path("add_to_favourites.", views.add_to_favourites, name="add_to_favourites"),
 ]

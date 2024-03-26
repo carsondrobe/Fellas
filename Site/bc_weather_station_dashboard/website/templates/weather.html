@@ -35,7 +35,8 @@
             <div class="col-6 text-center border-right border-dark">
                 <div style="display: flex; align-items: center; justify-content: center;">
                     <h2 id="station-name-code" class="foreground"></h2>
-                    <button type="button" class="btn btn-success" style="margin-left: 1em;">Favourite</button>
+                    <button type="button" class="btn btn-success favourite-button"
+                        style="margin-left: 1em;">Favourite</button>
                 </div>
 
                 <!-- Leaflet Map Implementation -->
@@ -206,6 +207,39 @@
         {% if error %}
         alert("{{error}}");
         {% endif %}
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.favourite-button').click(function () {
+                var stationCode = $('#station-name-code').text().split('#')[1];
+
+                $.ajax({
+                    url: "{% url 'add_to_favourites' %}",
+                    type: "POST",
+                    data: { 'station_code': stationCode },
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    success: function (data) {
+                        alert(data.success ? 'Station added to favourites!' : 'Failed to add station to favourites.');
+                    }
+                });
+            });
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
     </script>
 
 
