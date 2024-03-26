@@ -1,77 +1,95 @@
-// Initialize map
-const map = L.map('map').setView([51, -121], 6);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-}).addTo(map);
-
-// Create custom marker icon
-const markerIcon = L.icon({
-    iconUrl: '../static/images/weather_station_icon.svg',
-    shadowUrl: "../static/marker-shadow.png",
-    iconSize: [35, 65],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-});
-
-
-// Create variables to hold current station's station code and all weather stations
+// Create variables
 var currentStationCode;
 var weatherStations;
+var map;
+var markerIcon;
 
-// Fetch weather station information from Django backend
-fetch('/weather_stations_information/')
-    .then(response => response.json())
-    .then(data => {
-        // Set weatherStations to data
-        weatherStations = data;
-        // Set closest station to open on startup
-        checkLocation();
-        // Create a marker for each weather station with a popup of information
-        data.forEach(station => {
-            createMarker(station, 0);
+// Initialize map
+map = initMap(map);
+
+// Create custom marker icon
+markerIcon = initMarkerIcon(markerIcon);
+
+// Fetch weather station information from Django backend and store them in weatherStations variable
+fetchWeatherStationInfo().then(ws => {
+    weatherStations = ws;
+});
+
+// Function to initialize map
+function initMap(map) {
+    map = L.map('map').setView([51, -121], 6);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+    return map;
+}
+
+// Function to initialize marker icon
+function initMarkerIcon(markerIcon) {
+    markerIcon = L.icon({
+        iconUrl: '../../static/images/weather_station_icon.svg',
+        shadowUrl: "../../static/marker-shadow.png",
+        iconSize: [35, 65],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    return markerIcon;
+}
+
+// Create function to fetch weather station information
+function fetchWeatherStationInfo() {
+    return fetch('/weather_stations_information/')
+        // Check response
+        .then(response => {
+            // If response is ok
+            if (response.ok) {
+                return response.json();
+                // If response is error
+            } else {
+                throw new Error("Error: Could not fetch weather stations.");
+            }
+        })
+        .then(data => {
+            // Call function to get user location
+            checkLocation();
+            // Create marker for each weather station
+            data.forEach(station => {
+                createMarker(station, 0);
+            });
+            // Return data
+            return data;
+        })
+        .catch(error => {
+            console.error('Error fetching weather stations information:', error);
+            return undefined;
         });
-    })
-    .catch(error => console.error('Error fetching weather stations information:', error));
+}
 
 // Function to update the data on the right column
 function updateData(stationCode) {
-    // Get date from date picker
-    var datePicker = document.getElementById('selected_date').innerHTML;
-    if (datePicker === "Today") {
-        // Format today's date to yyyy-mm-dd
-        var year = new Date().getFullYear();
-        var month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-        var day = new Date().getDate().toString().padStart(2, '0');
-        datePicker = `${year}-${month}-${day}`;
-    }
-    var selectedDate = datePicker + " 12:00:00";
-    // Fetch all of the data for the clicked station
-    fetch(`/station_data/?datetime=${selectedDate}`)
-        // Check if station data is found
+    // Return date from date picker and fetch all of the data for the clicked station
+    return fetch("/station_data/?datetime=" + getSelectedDate())
         .then(response => {
             // If station data is found
             if (response.ok) {
                 return response.json();
-                // If station data for this datetime is not found
-            } else if (response.status === 404) {
-                alert("There is no data found for this station on " + datePicker + ". Please select another date.");
-                throw new Error("There is no station data for this date or this station is missing some of its' data. Error code " + response.status + ".");
-                // If any other error occurs
+                // If station data for this datetime is not found/error occurs
             } else {
-                throw new Error("Error");
+                alert("There is no data found for this station on " + getSelectedDate() + ". Please select another date.");
+                throw new Error("There is no station data for this date or this station is missing some of its' data. Error code " + response.status + ".");
             }
-            // TO DO: suppress get error and supress "RuntimeWarning: DateTimeField StationData.DATE_TIME received a naive datetime (2024-03-05 12:00:00) while time zone support is active."
         })
         .then(stationData => {
-            if (stationData != undefined) {
-                // Set the current station's data dependant on the station code
+            if (stationData !== undefined) {
+                // Set current station data to station with stationCode
                 var currentStationData = stationData.find(measure => measure.STATION_CODE === stationCode);
-                // Update HTML elements on right col
                 updateDataHTML(currentStationData);
             }
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            console.error(error);
+        });
 }
 
 // Update HTML elements on right side
@@ -104,8 +122,7 @@ function updateDataHTML(currentStationData) {
     }
     // Update the HTML elements with the station's wind speed data
     if (currentStationData.HOURLY_WIND_SPEED) {
-        document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
-        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED);
+        document.getElementById('wind-speed').innerHTML = currentStationData.HOURLY_WIND_SPEED + " km/h";
     }
     // Update the HTML elements with the station's wind direction data
     if (currentStationData.HOURLY_WIND_DIRECTION) {
@@ -121,6 +138,18 @@ function updateDataHTML(currentStationData) {
     if (currentStationData.HOURLY_WIND_GUST) {
         document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
     }
+}
+
+// Function to get the selected date from the date picker
+function getSelectedDate() {
+    var datePicker = document.getElementById('selected_date').innerHTML;
+    if (datePicker === "Today") {
+        var year = new Date().getFullYear();
+        var month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+        var day = new Date().getDate().toString().padStart(2, '0');
+        datePicker = `${year}-${month}-${day}`;
+    }
+    return datePicker + " 12:00:00";
 }
 
 // Function to check if geolocation is available
@@ -167,30 +196,6 @@ function getClosestStation(position) {
     createMarker(closestStation, 1);
 }
 
-// Function to compute the distance between 2 points using longitude and latitude
-function computeDistance(longitude1, latitude1, longitude2, latitude2) {
-    // Set variables to compute distance using Haversine equation
-    var radius = 6371;
-    var distLongitude = (longitude2 - longitude1) * (Math.PI / 180);
-    var distLatitude = (latitude2 - latitude1) * (Math.PI / 180);
-    var a = Math.sin(distLatitude / 2) * Math.sin(distLatitude / 2) + Math.cos((latitude1) * (Math.PI / 180)) * Math.cos((latitude2) * (Math.PI / 180)) * Math.sin(distLongitude / 2) * Math.sin(distLongitude / 2);
-    var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return radius * b;
-}
-
-// Function for displaying search bar station
-function searchBar() {
-    // Set variable for input
-    let input = document.getElementById('searchInput').value;
-    // Go through all of the weather stations
-    weatherStations.forEach(station => {
-        // Display current station data if name matches
-        if (station.name === input) {
-            createMarker(station, 1);
-        }
-    });
-}
-
 // Function to create a marker with an option to display it (if display is 1, marker pop up is enabled)
 function createMarker(station, display) {
     var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
@@ -220,23 +225,60 @@ function createMarker(station, display) {
     }
 }
 
-// Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
-document.getElementById('date_selector').addEventListener('change', function () {
-    // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
-    document.getElementById('temperature').innerHTML = "N/A";
-    document.getElementById('relative-humidity').innerHTML = "N/A";
-    document.getElementById('precipitation').innerHTML = "N/A";
-    document.getElementById('snow-depth').innerHTML = "N/A";
-    document.getElementById('snow-quality').innerHTML = "N/A";
-    document.getElementById('wind-speed').innerHTML = "N/A";
-    document.getElementById('wind-direction').innerHTML = "N/A";
-    document.getElementById('wind-gust').innerHTML = "N/A";
-    // Update all data since date time is changing
-    updateData(currentStationCode);
+// Function to compute the distance between 2 points using longitude and latitude
+function computeDistance(longitude1, latitude1, longitude2, latitude2) {
+    // Set variables to compute distance using Haversine equation
+    var radius = 6371;
+    var distLongitude = (longitude2 - longitude1) * (Math.PI / 180);
+    var distLatitude = (latitude2 - latitude1) * (Math.PI / 180);
+    var a = Math.sin(distLatitude / 2) * Math.sin(distLatitude / 2) + Math.cos((latitude1) * (Math.PI / 180)) * Math.cos((latitude2) * (Math.PI / 180)) * Math.sin(distLongitude / 2) * Math.sin(distLongitude / 2);
+    var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return radius * b;
+}
+
+// Create variable to store event listeners in
+var eventListeners = document.addEventListener('DOMContentLoaded', function () {
+    // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
+    document.getElementById('date_selector').addEventListener('change', function () {
+        // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
+        document.getElementById('temperature').innerHTML = "N/A";
+        // document.getElementById('relative-humidity').innerHTML = "N/A";
+        document.getElementById('precipitation').innerHTML = "N/A";
+        document.getElementById('snow-depth').innerHTML = "N/A";
+        document.getElementById('snow-quality').innerHTML = "N/A";
+        document.getElementById('wind-speed').innerHTML = "N/A";
+        document.getElementById('wind-direction').innerHTML = "N/A";
+        document.getElementById('wind-gust').innerHTML = "N/A";
+        // Update all data since date time is changing
+        updateData(currentStationCode);
+    });
+
+    // Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
+    document.getElementById('map').addEventListener('click', function () {
+        // Only need to update the HTML since date time is not changing
+        updateDataHTML(currentStationCode);
+    });
+
+    // Function for displaying search bar station
+    document.getElementById("search-btn").addEventListener("click", function () {
+        // Set variable for input
+        let input = document.getElementById('searchInput').value;
+        // Go through all of the weather stations
+        weatherStations.forEach(station => {
+            // Display current station data if name matches
+            if (station.name === input) {
+                createMarker(station, 1);
+            }
+        });
+    });
 });
 
-// Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
-document.getElementById('map').addEventListener('click', function () {
-    // Only need to update the HTML since date time is not changing
-    updateDataHTML(currentStationCode);
-});
+// Export functions for testing
+module.exports = {
+    initMap,
+    initMarkerIcon,
+    updateDataHTML,
+    getSelectedDate,
+    checkLocation,
+    computeDistance
+};
