@@ -122,7 +122,8 @@ function updateDataHTML(currentStationData) {
     }
     // Update the HTML elements with the station's wind speed data
     if (currentStationData.HOURLY_WIND_SPEED) {
-        document.getElementById('wind-speed').innerHTML = currentStationData.HOURLY_WIND_SPEED + " km/h";
+        document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
+        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED);
     }
     // Update the HTML elements with the station's wind direction data
     if (currentStationData.HOURLY_WIND_DIRECTION) {
