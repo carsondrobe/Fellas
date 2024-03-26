@@ -65,8 +65,6 @@ describe('computeDistance() Functionality', () => {
     });
 });
 
-const { updateWindSpeed } = require('../../static/JavaScript/wind_speed');
-
 // Define a test suite for the proper functioning of the updateDataHTML function
 describe('updateDataHTML Functionality', () => {
     // Setup the document body to include elements that updateDataHTML tries to update and reset them

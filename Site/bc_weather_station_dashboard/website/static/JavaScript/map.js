@@ -92,8 +92,6 @@ function updateData(stationCode) {
         });
 }
 
-const { updateWindSpeed } = require('../JavaScript/wind_speed');
-
 // Update HTML elements on right side
 function updateDataHTML(currentStationData) {
     if (currentStationData.HOURLY_TEMPERATURE) {
