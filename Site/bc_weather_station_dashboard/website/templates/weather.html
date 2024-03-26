@@ -33,21 +33,26 @@
         <div class="row pt-3">
             <!-- Station Map Column -->
             <div class="col-6 text-center border-right border-dark">
-                <h2 id="station-name-code" class="foreground"></h2>
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <h2 id="station-name-code" class="foreground"></h2>
+                    <button type="button" class="btn btn-success" style="margin-left: 1em;">Favourite</button>
+                </div>
+
                 <!-- Leaflet Map Implementation -->
                 <div id="map" style="height: 60em; width: 100%;"></div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
                 <!-- Search bar -->
                 <div class="container mt-4">
                     <div class="input-group">
-                        <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..." list="search-suggestions" autocomplete="on">
+                        <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..."
+                            list="search-suggestions" autocomplete="on">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="button" id="search-btn">Search</button>
                         </div>
                     </div>
-                        <datalist id="search-suggestions">
-                            <option value="1">1</option>
-                        </datalist>
+                    <datalist id="search-suggestions">
+                        <option value="1">1</option>
+                    </datalist>
                 </div>
                 <hr>
             </div>
@@ -199,7 +204,7 @@
         crossorigin="anonymous"></script>
     <script>
         {% if error %}
-            alert("{{error}}");
+        alert("{{error}}");
         {% endif %}
     </script>
 
