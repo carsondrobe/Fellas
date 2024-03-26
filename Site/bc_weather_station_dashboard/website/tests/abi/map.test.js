@@ -1,6 +1,6 @@
 // Mock setup for Leaflet L variable
 global.L = {
-    map: jest.fn().mockReturnThis( () => 'mock-map'),
+    map: jest.fn().mockReturnThis(() => 'mock-map'),
     tileLayer: jest.fn().mockReturnThis(),
     icon: jest.fn().mockImplementation(() => 'mock-icon'),
     marker: jest.fn().mockReturnThis(),
@@ -30,7 +30,7 @@ describe('initMap and initMarkerIcon Functionality', () => {
         global.L.map.mockReturnValue(mockMap);
         const result = initMap(undefined);
         expect(global.L.tileLayer).toHaveBeenCalledWith(
-            'https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             { maxZoom: 19 }
         );
 
@@ -64,6 +64,8 @@ describe('computeDistance() Functionality', () => {
         expect(distance).toBeCloseTo(0, 0);
     });
 });
+
+const { updateWindSpeed } = require('../../static/JavaScript/wind_speed');
 
 // Define a test suite for the proper functioning of the updateDataHTML function
 describe('updateDataHTML Functionality', () => {
