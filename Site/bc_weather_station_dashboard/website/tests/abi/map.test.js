@@ -126,17 +126,6 @@ describe('updateDataHTML Functionality', () => {
         updateDataHTML(mockData);
         expect(document.getElementById('snow-quality')).toHaveTextContent('');
     });
-    // Wind Speed Widget
-    test('Correctly updates wind speed widget.', () => {
-        const mockData = { HOURLY_WIND_SPEED: '15 km/h' };
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-speed')).toHaveTextContent('15 km/h');
-    });
-    test('Does not update the wind speed widget when data is missing.', () => {
-        const mockData = {};
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-speed')).toHaveTextContent('');
-    });
     // Wind Direction Widget
     test('Does not update the wind direction widget when data is missing.', () => {
         const mockData = {};

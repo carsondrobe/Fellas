@@ -32,7 +32,7 @@ QUnit.module("updateWindSpeed", hooks => {
 
     // Test cases
     QUnit.test("Color update for varying wind speeds", assert => {
-        const { updateWindSpeed } = require('../static/JavaScript/wind_speed.js');
+        const { updateWindSpeed } = require('../../static/JavaScript/wind_speed.js');
 
         updateWindSpeed(5); // Should set color to lightBlue
         assert.strictEqual(mockCircle.style.stroke, '#0dcaf0', "Wind speed of 5 sets circle color to lightBlue");
@@ -48,7 +48,7 @@ QUnit.module("updateWindSpeed", hooks => {
     });
 
     QUnit.test("Stroke dashoffset updates correctly", assert => {
-        const { updateWindSpeed } = require('../static/JavaScript/wind_speed.js');
+        const { updateWindSpeed } = require('../../static/JavaScript/wind_speed.js');
 
         updateWindSpeed(10);
         // For a wind speed of 10, progressPercentage is (10/35)*100 = ~28.57%
