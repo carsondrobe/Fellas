@@ -1,5 +1,5 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static '../../../static/CSS/favourite_cards.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'CSS/favourite_cards.css' %}">
 <script src="../static/JavaScript/map.js"></script>
 
 
@@ -28,16 +28,22 @@
         success: function (response) {
             response.forEach(function (station) {
                 var card = `
-                <div class="col-12">
-                    <a href="javascript:void(0);" onclick="event.preventDefault(); updateToFavourite('${station.name}')" class="card mb-2 foreground">
+                <div class="col-12" id="${station.name}">
+                    <div class="card mb-2 foreground">
                         <div class="card-body">
-                            <h5 class="card-title">${station.name}</h5>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h5 class="card-title">${station.name}</h5>
+                                <div style="float: right;">
+                                    <button onclick="event.preventDefault(); updateToFavourite('${station.name}')" class="btn btn-primary mr-4">Visit</button>
+                                    <button onclick="deleteStation('${station.name}')" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
                             <h6 class="card-subtitle mb-2 text-muted">${station.code}</h6>
                         </div>
-                    </a>
+                    </div>
                 </div>
             `;
-                $('#favourite-cards-container').append(card);  // replace with the ID of your cards container
+                $('#favourite-cards-container').append(card);
             });
         }
     });
@@ -49,5 +55,20 @@
             }
         });
         $('#viewFavouritesModal').modal('hide');
+    }
+    function deleteStation(stationName) {
+        var stationElement = document.getElementById(stationName);
+        stationElement.parentNode.removeChild(stationElement);
+
+        $.ajax({
+            url: '/delete_favourite/',
+            type: 'POST',
+            data: {
+                'station_name': stationName
+            },
+            success: function (response) {
+                console.log(response);
+            }
+        });
     }
 </script>
