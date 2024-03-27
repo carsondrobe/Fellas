@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .forms import FeedbackForm
 from django.http import JsonResponse
-from .models import WeatherStation, Feedback, StationData
+from .models import WeatherStation, Feedback, StationData, UserProfile
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -33,7 +33,20 @@ def home(request, **kwargs):
 def weather(request, **kwargs):
     global current_page
     current_page = "weather"
+
     return render(request, "weather.html", kwargs)
+
+
+def display_fav_button(request):
+    if request.method == "POST":
+        station_code = request.POST.get("station_code")
+        if request.user.is_authenticated:
+            user_profile = UserProfile.objects.get(user=request.user)
+            weather_station = WeatherStation.objects.get(STATION_CODE=station_code)
+            if weather_station in user_profile.favorite_stations.all():
+                return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
 
 
 def fire(request, **kwargs):
@@ -79,6 +92,10 @@ def register(request):
     # Create the user
     user = User.objects.create_user(username, email, password)
     user.save()
+
+    # Create the user profile
+    user_profile = UserProfile(user=user)
+    user_profile.save()
     # Log the user in
     login(request, user)
 
@@ -215,3 +232,41 @@ def station_data(request):
     ]
     # Return the data as a json resonse
     return JsonResponse(measures, safe=False)
+
+
+def add_to_favourites(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            station_code = request.POST.get("station_code")
+            station = WeatherStation.objects.get(STATION_CODE=station_code)
+            request.user.userprofile.favorite_stations.add(station)
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False})
+
+
+def view_favourites(request):
+    favourites = request.user.userprofile.favorite_stations.all()
+    data = [
+        {
+            "id": station.WEATHER_STATIONS_ID,
+            "code": station.STATION_CODE,
+            "name": station.STATION_NAME,
+            "acronym": station.STATION_ACRONYM,
+            "latitude": station.Y,
+            "longitude": station.X,
+            "elevation": station.ELEVATION,
+            "install_date": station.INSTALL_DATE.strftime("%Y-%m-%d"),
+        }
+        for station in favourites
+    ]
+    return JsonResponse(data, safe=False)
+
+
+def delete_favourite(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            station_name = request.POST.get("station_name")
+            station = WeatherStation.objects.get(STATION_NAME=station_name)
+            request.user.userprofile.favorite_stations.remove(station)
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False})
