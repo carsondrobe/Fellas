@@ -1,4 +1,4 @@
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1441px) {
   body {
       zoom: 0.95;
   }
@@ -273,4 +273,11 @@
   border-left: 25px solid transparent;
   border-right: 25px solid transparent;
   border-bottom: 35px solid #e5e5e5;
+}
+#swapPageIcon {
+  position: fixed; /* Fix position to the viewport */
+  bottom: 10px; /* Position at the bottom of the viewport */
+  right: 10px; /* Position at the right of the viewport */
+  width: 75px; /* Adjust as needed */
+  height: 75px; /* Adjust as needed */
 }
