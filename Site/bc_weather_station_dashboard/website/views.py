@@ -256,3 +256,13 @@ def view_favourites(request):
         for station in favourites
     ]
     return JsonResponse(data, safe=False)
+
+
+def delete_favourite(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            station_name = request.POST.get("station_name")
+            station = WeatherStation.objects.get(STATION_NAME=station_name)
+            request.user.userprofile.favorite_stations.remove(station)
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False})

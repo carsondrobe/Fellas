@@ -64,10 +64,15 @@
             url: '/delete_favourite/',
             type: 'POST',
             data: {
-                'station_name': stationName
+                'station_name': stationName,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
             },
-            success: function (response) {
-                console.log(response);
+            success: function (data) {
+                // handle success
+                console.log("Successfully deleted favourite station")
+            },
+            error: function (data) {
+                // handle error
             }
         });
     }
