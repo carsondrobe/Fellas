@@ -238,3 +238,21 @@ def add_to_favourites(request):
             request.user.userprofile.favorite_stations.add(station)
             return JsonResponse({"success": True})
     return JsonResponse({"success": False})
+
+
+def view_favourites(request):
+    favourites = request.user.userprofile.favorite_stations.all()
+    data = [
+        {
+            "id": station.WEATHER_STATIONS_ID,
+            "code": station.STATION_CODE,
+            "name": station.STATION_NAME,
+            "acronym": station.STATION_ACRONYM,
+            "latitude": station.Y,
+            "longitude": station.X,
+            "elevation": station.ELEVATION,
+            "install_date": station.INSTALL_DATE.strftime("%Y-%m-%d"),
+        }
+        for station in favourites
+    ]
+    return JsonResponse(data, safe=False)

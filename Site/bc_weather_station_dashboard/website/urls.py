@@ -48,4 +48,5 @@ urlpatterns = [
     ),
     path("add_to_favourites/", views.add_to_favourites, name="add_to_favourites"),
     path("display_fav_button/", views.display_fav_button, name="display_fav_button"),
+    path("view_favourites/", views.view_favourites, name="view_favourites"),
 ]

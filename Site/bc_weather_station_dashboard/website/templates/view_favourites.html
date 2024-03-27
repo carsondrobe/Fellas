@@ -1,0 +1,53 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static '../../../static/CSS/favourite_cards.css' %}">
+<script src="../static/JavaScript/map.js"></script>
+
+
+<div class="modal" id="viewFavouritesModal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content background">
+            <div class="modal-header">
+                <h4 class="modal-title">Favourite Stations</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row favourite-modal" id="favourite-cards-container" style="margin-bottom: 1em;">
+                        <!-- Favourites can be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.ajax({
+        url: '/view_favourites/',  // replace with the URL of your view
+        type: 'GET',
+        success: function (response) {
+            response.forEach(function (station) {
+                var card = `
+                <div class="col-12">
+                    <a href="javascript:void(0);" onclick="event.preventDefault(); updateToFavourite('${station.name}')" class="card mb-2 foreground">
+                        <div class="card-body">
+                            <h5 class="card-title">${station.name}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">${station.code}</h6>
+                        </div>
+                    </a>
+                </div>
+            `;
+                $('#favourite-cards-container').append(card);  // replace with the ID of your cards container
+            });
+        }
+    });
+    function updateToFavourite(stationName) {
+        weatherStations.forEach(station => {
+            // Display current station data if name matches
+            if (station.name === stationName) {
+                createMarker(station, 1);
+            }
+        });
+        $('#viewFavouritesModal').modal('hide');
+    }
+</script>

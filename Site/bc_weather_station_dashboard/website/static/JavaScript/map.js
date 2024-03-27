@@ -68,6 +68,7 @@ function fetchWeatherStationInfo() {
 
 // Function to update the data on the right column
 function updateData(stationCode) {
+
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {

@@ -35,7 +35,9 @@
                     data-target="#viewFeedbackModal" id="viewFeedbackButton">View Feedback</a>
                 {% else %}
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#feedbackModal">Submit Feedback</a>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="">View Favourites</a>
+                <a class="dropdown-item" href="{% url 'view_favourites' %}" data-toggle="modal"
+                    data-target="#viewFavouritesModal">View
+                    Favourites</a>
                 {% endif %}
 
                 <div class="dropdown-divider"></div>
