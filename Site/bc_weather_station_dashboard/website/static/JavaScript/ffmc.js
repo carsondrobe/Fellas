@@ -33,6 +33,4 @@ function updateFFMC(value_ffmc) {
     arrowvalue_ffmc.textContent = value_ffmc;
 }
 
-updateFFMC(0);
-
 module.exports = { updateFFMC };
