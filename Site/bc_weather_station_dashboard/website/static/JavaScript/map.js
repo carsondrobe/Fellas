@@ -48,7 +48,6 @@ function fetchWeatherStationInfo() {
             if (response.ok) {
                 return response.json();
                 // If response is error
-                // If response is error
             } else {
                 throw new Error("Error: Could not fetch weather stations.");
             }
@@ -111,14 +110,6 @@ function updateData(stationCode) {
     // Return date from date picker and fetch all of the data for the clicked station
     return fetch("/station_data/?datetime=" + getSelectedDate())
         .then(response => {
-            // If station data is found
-            if (response.ok) {
-                return response.json();
-                // If station data for this datetime is not found/error occurs
-            } else {
-                alert("There is no data found for this station on " + getSelectedDate() + ". Please select another date.");
-                throw new Error("There is no station data for this date or this station is missing some of its' data. Error code " + response.status + ".");
-            }
             // If station data is found
             if (response.ok) {
                 return response.json();
@@ -205,137 +196,131 @@ function getSelectedDate() {
 function checkLocation() {
     // If geolocation is available
     if (navigator.geolocation) {
-        if (navigator.geolocation) {
-            // Get current location of user
-            navigator.geolocation.getCurrentPosition(getClosestStation);
-        } else {
-            // geolocation is not available
-            console.log("Geolocation is not available on this browser.");
-        }
+        // Get current location of user
+        navigator.geolocation.getCurrentPosition(getClosestStation);
+    } else {
+        // geolocation is not available
+        console.log("Geolocation is not available on this browser.");
     }
 
-    // Function to get user's location 
-    function getClosestStation(position) {
-        // Get user's longitude and latitude and set max
-        var userLongitude = position.coords.longitude;
-        var userLatitude = position.coords.latitude;
-        // Set variables for max, datalist, and closest station
-        var max = Number.MAX_VALUE;
-        let datalist = document.getElementById('search-suggestions');
-        var closestStation;
+}
+
+// Function to get user's location 
+function getClosestStation(position) {
+    // Get user's longitude and latitude and set max
+    var userLongitude = position.coords.longitude;
+    var userLatitude = position.coords.latitude;
+    // Set variables for max, datalist, and closest station
+    var max = Number.MAX_VALUE;
+    let datalist = document.getElementById('search-suggestions');
+    var closestStation;
+    // Go through all of the weather stations
+    weatherStations.forEach(station => {
+        // Get stations longitude and latitude
+        var stationLongitude = station.longitude;
+        var stationLatitude = station.latitude;
+        // Compute distance between two points
+        var tempDistance = computeDistance(userLongitude, userLatitude, stationLongitude, stationLatitude);
+        // If tempDistance is less than max, this station code is equal to closestStationCode
+        if (tempDistance < max) {
+            // Save this weather station as closest
+            max = tempDistance;
+            currentStationCode = station.code;
+            closestStation = station;
+        }
+        // Create an option element and add it to the datalist
+        let option = document.createElement('option');
+        option.value = station.name;
+        datalist.appendChild(option);
+    });
+    // Create and display this station's marker on map
+    createMarker(closestStation, 1);
+}
+
+// Function to create a marker with an option to display it (if display is 1, marker pop up is enabled)
+function createMarker(station, display) {
+    var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
+    var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
+        .addTo(map)
+        .bindPopup(
+            `<b>Station ID: ${station.id}</b><br>` +
+            `<b>Station Code: ${station.code}</b><br>` +
+            `<b>Station Name: ${station.name}</b><br>` +
+            `<b>Station Acronym: ${station.acronym}</b><br>` +
+            `<b>Latitude: ${station.latitude}</b><br>` +
+            `<b>Longitude: ${station.longitude}</b><br>` +
+            `<b>Elevation: ${station.elevation}m</b><br>` +
+            `<b>Install Date: ${station.install_date}</b>`
+        );
+    // Add click event listener to update station name and code on click
+    marker.on('click', function () {
+        currentStationCode = station.code;
+        document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
+        updateData(currentStationCode);
+    });
+    // If display is 1, display
+
+    if (display === 1) {
+        // Display current station's data and open its popup
+        marker.fire('click');
+        // Add current station's name and code to the dashboard
+        document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
+    }
+}
+// Function to compute the distance between 2 points using longitude and latitude
+function computeDistance(longitude1, latitude1, longitude2, latitude2) {
+    // Set variables to compute distance using Haversine equation
+    var radius = 6371;
+    var distLongitude = (longitude2 - longitude1) * (Math.PI / 180);
+    var distLatitude = (latitude2 - latitude1) * (Math.PI / 180);
+    var a = Math.sin(distLatitude / 2) * Math.sin(distLatitude / 2) + Math.cos((latitude1) * (Math.PI / 180)) * Math.cos((latitude2) * (Math.PI / 180)) * Math.sin(distLongitude / 2) * Math.sin(distLongitude / 2);
+    var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return radius * b;
+}
+
+// Create variable to store event listeners in
+var eventListeners = document.addEventListener('DOMContentLoaded', function () {
+    // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
+    document.getElementById('date_selector').addEventListener('change', function () {
+        // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
+        document.getElementById('temperature').innerHTML = "N/A";
+        // document.getElementById('relative-humidity').innerHTML = "N/A";
+        document.getElementById('precipitation').innerHTML = "N/A";
+        document.getElementById('snow-depth').innerHTML = "N/A";
+        document.getElementById('snow-quality').innerHTML = "N/A";
+        document.getElementById('wind-speed').innerHTML = "N/A";
+        document.getElementById('wind-direction').innerHTML = "N/A";
+        document.getElementById('wind-gust').innerHTML = "N/A";
+        // Update all data since date time is changing
+        updateData(currentStationCode);
+    });
+
+    // Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
+    document.getElementById('map').addEventListener('click', function () {
+        // Only need to update the HTML since date time is not changing
+        updateDataHTML(currentStationCode);
+    });
+
+    // Function for displaying search bar station
+    document.getElementById("search-btn").addEventListener("click", function () {
+        // Set variable for input
+        let input = document.getElementById('searchInput').value;
         // Go through all of the weather stations
         weatherStations.forEach(station => {
-            // Get stations longitude and latitude
-            var stationLongitude = station.longitude;
-            var stationLatitude = station.latitude;
-            // Compute distance between two points
-            var tempDistance = computeDistance(userLongitude, userLatitude, stationLongitude, stationLatitude);
-            // If tempDistance is less than max, this station code is equal to closestStationCode
-            if (tempDistance < max) {
-                // Save this weather station as closest
-                max = tempDistance;
-                currentStationCode = station.code;
-                closestStation = station;
+            // Display current station data if name matches
+            if (station.name === input) {
+                createMarker(station, 1);
             }
-            // Create an option element and add it to the datalist
-            let option = document.createElement('option');
-            option.value = station.name;
-            datalist.appendChild(option);
         });
-        // Create and display this station's marker on map
-        createMarker(closestStation, 1);
-    }
+    });
+});
 
-    // Function to create a marker with an option to display it (if display is 1, marker pop up is enabled)
-    function createMarker(station, display) {
-        var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
-        var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
-            .addTo(map)
-            .bindPopup(
-                `<b>Station ID: ${station.id}</b><br>` +
-                `<b>Station Code: ${station.code}</b><br>` +
-                `<b>Station Name: ${station.name}</b><br>` +
-                `<b>Station Acronym: ${station.acronym}</b><br>` +
-                `<b>Latitude: ${station.latitude}</b><br>` +
-                `<b>Longitude: ${station.longitude}</b><br>` +
-                `<b>Elevation: ${station.elevation}m</b><br>` +
-                `<b>Install Date: ${station.install_date}</b>`
-            );
-        // Add click event listener to update station name and code on click
-        marker.on('click', function () {
-            marker.on('click', function () {
-                currentStationCode = station.code;
-                document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
-                updateData(currentStationCode);
-            });
-            // If display is 1, display
-            if (display === 1) {
-                if (display === 1) {
-                    // Display current station's data and open its popup
-                    marker.fire('click');
-                    // Add current station's name and code to the dashboard
-                    document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
-                }
-            }
-
-            // Function to compute the distance between 2 points using longitude and latitude
-            function computeDistance(longitude1, latitude1, longitude2, latitude2) {
-                // Set variables to compute distance using Haversine equation
-                var radius = 6371;
-                var distLongitude = (longitude2 - longitude1) * (Math.PI / 180);
-                var distLatitude = (latitude2 - latitude1) * (Math.PI / 180);
-                var a = Math.sin(distLatitude / 2) * Math.sin(distLatitude / 2) + Math.cos((latitude1) * (Math.PI / 180)) * Math.cos((latitude2) * (Math.PI / 180)) * Math.sin(distLongitude / 2) * Math.sin(distLongitude / 2);
-                var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                var distLongitude = (longitude2 - longitude1) * (Math.PI / 180);
-                var distLatitude = (latitude2 - latitude1) * (Math.PI / 180);
-                var a = Math.sin(distLatitude / 2) * Math.sin(distLatitude / 2) + Math.cos((latitude1) * (Math.PI / 180)) * Math.cos((latitude2) * (Math.PI / 180)) * Math.sin(distLongitude / 2) * Math.sin(distLongitude / 2);
-                var b = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                return radius * b;
-            }
-
-            // Create variable to store event listeners in
-            var eventListeners = document.addEventListener('DOMContentLoaded', function () {
-                // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
-                document.getElementById('date_selector').addEventListener('change', function () {
-                    // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
-                    document.getElementById('temperature').innerHTML = "N/A";
-                    // document.getElementById('relative-humidity').innerHTML = "N/A";
-                    document.getElementById('precipitation').innerHTML = "N/A";
-                    document.getElementById('snow-depth').innerHTML = "N/A";
-                    document.getElementById('snow-quality').innerHTML = "N/A";
-                    document.getElementById('wind-speed').innerHTML = "N/A";
-                    document.getElementById('wind-direction').innerHTML = "N/A";
-                    document.getElementById('wind-gust').innerHTML = "N/A";
-                    // Update all data since date time is changing
-                    updateData(currentStationCode);
-                });
-
-                // Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
-                document.getElementById('map').addEventListener('click', function () {
-                    // Only need to update the HTML since date time is not changing
-                    updateDataHTML(currentStationCode);
-                });
-
-                // Function for displaying search bar station
-                document.getElementById("search-btn").addEventListener("click", function () {
-                    // Set variable for input
-                    let input = document.getElementById('searchInput').value;
-                    // Go through all of the weather stations
-                    weatherStations.forEach(station => {
-                        // Display current station data if name matches
-                        if (station.name === input) {
-                            createMarker(station, 1);
-                        }
-                    });
-                });
-            });
-
-            // Export functions for testing
-            module.exports = {
-                initMap,
-                initMarkerIcon,
-                updateDataHTML,
-                getSelectedDate,
-                checkLocation,
-                computeDistance
-            };
+// Export functions for testing
+module.exports = {
+    initMap,
+    initMarkerIcon,
+    updateDataHTML,
+    getSelectedDate,
+    checkLocation,
+    computeDistance
+};
