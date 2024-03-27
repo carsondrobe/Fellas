@@ -28,7 +28,7 @@
         filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 0 #fff) brightness(1);
     }
     50% {
-        filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 50px #fff5) brightness(1.5);
+        filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 50px #fff5) brightness(2);
     }
 }
 

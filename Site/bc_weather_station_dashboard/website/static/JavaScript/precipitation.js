@@ -1,3 +1,42 @@
+// Function to get current precipitation value
+function getCurrentPrecipitationValue() {
+    // Get precipitation amount
+    var precipitationText = document.getElementById('precipitation').innerText;
+    var match = precipitationText.match(/\d+(\.\d+)?/); 
+    // If number, return number or else return null
+    if (match) {
+        return parseFloat(match[0]);
+    } else {
+        return null;
+    }
+}
+
+// Function to change rain intensity
+function adjustRainIntensity(precipitationValue) {
+    // Calculate intensity
+    var rainAmount;
+    if(precipitationValue === 0) {
+        rainAmount = 50000;
+    } else if(precipitationValue <= 0.5) {
+        rainAmount = 200;
+    } else if(precipitationValue <= 1.0) {
+        rainAmount = 150;
+    } else if(precipitationValue <= 1.5) {
+        rainAmount = 100;
+    } else if(precipitationValue <= 2.0) {
+        rainAmount = 60;
+    } else if(precipitationValue <= 4.0) {
+        rainAmount = 40;
+    } else if(precipitationValue <= 6.0) {
+        rainAmount = 20;
+    } else {
+        rainAmount = 5;
+    }
+    // Adjust raindrop intensity
+    clearInterval(rainInterval);
+    rainInterval = setInterval(rain, rainAmount)
+}
+
 // Function to create raindrops
 function rain() {
     // Get cloud and create html div for raindrops
@@ -20,7 +59,15 @@ function rain() {
     }, 2000)
 }
 
-// Lower number means more raindrops
-setInterval(function() {
+// Create rain interval variable
+var rainInterval = setInterval(function() {
     rain()
-}, 20);
+}, 5000);
+
+// Call rain intensity function every 3 milliseconds
+setInterval(function() {
+    adjustRainIntensity(getCurrentPrecipitationValue());
+}, 300);
+
+// Export for testing
+module.exports = { getCurrentPrecipitationValue };
