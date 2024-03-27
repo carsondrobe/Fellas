@@ -18,9 +18,13 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+
     <script src="{% static 'home.js' %}"></script>
     <script src="{% static 'wind_direction.js' %}"></script>
     <script src="{% static 'JavaScript/humidity.js' %}"></script>
+    <script src="{% static 'JavaScript/wind_speed.js' %}"></script>
+
+
     <title>Dashboard</title>
 
 </head>
@@ -40,14 +44,15 @@
                 <!-- Search bar -->
                 <div class="container mt-4">
                     <div class="input-group">
-                        <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..." list="search-suggestions" autocomplete="on">
+                        <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..."
+                            list="search-suggestions" autocomplete="on">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="button" id="search-btn">Search</button>
                         </div>
                     </div>
-                        <datalist id="search-suggestions">
-                            <option value="1">1</option>
-                        </datalist>
+                    <datalist id="search-suggestions">
+                        <option value="1">1</option>
+                    </datalist>
                 </div>
                 <hr>
             </div>
@@ -150,11 +155,26 @@
                 <!-- Row 3 -->
                 <div class="row pt-4 justify-content-center">
                     <!-- Wind Speed Card -->
-                    <div class="col-md-4">
+                    <div class="col-md-4" style="min-width: 240px;">
                         <div class="card foreground">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Wind Speed</h5>
-                                <h2 class="card-text" id="wind-speed">N/A</h2>
+                                <img src="{% static 'images/wind-icon.svg' %}" alt="Wind Speed Icon"
+                                class="wind-icon" style="width: 30px; float: left; margin-right: 5px;">
+                                <h5 class="card-title mb-2">Wind Speed</h5>
+
+
+                                <div class="progress-container circle-text-container">
+                                    <svg viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" stroke="#eee" stroke-width="5" fill="none" />
+
+                                        <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
+                                            stroke-dasharray="283 283" stroke-dashoffset="283" />
+                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#dddddddd"
+                                            id="wind-speed">
+                                            N/A
+                                        </text>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -199,7 +219,7 @@
         crossorigin="anonymous"></script>
     <script>
         {% if error %}
-            alert("{{error}}");
+        alert("{{error}}");
         {% endif %}
     </script>
 
@@ -207,6 +227,7 @@
 
     <!-- JS for widgets -->
     <script src="{% static 'ffmc.js' %}"></script>
+
 </body>
 
 </html>
