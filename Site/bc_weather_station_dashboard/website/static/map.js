@@ -129,10 +129,10 @@ function updateDataHTML(currentStationData) {
     // Check if the current page is fire.html
     else if (path.endsWith('/fire/')) {
         // Update the HTML elements with the station's fine fuel moisture code data
-        console.log('currentStationData:', currentStationData.HOURLY_FINE_FUEL_MOISTURE_CODE);
-        if (currentStationData.HOURLY_FINE_FUEL_MOISTURE_CODE) {
-            console.log('Initial value_ffmc:', currentStationData.HOURLY_FINE_FUEL_MOISTURE_CODE);
-            updateFFMC(currentStationData.HOURLY_FINE_FUEL_MOISTURE_CODE);
+        console.log('currentStationData:', currentStationData.FINE_FUEL_MOISTURE_CODE);
+        if (currentStationData.FINE_FUEL_MOISTURE_CODE) {
+            console.log('Initial value_ffmc:', currentStationData.FINE_FUEL_MOISTURE_CODE);
+            updateFFMC(currentStationData.FINE_FUEL_MOISTURE_CODE);
         }
 
         // Update the HTML elements with the station's initial spread index data
