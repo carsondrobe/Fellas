@@ -1,4 +1,5 @@
 function updateFFMC(value_ffmc) {
+    value_ffmc = Math.round(value_ffmc); // Round value_ffmc to the nearest integer
     let position_ffmc = value_ffmc;
 
     // check if value_ffmc is less than 0 and set it to 0
