@@ -218,6 +218,8 @@
     <script>
         $(document).ready(function () {
             $('.favourite-button').click(function () {
+                // hide button
+                $(this).hide();
                 var stationCode = getStationCode();
 
                 $.ajax({
@@ -226,7 +228,7 @@
                     data: { 'station_code': stationCode },
                     headers: { 'X-CSRFToken': getCookie('csrftoken') },
                     success: function (data) {
-                        alert(data.success ? 'Station added to favourites!' : 'Failed to add station to favourites.');
+                        console.log("Successfully added to favourites");
                     }
                 });
             });
