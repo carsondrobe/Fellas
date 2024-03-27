@@ -65,9 +65,15 @@ var rainInterval = setInterval(function() {
 }, 5000);
 
 // Call rain intensity function every 3 milliseconds
-setInterval(function() {
+var adjustRainInterval = setInterval(function() {
     adjustRainIntensity(getCurrentPrecipitationValue());
 }, 300);
 
+// Functions to clear intervals
+function clearIntervals() {
+    clearInterval(rainInterval);
+    clearInterval(adjustRainInterval);
+}
+
 // Export for testing
-module.exports = { getCurrentPrecipitationValue };
+module.exports = { getCurrentPrecipitationValue, clearIntervals };

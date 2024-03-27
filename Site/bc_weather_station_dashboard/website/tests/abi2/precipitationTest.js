@@ -7,10 +7,13 @@ const QUnit = require('qunit');
 const html = fs.readFileSync(path.resolve(__dirname, '../../templates/weather.html'), 'utf8');
 const { document } = (new JSDOM(html)).window;
 global.document = document;
-const { getCurrentPrecipitationValue } = require('../../static/JavaScript/precipitation');
+const { getCurrentPrecipitationValue, clearIntervals } = require('../../static/JavaScript/precipitation');
 
 // Define a test suite for the getCurrentPrecipitationValue function
-QUnit.module('Precipitation Tests', function() {
+QUnit.module('Precipitation Tests', function(hooks) {
+    hooks.afterEach(() => {
+        clearIntervals();
+    });
     QUnit.test('getCurrentPrecipitationValue with number', function(assert) {
         document.getElementById('precipitation').innerText = '2.5';
         assert.equal(getCurrentPrecipitationValue(), 2.5, 'Should return 2.5 when precipitation text is "2.5"');
