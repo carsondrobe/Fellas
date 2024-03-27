@@ -27,7 +27,22 @@ def home(request, **kwargs):
 def weather(request, **kwargs):
     global current_page
     current_page = "weather"
+
     return render(request, "weather.html", kwargs)
+
+
+def display_fav_button(request):
+    if request.method == "POST":
+        station_code = request.POST.get("station_code")
+        if request.user.is_authenticated:
+            user_profile = UserProfile.objects.get(user=request.user)
+            weather_station = WeatherStation.objects.get(STATION_CODE=station_code)
+            print(weather_station, user_profile.favorite_stations.all())
+            print(weather_station in user_profile.favorite_stations.all())
+            if weather_station in user_profile.favorite_stations.all():
+                return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
 
 
 def fire(request, **kwargs):

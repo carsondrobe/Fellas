@@ -34,9 +34,14 @@
             <!-- Station Map Column -->
             <div class="col-6 text-center border-right border-dark">
                 <div style="display: flex; align-items: center; justify-content: center;">
+
                     <h2 id="station-name-code" class="foreground"></h2>
-                    <button type="button" class="btn btn-success favourite-button"
-                        style="margin-left: 1em;">Favourite</button>
+                    {% if request.user.is_authenticated %}
+
+                    <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
+                        id="favourite-button">Favourite</button>
+
+                    {% endif %}
                 </div>
 
                 <!-- Leaflet Map Implementation -->
@@ -212,7 +217,7 @@
     <script>
         $(document).ready(function () {
             $('.favourite-button').click(function () {
-                var stationCode = $('#station-name-code').text().split('#')[1];
+                var stationCode = getStationCode();
 
                 $.ajax({
                     url: "{% url 'add_to_favourites' %}",
@@ -239,6 +244,9 @@
                 }
             }
             return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
         }
     </script>
 
