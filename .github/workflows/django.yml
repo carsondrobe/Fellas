@@ -50,3 +50,7 @@ jobs:
       run: |
         npm run test:abi
       working-directory: Site/bc_weather_station_dashboard
+    - name: Run Ab2 JS tests
+      run: |
+        npx qunit website/tests/abi2/*.js
+      working-directory: Site/bc_weather_station_dashboard

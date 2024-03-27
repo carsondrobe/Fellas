@@ -211,12 +211,6 @@ describe('checkLocation() Functionality', () => {
             }),
         };
     });
-    // Commented out because failing
-    // // Create a test for checkLocation when geolocation is available
-    // test('Correctly calls getCurrentPosition if geolocation is available.', () => {    
-    //     checkLocation();
-    //     expect(navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
-    // });
     // Create a test for checkLocation when geolocation is not available
     test('Correctly logs message if geolocation is not available.', () => {
         delete global.navigator.geolocation;

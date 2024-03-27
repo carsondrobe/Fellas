@@ -6,12 +6,12 @@
   "scripts": {
     "test:robert": "qunit website/tests/robert/*.js",
     "test:robert:coverage": "nyc --reporter=text npm run test:robert",
-    
     "test:davis": "npx qunit website/tests/davis/*.js",
     "test:davis:coverage": "npx nyc --reporter=text npm run test:davis",
-
     "test:abi": "jest",
-    "test:abi:coverage": "npm run test:abi -- --coverage"
+    "test:abi:coverage": "npm run test:abi -- --coverage",
+    "test:abi2": "qunit website/tests/abi2/*.js",
+    "test:abi2:coverage": "npx nyc --reporter=text npm run test:abi2"
   },
   "author": "",
   "license": "ISC",
