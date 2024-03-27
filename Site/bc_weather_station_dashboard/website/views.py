@@ -37,8 +37,6 @@ def display_fav_button(request):
         if request.user.is_authenticated:
             user_profile = UserProfile.objects.get(user=request.user)
             weather_station = WeatherStation.objects.get(STATION_CODE=station_code)
-            print(weather_station, user_profile.favorite_stations.all())
-            print(weather_station in user_profile.favorite_stations.all())
             if weather_station in user_profile.favorite_stations.all():
                 return JsonResponse({"success": True})
 
