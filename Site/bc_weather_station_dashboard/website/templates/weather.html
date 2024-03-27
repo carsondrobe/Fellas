@@ -33,9 +33,13 @@
         <div class="row pt-3">
             <!-- Station Map Column -->
             <div class="col-6 text-center border-right border-dark">
-                <h2 id="station-name-code" class="foreground"></h2>
+                <div class="foreground">
+                    <h2 id="station-name-code"></h2>
+                </div>
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 60em; width: 100%;"></div>
+                <div id="map" style="height: 60em; width: 100%;">
+                    <button id="find-me-btn">Find me!</button>
+                </div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
                 <!-- Search bar -->
                 <div class="container mt-4">
