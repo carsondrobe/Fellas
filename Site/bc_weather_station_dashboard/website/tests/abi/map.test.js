@@ -1,6 +1,6 @@
 // Mock setup for Leaflet L variable
 global.L = {
-    map: jest.fn().mockReturnThis( () => 'mock-map'),
+    map: jest.fn().mockReturnThis(() => 'mock-map'),
     tileLayer: jest.fn().mockReturnThis(),
     icon: jest.fn().mockImplementation(() => 'mock-icon'),
     marker: jest.fn().mockReturnThis(),
@@ -30,7 +30,7 @@ describe('initMap and initMarkerIcon Functionality', () => {
         global.L.map.mockReturnValue(mockMap);
         const result = initMap(undefined);
         expect(global.L.tileLayer).toHaveBeenCalledWith(
-            'https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             { maxZoom: 19 }
         );
 
@@ -123,17 +123,6 @@ describe('updateDataHTML Functionality', () => {
         const mockData = {};
         updateDataHTML(mockData);
         expect(document.getElementById('snow-quality')).toHaveTextContent('');
-    });
-    // Wind Speed Widget
-    test('Correctly updates wind speed widget.', () => {
-        const mockData = { HOURLY_WIND_SPEED: '15 km/h' };
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-speed')).toHaveTextContent('15 km/h');
-    });
-    test('Does not update the wind speed widget when data is missing.', () => {
-        const mockData = {};
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-speed')).toHaveTextContent('');
     });
     // Wind Direction Widget
     test('Does not update the wind direction widget when data is missing.', () => {

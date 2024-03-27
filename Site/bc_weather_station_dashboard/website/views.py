@@ -16,10 +16,16 @@ current_page = "weather"
 
 
 def home(request, **kwargs):
+    try:
+        user_type = request.user.userprofile.user_type
+    except:
+        user_type = "CU"
+
+    context = {"user_type": user_type}
     if current_page == "weather":
-        return weather(request, **kwargs)
+        return weather(request, **kwargs, **context)
     elif current_page == "fire":
-        return fire(request, **kwargs)
+        return fire(request, **kwargs, **context)
     else:
         raise ValueError("Invalid page", current_page)
 

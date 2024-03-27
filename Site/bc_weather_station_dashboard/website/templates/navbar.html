@@ -1,5 +1,8 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark foreground">
-    <a class="navbar-brand foreground" href="#">BC Weather and Wildfire</a>
+    <a class="navbar-brand foreground"
+        href="{% if user_type == 'CU' %}{% url 'weather' %}{% else %}{% url 'fire' %}{% endif %}">BC Weather and
+        Wildfire</a>
     <div id="date_selector" class="ml-auto">
         <strong><span id="selected_date" class="text-white p-2">Today</span></strong>
         <img class="datepicker-toggle-button" src="../static/images/calendar_icon.svg" alt="calendar icon" width="30">
