@@ -42,8 +42,6 @@ jobs:
           run: chmod -R 777 .
         - name: Run Django management command
           run: python manage.py csv_scrape
-          working-directory: Site/bc_weather_station_dashboard
-          timeout-minutes: 4
         - name: Commit and push changes
           run: |
               git config --local user.email "action@github.com"
