@@ -10,7 +10,7 @@ jobs:
         strategy:
             max-parallel: 4
             matrix:
-                python-version: [3.10]
+                python-version: [3.10.9]
         
         steps:
         - uses: actions/checkout@v3
@@ -31,4 +31,4 @@ jobs:
               git config --local user.name "GitHub Action"
               git add -A
               git commit -m "Update database" || exit 0
-              git push
+              git push https://${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git
