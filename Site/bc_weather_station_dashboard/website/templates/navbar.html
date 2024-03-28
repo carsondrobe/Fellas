@@ -1,6 +1,6 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark foreground">
-    <a class="navbar-brand foreground"
+    <a class="font-weight-bold foreground p-0" style="text-decoration:none; color: inherit;"
         href="{% if user_type == 'CU' %}{% url 'weather' %}{% else %}{% url 'fire' %}{% endif %}">BC Weather and
         Wildfire</a>
     <div id="date_selector" class="ml-auto">
@@ -17,7 +17,7 @@
             if (adjusted_date.toDateString() === new Date().toDateString()) {
                 selected_date.textContent = "Today";
             } else {
-                selected_date.textContent = adjusted_date.toLocaleDateString('en-CA');
+                selected_date.textContent = adjusted_date.getFullYear() + "-" + (adjusted_date.getMonth() + 1) + "-" + adjusted_date.getDate();
             }
         });
     </script>
