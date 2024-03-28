@@ -34,6 +34,10 @@ jobs:
             status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null "$url")
             echo "URL: $url"
             echo "Status code: $status_code"
+        - name: Check database connectivity
+          run: |
+            echo "from django.db import connections; connections['default'].cursor()" | python manage.py shell
+          working-directory: Site/bc_weather_station_dashboard
         - name: Run Django management command
           run: python manage.py check
           working-directory: Site/bc_weather_station_dashboard
