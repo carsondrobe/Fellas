@@ -49,4 +49,4 @@ jobs:
               git config --local user.name "GitHub Action"
               git add -A
               git commit -m "Update database" || exit 0
-              git push https://${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git
+              git push https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
