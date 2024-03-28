@@ -1,8 +1,10 @@
 #precipitation-card {
+    display: flex;
     width: 180px;
 }
 
 .precipitation-container {
+    display: flex;
     position: relative;
     width: 115px;
     height: 160px;
@@ -12,7 +14,8 @@
     margin-bottom: 10px;
 }
 
-.precipitation-container .cloud {
+#cloud {
+    display: flex;
     position: relative;
     width: 150px;
     height: 40px;
@@ -20,7 +23,7 @@
     background: #fff;
     border-radius: 100px;
     filter: drop-shadow(8px 8px 0 #0005);
-    animation: animateCloud 3s linear infinite;
+    animation: animateCloud 0s linear infinite;;
 }
 
 @keyframes animateCloud {
@@ -28,12 +31,12 @@
         filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 0 #fff) brightness(1);
     }
     50% {
-        filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 50px #fff5) brightness(2);
+        filter: drop-shadow(8px 8px 0 #0001) drop-shadow(0 0 50px rgba(255, 255, 255, 0.333)) brightness(2);
     }
 }
 
 
-.precipitation-container .cloud::before {
+#cloud::before {
     content: '';
     position: absolute;
     top: -15px;
@@ -41,20 +44,21 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: #484f59;
-    box-shadow: 35px 2px 0px 15px #484f59;
+    background: #9c9a9a;
+    box-shadow: 35px 2px 0px 15px #9c9a9a;
+    z-index: 1000;
 }
 
-.precipitation-container .cloud::after {
+#cloud::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: #484f59;
+    background: #9c9a9a;
     border-radius: 100px;
     z-index: 1000;
 }
 
-.precipitation-container .cloud .raindrop {
+#cloud .raindrop {
     position: absolute;
     top: 40px;
     background: #05a2eb;

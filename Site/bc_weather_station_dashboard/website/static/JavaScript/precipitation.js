@@ -15,6 +15,14 @@ function getCurrentPrecipitationValue() {
 function adjustRainIntensity(precipitationValue) {
     // Calculate intensity
     var rainAmount = 100/(precipitationValue+.1);
+    console.log(rainAmount);
+    var cloud = document.getElementById('cloud');
+    // If intense enough, make cloud pulse
+    if(rainAmount < 70) {
+        cloud.style.animation = 'animateCloud 2s linear infinite';
+    } else {
+        cloud.style.animation = 'animateCloud 0s linear infinite';
+    }
     // Adjust raindrop intensity
     clearInterval(rainInterval);
     rainInterval = setInterval(rain, rainAmount)
