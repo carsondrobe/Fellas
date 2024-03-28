@@ -38,8 +38,10 @@ jobs:
           run: |
             echo "from django.db import connections; connections['default'].cursor()" | python manage.py shell
           working-directory: Site/bc_weather_station_dashboard
+        - name: Set permissions
+          run: chmod -R 777 .
         - name: Run Django management command
-          run: python manage.py check
+          run: python manage.py csv_scrape
           working-directory: Site/bc_weather_station_dashboard
           timeout-minutes: 4
         - name: Commit and push changes
