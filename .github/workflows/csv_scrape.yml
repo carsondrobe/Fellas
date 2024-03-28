@@ -43,6 +43,9 @@ jobs:
         - name: Run Django management command
           run: python manage.py csv_scrape
           working-directory: Site/bc_weather_station_dashboard
+        - name: Checkout branch
+          run: |
+            git checkout main
         - name: Commit and push changes
           run: |
               git config --local user.email "action@github.com"
