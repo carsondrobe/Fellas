@@ -52,4 +52,4 @@ jobs:
               git config --local user.name "GitHub Action"
               git add Site/bc_weather_station_dashboard/db.sqlite3
               git commit -m "Update database" || exit 0
-              git push https://${{ secrets.G_TOKEN }}@github.com/carsondrobe/Fellas.git
+              git push https://${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git
