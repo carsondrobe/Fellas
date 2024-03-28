@@ -53,6 +53,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs) -> None:
         """Handles the command, calls the other methods. You can change the date range here."""
+        print("Starting handle method")  # Debug print statement
         # Create a date range for when you want to scrape the data
         start_date = (datetime.today() - timedelta(days=2)).date()  # Change the start date
         end_date = date.today()  # Change the end date
@@ -64,6 +65,7 @@ class Command(BaseCommand):
 
         # Loop over the dates
         for date_current in dates:
+            print(f"Processing date: {date_current}")  # Debug print statement
             # Format the date as yyyy-mm-dd
             date_str = date_current.strftime('%Y-%m-%d')
             # Get the year from the date
@@ -85,3 +87,4 @@ class Command(BaseCommand):
                 if os.path.exists(filename):
                     os.remove(filename)
                     self.stdout.write(self.style.SUCCESS(f'File {filename} Deleted Successfully'))
+        print("Finished handle method")  # Debug print statement
