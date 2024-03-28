@@ -6,15 +6,28 @@
   "scripts": {
     "test:robert": "qunit website/tests/robert/*.js",
     "test:robert:coverage": "nyc --reporter=text npm run test:robert",
-    
     "test:davis": "npx qunit website/tests/davis/*.js",
-    "test:davis:coverage": "npx nyc --reporter=text npm run test:davis"
+    "test:davis:coverage": "npx nyc --reporter=text npm run test:davis",
+    "test:abi": "jest",
+    "test:abi:coverage": "npm run test:abi -- --coverage",
+    "test:carson": "npx qunit website/tests/carson/*.js",
+    "test:carson:coverage": "npx nyc --reporter=text npm run test:carson"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3",
     "jsdom": "^24.0.0",
     "nyc": "^15.1.0",
     "qunit": "^2.20.1"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
   }
 }

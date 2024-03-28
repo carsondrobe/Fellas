@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from .forms import FeedbackForm
 from django.http import JsonResponse
-from .models import WeatherStation, Feedback, StationData
+from .models import UserProfile, WeatherStation, Feedback, StationData
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -16,10 +16,16 @@ current_page = "weather"
 
 
 def home(request, **kwargs):
+    try:
+        user_type = request.user.userprofile.user_type
+    except:
+        user_type = "CU"
+
+    context = {"user_type": user_type}
     if current_page == "weather":
-        return weather(request, **kwargs)
+        return weather(request, **kwargs, **context)
     elif current_page == "fire":
-        return fire(request, **kwargs)
+        return fire(request, **kwargs, **context)
     else:
         raise ValueError("Invalid page", current_page)
 
@@ -66,6 +72,8 @@ def register(request):
     print("register", request.POST)
     username = request.POST.get("username")
     email = request.POST.get("email")
+    phone_number = request.POST.get("phone_number")
+    user_type = request.POST.get("user_type")
     password = request.POST.get("password")
     if not username or not email or not password:
         return HttpResponse("Please fill in all fields", status=400)
@@ -73,7 +81,12 @@ def register(request):
     # Create the user
     user = User.objects.create_user(username, email, password)
     user.save()
-    # Log the user in
+
+    # Creates the "user profile" model with information
+    user_profile = UserProfile(user=user, phone_number=phone_number, user_type=user_type)
+    user_profile.save()
+
+    # Logs user in 
     login(request, user)
 
     return redirect(reverse("home"))

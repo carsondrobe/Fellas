@@ -12,6 +12,7 @@ from django.utils import timezone
 # The User model is used to store user information
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15, blank=True, unique=True)
     COMMON_USER = "CU"
     FIRE_STAFF = "FS"
     USER_TYPE_CHOICES = [
