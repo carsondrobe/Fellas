@@ -145,7 +145,7 @@
                     <!-- Snow Depth Card -->
                     <div class="col-md-4">
                         <div class="card mx-md-0 mx-4 foreground">
-                            <div class="card-body text-center">
+                            <div class="card-body text-center" id="snow-depth">
                                 <h5 class="card-title">Snow Depth</h5>
                                 <h2 class="card-text" id="snow-depth">N/A</h2>
                             </div>
@@ -229,6 +229,10 @@
 
 
     <!-- JS for widgets -->
+    <script src="{% static 'home.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/snow_depth.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/wind_direction.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/ffmc.js' %}"></script>
     <script src="{% static 'ffmc.js' %}"></script>
 
 </body>
