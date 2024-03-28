@@ -31,7 +31,7 @@ class WindArrow {
     calculateComponents() {
         // Calculate the x and y components of the arrow
         this.x = 115 * Math.cos(this.radians);
-        this.y = 115 * Math.sin(this.radians); 
+        this.y = 115 * Math.sin(this.radians);
     }
 
     drawMainArrow() {
@@ -85,9 +85,9 @@ class WindArrow {
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillText('S', 0, 140);  // position of the letter
-        this.ctx.fillText('E', 140, 0);  
+        this.ctx.fillText('E', 140, 0);
         this.ctx.fillStyle = 'red'; // Change fillStyle to red for 'N'
-        this.ctx.fillText('N', 0, -140);  
+        this.ctx.fillText('N', 0, -140);
         this.ctx.fillStyle = '#e5e5e5'; // Change fillStyle back to black for 'W'
         this.ctx.fillText('W', -140, 0);
         this.ctx.restore();
@@ -105,8 +105,8 @@ class WindArrow {
             let adjustedAngle = (90 - angle) % 360;
             if (adjustedAngle < 0) adjustedAngle += 360;
             let angleRad = adjustedAngle * (Math.PI / 180);
-            let x = 1.40 * 100 * Math.cos(angleRad); 
-            let y = 1.40 * 100 * Math.sin(angleRad); 
+            let x = 1.40 * 100 * Math.cos(angleRad);
+            let y = 1.40 * 100 * Math.sin(angleRad);
             let fontsize = angle % 30 === 0 ? '20px' : '14px';
             let color = angle % 30 === 0 ? '#e5e5e5' : '#c0c0c0';
             this.ctx.font = fontsize + ' Arial';

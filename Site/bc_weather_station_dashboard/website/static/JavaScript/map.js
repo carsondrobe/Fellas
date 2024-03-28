@@ -109,16 +109,15 @@ function updateDataHTML(currentStationData) {
         progressBar.setValue(relativeHumidity);
     }
     // Update the HTML elements with the station's precipitation data
-    if (currentStationData.HOURLY_PRECIPITATION) {
+    if (currentStationData.HOURLY_PRECIPITATION !== undefined) {
         document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
     }
     // Update the HTML elements with the station's snow depth data
     if (currentStationData.SNOW_DEPTH) {
-        document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
-    }
-    // Update the HTML elements with the station's snow quality data
-    if (currentStationData.SNOW_DEPTH_QUALITY) {
-        document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
+        // document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
+        drawSnowDepth(currentStationData.SNOW_DEPTH);
+    }else{
+        drawSnowDepth(0);
     }
     // Update the HTML elements with the station's wind speed data
     if (currentStationData.HOURLY_WIND_SPEED) {
@@ -136,9 +135,9 @@ function updateDataHTML(currentStationData) {
         windArrow.draw();
     }
     // Update the HTML elements with the station's wind gust data
-    if (currentStationData.HOURLY_WIND_GUST) {
-        document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
-    }
+    // if (currentStationData.HOURLY_WIND_GUST) {
+    //     document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
+    // }
 }
 
 // Function to get the selected date from the date picker
@@ -246,10 +245,9 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
         // document.getElementById('relative-humidity').innerHTML = "N/A";
         document.getElementById('precipitation').innerHTML = "N/A";
         document.getElementById('snow-depth').innerHTML = "N/A";
-        document.getElementById('snow-quality').innerHTML = "N/A";
         document.getElementById('wind-speed').innerHTML = "N/A";
         document.getElementById('wind-direction').innerHTML = "N/A";
-        document.getElementById('wind-gust').innerHTML = "N/A";
+        // document.getElementById('wind-gust').innerHTML = "N/A";
         // Update all data since date time is changing
         updateData(currentStationCode);
     });
