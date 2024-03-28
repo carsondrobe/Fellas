@@ -116,10 +116,6 @@ function updateDataHTML(currentStationData) {
     if (currentStationData.SNOW_DEPTH) {
         document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
     }
-    // Update the HTML elements with the station's snow quality data
-    if (currentStationData.SNOW_DEPTH_QUALITY) {
-        document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
-    }
     // Update the HTML elements with the station's wind speed data
     if (currentStationData.HOURLY_WIND_SPEED) {
         document.getElementById('wind-speed').innerHTML = currentStationData.HOURLY_WIND_SPEED + " km/h";
@@ -245,7 +241,6 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function() {
         // document.getElementById('relative-humidity').innerHTML = "N/A";
         document.getElementById('precipitation').innerHTML = "N/A";
         document.getElementById('snow-depth').innerHTML = "N/A";
-        document.getElementById('snow-quality').innerHTML = "N/A";
         document.getElementById('wind-speed').innerHTML = "N/A";
         document.getElementById('wind-direction').innerHTML = "N/A";
         document.getElementById('wind-gust').innerHTML = "N/A";

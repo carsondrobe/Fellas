@@ -36,10 +36,11 @@
     <div class="container-fluid">
         <div class="row pt-3">
             <!-- Station Map Column -->
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 text-center border-right border-dark">
+                <h2 id="station-name-code" class="foreground"></h2>
             {% comment %} If you want to make map only take up 1/3 of page, use line below {% endcomment %}
             {% comment %} <div class="col-4 text-center border-right border-dark"> {% endcomment %}
-            <div class="col-6 text-center border-right border-dark">
-                <h2 id="station-name-code" class="foreground"></h2>
+
                 <!-- Leaflet Map Implementation -->
                 <div id="map" style="height: 60em; width: 100%;"></div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
@@ -58,7 +59,7 @@
                 <hr>
             </div>
             <!-- Weather Data Column -->
-            <div class="col-6 ">
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                 <h2 class="foreground text-center">
                     Weather
                 </h2>
@@ -66,7 +67,7 @@
                 <!-- Row 1 -->
                 <div class="row pt-4 justify-content-center">
                     <!-- Temperature Card -->
-                    <div class="foreground mr-md-4 mb-4">
+                    <div class="col-lg-4 col-sm-12 foreground mr-md-0 mx-5 mb-5 mb-md-0">
                         <div class="card rounded shadow bg-info text-white">
                             <div class="card-body text-center p-4">
                                 <!-- Temp icon and title -->
@@ -99,7 +100,7 @@
                     <!-- End Temperature card -->
 
                     <!-- Relative Humidity Card -->
-                    <div class="card rounded text-white foreground mb-4">
+                    <div class="col-lg-4 col-sm-12 card rounded text-white foreground mx-5">
                         <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
                             <!-- Humidity icon and title -->
                             <div>
@@ -125,8 +126,8 @@
                 <!-- Row 2 -->
                 <div class="row pt-4 justify-content-center">
                     <!-- Precipitation Card -->
-                    <div class="col-md-4" >
-                        <div class="card foreground" id="precipitation-card">
+                    <div class="col-md-4">
+                        <div class="card mb-md-0 mb-3 mx-md-0 mx-4 foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Precipitation</h5>
                                 <div class="precipitation-container">
@@ -138,19 +139,10 @@
                     </div>
                     <!-- Snow Depth Card -->
                     <div class="col-md-4">
-                        <div class="card foreground">
+                        <div class="card mx-md-0 mx-4 foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Snow Depth</h5>
                                 <h2 class="card-text" id="snow-depth">N/A</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Snow Quality Card -->
-                    <div class="col-md-4">
-                        <div class="card foreground">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Snow Quality</h5>
-                                <h2 class="card-text" id="snow-quality">N/A</h2>
                             </div>
                         </div>
                     </div>
@@ -160,7 +152,7 @@
                 <div class="row pt-4 justify-content-center">
                     <!-- Wind Speed Card -->
                     <div class="col-md-4">
-                        <div class="card foreground">
+                        <div class="card mx-md-0 mx-4 foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Wind Speed</h5>
                                 <h2 class="card-text" id="wind-speed">N/A</h2>
@@ -169,7 +161,7 @@
                     </div>
                     <!-- Wind Direction Card -->
                     <div class="col-md-4">
-                        <div class="card rounded shadow mb-md-0 mb-4 foreground">
+                        <div class="card rounded shadow mx-md-0 mx-4 my-md-0 my-4 foreground">
                             <div class="card-body text-center" id="wind-direction">
                                 <h5 class="card-title">Wind Direction</h5>
                                 <h2 class="card-text" id="wind-direction">N/A</h2>
@@ -178,7 +170,7 @@
                     </div>
                     <!-- Wind Gust Card -->
                     <div class="col-md-4">
-                        <div class="card foreground">
+                        <div class="card mx-md-0 mx-4 foreground">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Wind Gust</h5>
                                 <h2 class="card-text" id="wind-gust">N/A</h2>
