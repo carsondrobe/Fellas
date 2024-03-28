@@ -14,24 +14,7 @@ function getCurrentPrecipitationValue() {
 // Function to change rain intensity
 function adjustRainIntensity(precipitationValue) {
     // Calculate intensity
-    var rainAmount;
-    if(precipitationValue === 0) {
-        rainAmount = 50000;
-    } else if(precipitationValue <= 0.5) {
-        rainAmount = 200;
-    } else if(precipitationValue <= 1.0) {
-        rainAmount = 150;
-    } else if(precipitationValue <= 1.5) {
-        rainAmount = 100;
-    } else if(precipitationValue <= 2.0) {
-        rainAmount = 60;
-    } else if(precipitationValue <= 4.0) {
-        rainAmount = 40;
-    } else if(precipitationValue <= 6.0) {
-        rainAmount = 20;
-    } else {
-        rainAmount = 5;
-    }
+    var rainAmount = 100/(precipitationValue+.1);
     // Adjust raindrop intensity
     clearInterval(rainInterval);
     rainInterval = setInterval(rain, rainAmount)
