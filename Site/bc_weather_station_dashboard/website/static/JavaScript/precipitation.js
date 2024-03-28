@@ -15,7 +15,6 @@ function getCurrentPrecipitationValue() {
 function adjustRainIntensity(precipitationValue) {
     // Calculate intensity
     var rainAmount = 100/(precipitationValue+.1);
-    console.log(rainAmount);
     var cloud = document.getElementById('cloud');
     // If intense enough, make cloud pulse
     if(rainAmount < 70) {
