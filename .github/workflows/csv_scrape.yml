@@ -1,4 +1,4 @@
-name: CSV scrape hourly automation
+name: CSV scrape automation hourly
 
 on:
     schedule:
