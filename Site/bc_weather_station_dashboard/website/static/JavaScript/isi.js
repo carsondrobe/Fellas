@@ -1,4 +1,5 @@
 function updateISI(value_isi) {
+    value_isi = Math.round(value_isi);
     let position_isi = value_isi;
 
     // check if value_ISI is less than 0 and set it to 0
@@ -25,7 +26,5 @@ function updateISI(value_isi) {
     arrow_isi.style.left = leftPosition_isi;
     arrowValue_isi.textContent = value_isi;
 }
-
-updateISI(0);
 
 module.exports = { updateISI };

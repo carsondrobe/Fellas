@@ -1,4 +1,5 @@
 function updateDMC(value_dmc) {
+    value_dmc = Math.round(value_dmc);
     let position_dmc = value_dmc;
 
     // check if value_dmc is less than 0 and set it to 0
@@ -25,7 +26,5 @@ function updateDMC(value_dmc) {
     arrow_dmc.style.top = topPosition_dmc;
     arrowValue_dmc.textContent = value_dmc;
 }
-
-updateDMC(100);
 
 module.exports = { updateDMC };

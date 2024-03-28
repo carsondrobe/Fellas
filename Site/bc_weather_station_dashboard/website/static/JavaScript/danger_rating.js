@@ -25,6 +25,4 @@ function updateDangerRating(value_danger_rating) {
     arrow_danger_rating.style.left = position_danger_rating;
 }
 
-updateDangerRating(0);
-
 module.exports = { updateDangerRating };

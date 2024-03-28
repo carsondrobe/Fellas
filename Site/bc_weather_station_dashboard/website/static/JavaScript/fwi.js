@@ -1,4 +1,5 @@
 function updateFWI(value_fwi) {
+    value_fwi = Math.round(value_fwi);
     let position_fwi = value_fwi;
 
     // check if value_FWI is less than 0 and set it to 0
@@ -25,7 +26,5 @@ function updateFWI(value_fwi) {
     arrow_fwi.style.left = leftPosition_fwi;
     arrowValue_fwi.textContent = value_fwi;
 }
-
-updateFWI(0);
 
 module.exports = { updateFWI };

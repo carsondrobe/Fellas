@@ -1,4 +1,6 @@
 function updateDC(value_dc) {
+    value_dc = Math.round(value_dc);
+
     // Convert position_dc to 500 if it is greater than 500 and convert position_dc to 0 if it is less than 0
     if (value_dc > 999) {
         value_dc = 999;
@@ -18,7 +20,5 @@ function updateDC(value_dc) {
     arrow_dc.style.top = topPosition_dc;
     arrowValue_dc.textContent = value_dc;
 }
-
-updateDC(1000);
 
 module.exports = { updateDC };

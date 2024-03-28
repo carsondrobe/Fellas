@@ -1,4 +1,5 @@
 function updateBUI(value_bui) {
+    value_bui = Math.round(value_bui); 
     let position_bui = value_bui;
 
     // check if value_BUI is less than 0 and set it to 0
@@ -25,7 +26,5 @@ function updateBUI(value_bui) {
     arrow_bui.style.left = leftPosition_bui;
     arrowValue_bui.textContent = value_bui;
 }
-
-updateBUI(500);
 
 module.exports = { updateBUI };

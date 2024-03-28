@@ -1,4 +1,10 @@
 function updateFFMC(value_ffmc) {
+
+    if(value_ffmc === undefined) {
+        arrow_ffmc.style.top = '100%';
+        arrowvalue_ffmc.textContent = 'N/A';
+    }
+
     value_ffmc = Math.round(value_ffmc); // Round value_ffmc to the nearest integer
     let position_ffmc = value_ffmc;
 
