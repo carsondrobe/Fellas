@@ -45,14 +45,13 @@ jobs:
           working-directory: Site/bc_weather_station_dashboard
         - name: Checkout branch
           run: |
-            git stash
             git fetch origin main:main
             git checkout main
-            git stash apply
         - name: Commit and push changes
           run: |
               git config --local user.email "action@github.com"
               git config --local user.name "GitHub Action"
-              git add -A
+              git add db.sqlite3
               git commit -m "Update database" || exit 0
               git push https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
+            
