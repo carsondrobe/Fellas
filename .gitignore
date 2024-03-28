@@ -32,3 +32,6 @@ virtual
 venv
 node_modules
 .nyc_output
+
+# env
+.env

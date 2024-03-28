@@ -46,4 +46,5 @@ urlpatterns = [
         views.update_feedback_status,
         name="update_feedback_status",
     ),
+    path('profile/', views.view_profile, name='view_profile'),
 ]
