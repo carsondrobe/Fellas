@@ -36,7 +36,7 @@ jobs:
             echo "Status code: $status_code"
         - name: Check database connectivity
           run: |
-            echo "from django.db import connections; try: connections['default'].cursor(); print('Success!') except Exception as e: print('Failed to open cursor:', e)" | python manage.py shell
+            echo "from django.db import connections; try: connections['default'].cursor(); print('Success!') except Exception as e: print('Failed to open cursor:', str(e))" | python manage.py shell
           working-directory: Site/bc_weather_station_dashboard
         - name: Set permissions
           run: chmod -R 777 .
