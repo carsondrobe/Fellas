@@ -4,11 +4,10 @@ from django.core.management.base import BaseCommand
 import requests
 from django.utils import timezone
 from datetime import date
-from datetime import datetime
+from datetime import datetime, timedelta
 from website.models import StationData,WeatherStation
 import pandas as pd
 import os
-
 class Command(BaseCommand):
     help = 'Manually download current day CSV data and update StationData model to run use the command: python manage.py csv_scrape.'
 
@@ -55,8 +54,8 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs) -> None:
         """Handles the command, calls the other methods. You can change the date range here."""
         # Create a date range for when you want to scrape the data
-        start_date = date.today()# date(2024, 3, 10) # Change the start date (make sure this start_date and end_date are in the same year)
-        end_date = date.today() # Change the end date
+        start_date = (datetime.today() - timedelta(days=2)).date()  # Change the start date
+        end_date = date.today()  # Change the end date
         delta = timedelta(days=1)
         dates = []
         while start_date <= end_date:
