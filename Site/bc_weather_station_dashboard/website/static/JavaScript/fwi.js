@@ -1,4 +1,14 @@
 function updateFWI(value_fwi) {
+    // Get the arrow and arrow value elements
+    const arrow_fwi = document.getElementById('arrow-fwi');
+    const arrowValue_fwi = document.getElementById('arrowValue-fwi');
+
+    if(value_fwi === undefined) {
+        arrow_fwi.style.left = 'calc(' + 0 + '% - 14px)';
+        arrowValue_fwi.textContent = 'N/A';
+        return; // Return early to prevent the rest of the function from running
+    }
+
     value_fwi = Math.round(value_fwi);
     let position_fwi = value_fwi;
 
@@ -14,10 +24,6 @@ function updateFWI(value_fwi) {
     if (position_fwi < 0) {
         position_fwi = 0;
     }
-    
-    // Get the arrow and arrow value elements
-    const arrow_fwi = document.getElementById('arrow-fwi');
-    const arrowValue_fwi = document.getElementById('arrowValue-fwi');
 
     // Calculate the top position of the arrow based on the value
     const leftPosition_fwi = 'calc(' + ((position_fwi) * 2) + '% - 14px)'; // Calculate the top position

@@ -1,8 +1,12 @@
 function updateFFMC(value_ffmc) {
+    // Get the arrow and arrow value_ffmc elements
+    const arrow_ffmc = document.getElementById('arrow-ffmc');
+    const arrowvalue_ffmc = document.getElementById('arrowValue-ffmc');
 
     if(value_ffmc === undefined) {
-        arrow_ffmc.style.top = '100%';
+        arrow_ffmc.style.top = 'calc(' + 100 + '% - 5px)';
         arrowvalue_ffmc.textContent = 'N/A';
+        return; // Return early to prevent the rest of the function from running
     }
 
     value_ffmc = Math.round(value_ffmc); // Round value_ffmc to the nearest integer
@@ -18,13 +22,6 @@ function updateFFMC(value_ffmc) {
     } else if (position_ffmc < 0) {
         position_ffmc = 0;
     }
-    
-    // Get the arrow and arrow value_ffmc elements
-    const arrow_ffmc = document.getElementById('arrow-ffmc');
-    const arrowvalue_ffmc = document.getElementById('arrowValue-ffmc');
-
-    console.log('arrow_ffmc:', arrow_ffmc);
-    console.log('arrowvalue_ffmc:', arrowvalue_ffmc);
 
     // Calculate the top position_ffmc of the arrow based on the value_ffmc
     let topposition_ffmc;

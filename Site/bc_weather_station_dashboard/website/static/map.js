@@ -129,41 +129,26 @@ function updateDataHTML(currentStationData) {
     // Check if the current page is fire.html
     else if (path.endsWith('/fire/')) {
         // Update the HTML elements with the station's fine fuel moisture code data
-        if (currentStationData.FINE_FUEL_MOISTURE_CODE) {
-            console.log(currentStationData.FINE_FUEL_MOISTURE_CODE);
-            updateFFMC(currentStationData.FINE_FUEL_MOISTURE_CODE);
-        }
+        updateFFMC(currentStationData.FINE_FUEL_MOISTURE_CODE);
 
         // Update the HTML elements with the station's duff moisture code data
-        if (currentStationData.DUFF_MOISTURE_CODE) {
-            updateDMC(currentStationData.DUFF_MOISTURE_CODE);
-        }
+        updateDMC(currentStationData.DUFF_MOISTURE_CODE);
 
         // Update the HTML elements with the station's drought code data
-        if (currentStationData.DROUGHT_CODE) {
-            updateDC(currentStationData.DROUGHT_CODE);
-        }
+        updateDC(currentStationData.DROUGHT_CODE);
 
         // Update the HTML elements with the station's initial spread index data
-        if (currentStationData.INITIAL_SPREAD_INDEX) {
-            updateISI(currentStationData.INITIAL_SPREAD_INDEX);
-        }
+        updateISI(currentStationData.INITIAL_SPREAD_INDEX);
 
         // Update the HTML elements with the station's buildup index data
-        if (currentStationData.BUILDUP_INDEX) {
-            updateBUI(currentStationData.BUILDUP_INDEX);
-        }
+        updateBUI(currentStationData.BUILDUP_INDEX);
 
         // Update the HTML elements with the station's fire weather index data
-        if (currentStationData.FIRE_WEATHER_INDEX) {
-            updateFWI(currentStationData.FIRE_WEATHER_INDEX);
-        }
+        updateFWI(currentStationData.FIRE_WEATHER_INDEX);
 
         // Update the HTML elements with the station's danger rating data
-        if (currentStationData.DANGER_RATING) {
-            updateDangerRating(currentStationData.DANGER_RATING);
-        }
-        }
+        updateDangerRating(currentStationData.DANGER_RATING);
+    }
 }
 
 // Function to check if geolocation is available
