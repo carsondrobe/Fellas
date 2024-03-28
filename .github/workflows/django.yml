@@ -54,3 +54,7 @@ jobs:
       run: |
         npx qunit website/tests/abi2/*.js
       working-directory: Site/bc_weather_station_dashboard
+    - name: Run Carson JS tests
+      run: |
+        npx qunit website/tests/carson/*.js
+      working-directory: Site/bc_weather_station_dashboard
