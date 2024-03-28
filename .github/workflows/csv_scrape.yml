@@ -45,6 +45,7 @@ jobs:
           working-directory: Site/bc_weather_station_dashboard
         - name: Checkout branch
           run: |
+            git fetch origin main:main
             git checkout main
         - name: Commit and push changes
           run: |
