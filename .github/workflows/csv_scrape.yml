@@ -3,6 +3,10 @@ name: CSV scrape hourly automation
 on:
     schedule:
         - cron: '0 * * * *'
+    push:
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "main" ]
 
 jobs:
     build:
