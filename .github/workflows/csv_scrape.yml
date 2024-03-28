@@ -50,7 +50,7 @@ jobs:
           run: |
               git config --local user.email "action@github.com"
               git config --local user.name "GitHub Action"
-              git add db.sqlite3
+              git add Site/bc_weather_station_dashboard/db.sqlite3
               git commit -m "Update database" || exit 0
               git push https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
         
