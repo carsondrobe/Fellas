@@ -14,7 +14,7 @@ jobs:
         strategy:
             max-parallel: 4
             matrix:
-                python-version: [3.10.9]
+                python-version: [3.10]
         
         steps:
         - uses: actions/checkout@v3
@@ -27,7 +27,7 @@ jobs:
               python -m pip install --upgrade pip
               pip install -r requirements.txt
         - name: Run Django management command
-          run: python manage.py csv_scrape
+          run: python manage.py check
           working-directory: Site/bc_weather_station_dashboard
           timeout-minutes: 4
         - name: Commit and push changes
