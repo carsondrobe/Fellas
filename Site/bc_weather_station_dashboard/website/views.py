@@ -245,6 +245,8 @@ def add_to_favourites(request):
 
 
 def view_favourites(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User is not logged in"}, status=200)
     favourites = request.user.userprofile.favorite_stations.all()
     data = [
         {
