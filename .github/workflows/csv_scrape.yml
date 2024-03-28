@@ -43,10 +43,9 @@ jobs:
         - name: Run Django management command
           run: python manage.py csv_scrape
           working-directory: Site/bc_weather_station_dashboard
-        - name: Checkout branch
+        - name: Discard changes in all files except db.sqlite3
           run: |
-            git fetch origin main:main
-            git checkout main
+            git checkout .
         - name: Commit and push changes
           run: |
               git config --local user.email "action@github.com"
@@ -54,4 +53,4 @@ jobs:
               git add db.sqlite3
               git commit -m "Update database" || exit 0
               git push https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
-            
+        
