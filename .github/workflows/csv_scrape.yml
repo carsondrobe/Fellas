@@ -56,4 +56,4 @@ jobs:
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git commit -m "Update database" || exit 0
-            git push https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
+            git push -f https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git main
