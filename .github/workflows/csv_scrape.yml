@@ -40,14 +40,14 @@ jobs:
           working-directory: Site/bc_weather_station_dashboard
         - name: Set permissions
           run: chmod -R 777 .
-        - name: Stash changes to db.sqlite3
-          run: git stash push Site/bc_weather_station_dashboard/db.sqlite3
+        - name: Stage changes to db.sqlite3
+          run: git add Site/bc_weather_station_dashboard/db.sqlite3
+        - name: Stash changes to all other files
+          run: git stash --keep-index
         - name: Checkout main branch
           run: |
             git fetch origin main:main
             git checkout main
-        - name: Apply stashed changes
-          run: git stash apply
         - name: Run Django management command
           run: python manage.py csv_scrape
           working-directory: Site/bc_weather_station_dashboard
@@ -55,6 +55,5 @@ jobs:
           run: |
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
-            git add Site/bc_weather_station_dashboard/db.sqlite3
             git commit -m "Update database" || exit 0
             git push https://${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git
