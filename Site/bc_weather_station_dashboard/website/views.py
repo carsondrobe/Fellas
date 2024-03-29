@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
-
 from .forms import FeedbackForm
 from django.http import JsonResponse
 from .models import WeatherStation, Feedback, StationData, UserProfile
@@ -11,6 +10,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from twilio.rest import Client
+from django.conf import settings
+from .models import UserProfile
+from .forms import UserProfileForm
+
 
 current_page = "weather"
 
@@ -34,6 +38,7 @@ def weather(request, **kwargs):
     global current_page
     current_page = "weather"
 
+    kwargs["template_name"] = "weather"
     return render(request, "weather.html", kwargs)
 
 
@@ -52,6 +57,7 @@ def display_fav_button(request):
 def fire(request, **kwargs):
     global current_page
     current_page = "fire"
+    kwargs["template_name"] = "fire"
     return render(request, "fire.html", kwargs)
 
 
@@ -85,19 +91,33 @@ def register(request):
     print("register", request.POST)
     username = request.POST.get("username")
     email = request.POST.get("email")
+    phone_number = request.POST.get("phone_number")
+    user_type = request.POST.get("user_type")
     password = request.POST.get("password")
-    if not username or not email or not password:
+    if not username or not email or not password or not phone_number:
         return HttpResponse("Please fill in all fields", status=400)
 
     # Create the user
     user = User.objects.create_user(username, email, password)
     user.save()
 
-    # Create the user profile
-    user_profile = UserProfile(user=user)
+    # Creates the "user profile" model with information
+    user_profile = UserProfile(
+        user=user, phone_number=phone_number, user_type=user_type
+    )
     user_profile.save()
-    # Log the user in
+
+    # Logs user in
     login(request, user)
+
+    # Send SMS after successful registration
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+
+    message = client.messages.create(
+        body=f"Hey {username}!\n Thank you for registering with the BC Weather & Wildfire Dashboard for important weather alerts. -Fellas",
+        from_=settings.TWILIO_PHONE_NUMBER,
+        to=phone_number,
+    )
 
     return redirect(reverse("home"))
 
@@ -232,6 +252,30 @@ def station_data(request):
     ]
     # Return the data as a json resonse
     return JsonResponse(measures, safe=False)
+
+
+@login_required
+def view_profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    non_addressed_feedbacks = request.user.feedbacks.exclude(status="ADD")
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            request.user.email = request.POST.get("email")
+            request.user.save()
+            return redirect("view_profile")
+    else:
+        form = UserProfileForm(instance=user_profile)
+    return render(
+        request,
+        "profile.html",
+        {
+            "form": form,
+            "user_profile": user_profile,
+            "non_addressed_feedbacks": non_addressed_feedbacks,
+        },
+    )
 
 
 def add_to_favourites(request):

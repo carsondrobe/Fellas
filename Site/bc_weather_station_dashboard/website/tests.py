@@ -22,6 +22,7 @@ from website.forms import FeedbackForm
 from django.test import TestCase, Client, RequestFactory
 from website.views import add_to_favourites
 from django.utils import timezone
+from .models import UserProfile
 
 
 # Begin models tests
@@ -508,3 +509,17 @@ class ViewFavouriteButtonTestCase(TestCase):
         response = self.client.post("/display_fav_button/", {"station_code": 1})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
+
+
+# Profile page tests in views.py
+class ProfileViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.user_profile = UserProfile.objects.create(user=self.user)
+        self.client.login(username="testuser", password="12345")
+
+    def test_view_profile(self):
+        response = self.client.get(reverse("view_profile"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "profile.html")
