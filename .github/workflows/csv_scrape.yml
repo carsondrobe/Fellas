@@ -8,6 +8,10 @@ on:
     pull_request:
         branches: [ "main" ]
 
+permissions:
+    contents: write
+    pull-requests: write
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -57,4 +61,4 @@ jobs:
               git config --local user.name "GitHub Action"
               git add Site/bc_weather_station_dashboard/db.sqlite3
               git commit -m "Update database" || exit 0
-              git push https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
+              git push --force https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
