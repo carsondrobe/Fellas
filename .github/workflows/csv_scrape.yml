@@ -18,10 +18,6 @@ jobs:
         
         steps:
         - uses: actions/checkout@v3
-        - name: Set up SSH
-          uses: webfactory/ssh-agent@v0.5.3
-          with:
-              ssh-private-key: ${{ secrets.SSH_DEPLOY_KEY }}
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v3
           with:
@@ -60,4 +56,4 @@ jobs:
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git commit -m "Update database" || exit 0
-            git push git@github.com:carsondrobe/Fellas.git main
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git main
