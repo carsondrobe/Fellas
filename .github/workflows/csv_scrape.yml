@@ -53,7 +53,8 @@ jobs:
           working-directory: Site/bc_weather_station_dashboard
         - name: Commit and push changes
           run: |
-            git config --local user.email "action@github.com"
-            git config --local user.name "GitHub Action"
-            git commit -m "Update database" || exit 0
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git main
+              git config --local user.email "action@github.com"
+              git config --local user.name "GitHub Action"
+              git add Site/bc_weather_station_dashboard/db.sqlite3
+              git commit -m "Update database" || exit 0
+              git push https://${{ secrets.GH_TOKEN }}@github.com/carsondrobe/Fellas.git
