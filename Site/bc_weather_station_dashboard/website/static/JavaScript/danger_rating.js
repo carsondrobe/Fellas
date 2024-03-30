@@ -2,6 +2,14 @@ function updateDangerRating(value_danger_rating) {
     // Get the arrow and arrow value elements
     const arrow_danger_rating = document.getElementById('arrow-danger-rating');
 
+    if(value_danger_rating === undefined) {
+        arrow_danger_rating.style.display = 'none'; // Hide the arrow
+        return; // Return early to prevent the rest of the function from running
+    } else {
+        arrow_danger_rating.style.display = ''; // Show the arrow if value_danger_rating is not undefined
+    }
+
+
     if (value_danger_rating === 1 || value_danger_rating === 2){
         value_danger_rating = 60;
     }else if (value_danger_rating === 3){
@@ -24,7 +32,5 @@ function updateDangerRating(value_danger_rating) {
     // Set the position of the arrow relative to the left
     arrow_danger_rating.style.left = position_danger_rating;
 }
-
-updateDangerRating(0);
 
 module.exports = { updateDangerRating };

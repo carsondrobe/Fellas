@@ -1,4 +1,15 @@
 function updateISI(value_isi) {
+    // Get the arrow and arrow value elements
+    const arrow_isi = document.getElementById('arrow-isi');
+    const arrowValue_isi = document.getElementById('arrowValue-isi');
+
+    if(value_isi === undefined) {
+        arrow_isi.style.left = 'calc(' + 0 + '% - 14px)';
+        arrowValue_isi.textContent = 'N/A';
+        return; // Return early to prevent the rest of the function from running
+    }
+
+    value_isi = Math.round(value_isi);
     let position_isi = value_isi;
 
     // check if value_ISI is less than 0 and set it to 0
@@ -13,10 +24,6 @@ function updateISI(value_isi) {
     if (position_isi < 0) {
         position_isi = 0;
     }
-    
-    // Get the arrow and arrow value elements
-    const arrow_isi = document.getElementById('arrow-isi');
-    const arrowValue_isi = document.getElementById('arrowValue-isi');
 
     // Calculate the left position of the arrow based on the position
     const leftPosition_isi = 'calc(' + ((position_isi) * 4) + '% - 14px)'; // Calculate the left position
@@ -25,7 +32,5 @@ function updateISI(value_isi) {
     arrow_isi.style.left = leftPosition_isi;
     arrowValue_isi.textContent = value_isi;
 }
-
-updateISI(0);
 
 module.exports = { updateISI };
