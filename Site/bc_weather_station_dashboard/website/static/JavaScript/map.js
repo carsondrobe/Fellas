@@ -143,7 +143,7 @@ function updateDataHTML(currentStationData) {
     // Check if the current page is weather.html
     if (path.endsWith('/weather/')) {
         if (currentStationData.HOURLY_TEMPERATURE !== undefined) {
-        document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
+            document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
         }
         // Update the HTML elements with the station's relative humidity data
         if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
