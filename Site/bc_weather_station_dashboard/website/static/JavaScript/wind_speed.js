@@ -1,41 +1,31 @@
-const lightBlue = '#0dcaf0';
-const lightYellow = '#e0e064';
-const lightOrange = '#e68e47';
-const lightRed = '#e64c4c';
-
-const colorRanges = [
-    { maxSpeed: 10, color: lightBlue },
-    { maxSpeed: 15, color: lightYellow },
-    { maxSpeed: 20, color: lightOrange },
-    { maxSpeed: 30, color: lightRed }
-];
-
 function updateWindSpeed(windSpeed, windGust) {
-    let currentColor;
-    for (const range of colorRanges) {
-        if (windSpeed <= range.maxSpeed) {
-            currentColor = range.color;
-            break;
-        }
-    }
+    const blueColor = '#0dcaf0'; // Color for wind speed
+    const darkBlueColor = '#447094'; // Darker shade of blue for wind gust
+    const maxWindSpeed = 50;
 
-    const maxWindSpeed = 40;
-    if (windSpeed >= 30) {
-        currentColor = lightRed;
-    }
-    const progressPercentage = (windSpeed / maxWindSpeed) * 100;
-    const progressCircle = document.querySelector('circle:last-of-type');
-    const circumference = progressCircle.getTotalLength();
-    progressCircle.style.strokeDashoffset = circumference - (progressPercentage / 100) * circumference;
-    progressCircle.style.stroke = currentColor;
+    const windSpeedPercentage = (windSpeed / maxWindSpeed) * 100;
+    const windGustPercentage = (windGust / maxWindSpeed) * 100;
+    const circumference = 283; // Assuming the circumference of your circles
 
+    // Update wind speed circle
+    const windSpeedCircle = document.querySelector('.wind-speed-circle');
+    windSpeedCircle.style.strokeDashoffset = circumference - (windSpeedPercentage / 100) * circumference;
+    windSpeedCircle.style.stroke = blueColor;
+
+    // Update wind gust circle
+    const windGustCircle = document.querySelector('.wind-gust-circle');
+    windGustCircle.style.strokeDashoffset = circumference - (windGustPercentage / 100) * circumference;
+    windGustCircle.style.stroke = darkBlueColor;
+
+    // Update wind speed text
+    const windSpeedText = document.getElementById('wind-speed');
+    windSpeedText.textContent = `${windSpeed} km/h`;
+    windSpeedText.style.fill = blueColor; // For SVG text elements, use 'fill' instead of 'color'
+
+    // Update wind gust text
     const windGustText = document.getElementById('wind-gust');
-    if (windGust > maxWindSpeed) {
-        windGustText.style.color = lightRed;
-    }
+    windGustText.textContent = `${windGust} km/h`;
+    windGustText.style.color = darkBlueColor;
 }
 
 module.exports.updateWindSpeed = updateWindSpeed;
-
-// Example usage:
-// Call updateWindSpeed(windSpeed) where windSpeed is the value to be displayed.

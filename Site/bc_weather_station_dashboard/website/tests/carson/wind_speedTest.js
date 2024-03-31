@@ -3,7 +3,13 @@ const { updateWindSpeed } = require('../../static/JavaScript/wind_speed.js');
 QUnit.module("updateWindSpeed", hooks => {
     // Mock DOM setup
     const { JSDOM } = require("jsdom");
-    const dom = new JSDOM(`<!DOCTYPE html><svg><circle></circle><text id="wind-gust"></text></svg>`);
+    const dom = new JSDOM(`<!DOCTYPE html>
+                            <svg>
+                                <circle class="wind-gust-circle"></circle>
+                                <circle class="wind-speed-circle"></circle>
+                                <text id="wind-speed"></text>
+                                <text id="wind-gust"></text>
+                            </svg>`);
     const { document } = dom.window;
 
     hooks.beforeEach(() => {
@@ -14,41 +20,26 @@ QUnit.module("updateWindSpeed", hooks => {
         delete global.document;
     });
 
-    const lightBlue = '#0dcaf0';
-    const lightYellow = '#e0e064';
-    const lightOrange = '#e68e47';
-    const lightRed = '#e64c4c';
+    const blueColor = '#0dcaf0';
+    const darkBlueColor = '#447094';
 
-    const colorRanges = [
-        { maxSpeed: 10, color: lightBlue },
-        { maxSpeed: 15, color: lightYellow },
-        { maxSpeed: 20, color: lightOrange },
-        { maxSpeed: 30, color: lightRed }
-    ];
+    QUnit.test("Circle and Text Color Update for Wind Speed and Gust", assert => {
+        // Mock circle elements
+        const windSpeedCircle = document.querySelector('.wind-speed-circle');
+        const windGustCircle = document.querySelector('.wind-gust-circle');
+        windSpeedCircle.getTotalLength = windGustCircle.getTotalLength = () => 283; // Mocking getTotalLength function
 
-    QUnit.test("Color update for varying wind speeds", assert => {
-        // Mock circle element
-        const circleElement = document.querySelector('circle');
-        circleElement.getTotalLength = () => 100; // Mocking getTotalLength function
+        const windSpeedText = document.getElementById('wind-speed');
+        const windGustText = document.getElementById('wind-gust');
 
-        // Test lightBlue color for windSpeed = 5
-        updateWindSpeed(5, 10);
-        assert.strictEqual(circleElement.style.stroke, lightBlue, "Wind speed of 5 sets circle color to lightBlue");
+        // Test blue color for windSpeed and dark blue for windGust
+        updateWindSpeed(20, 30);
+        assert.strictEqual(windSpeedCircle.style.stroke, blueColor, "Wind speed sets wind speed circle color to blue");
+        assert.strictEqual(windGustCircle.style.stroke, darkBlueColor, "Wind gust sets wind gust circle color to dark blue");
 
-        // Test lightYellow color for windSpeed = 15
-        updateWindSpeed(15, 20);
-        assert.strictEqual(circleElement.style.stroke, lightYellow, "Wind speed of 15 sets circle color to lightYellow");
-
-        // Test lightOrange color for windSpeed = 20
-        updateWindSpeed(20, 25);
-        assert.strictEqual(circleElement.style.stroke, lightOrange, "Wind speed of 20 sets circle color to lightOrange");
-
-        // Test lightRed color for windSpeed = 35
-        updateWindSpeed(35, 45);
-        assert.strictEqual(circleElement.style.stroke, lightRed, "Wind speed of 35 sets circle color to lightRed");
-
-        // Test lightRed color for windSpeed > maxWindSpeed
-        updateWindSpeed(45, 50);
-        assert.strictEqual(circleElement.style.stroke, lightRed, "Wind speed exceeding max sets circle color to lightRed");
+        assert.strictEqual(windSpeedText.style.fill, blueColor, "Wind speed sets wind speed text color to blue");
+        assert.strictEqual(windGustText.style.color, 'rgb(68, 112, 148)', "Wind gust sets wind gust text color to dark blue");
     });
+
+    // Additional tests here as needed...
 });
