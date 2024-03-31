@@ -3,10 +3,6 @@ name: CSV scrape automation hourly
 on:
     schedule:
         - cron: '0 * * * *'
-    push:
-      branches: [ "main" ]
-    pull_request:
-        branches: [ "main" ]
     workflow_dispatch:
     
 
