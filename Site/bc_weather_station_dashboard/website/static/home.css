@@ -63,13 +63,21 @@
 .leaflet-control-zoom-in,
 .leaflet-control-zoom-out,
 .leaflet-control-attribution {
-  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
 }
 
 .leaflet-popup-content-wrapper {
     background-color: #333333;
     padding: 10px;
     color: #e5e5e5;
+}
+
+#swapPageIcon {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+    width: 4.5rem;
 }
 
 #find-me-btn {

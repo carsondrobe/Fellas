@@ -1,5 +1,9 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark foreground">
-    <a class="navbar-brand foreground" href="#">BC Weather and Wildfire</a>
+    <a class="navbar-brand foreground"
+        href="{% if user_type == 'CU' %}{% url 'weather' %}{% else %}{% url 'fire' %}{% endif %}">BC Weather and
+        Wildfire</a>
+    {% if template_name == 'weather' or template_name == 'fire' %}
     <div id="date_selector" class="ml-auto">
         <strong><span id="selected_date" class="text-white p-2">Today</span></strong>
         <img class="datepicker-toggle-button" src="../static/images/calendar_icon.svg" alt="calendar icon" width="30">
@@ -18,8 +22,9 @@
             }
         });
     </script>
+    {% endif %}
 
-    <div class="nav-item dropdown">
+    <div class="nav-item dropdown {% if template_name != 'weather' and template_name != 'fire' %}ml-auto{% endif %}">
         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             <img class="avatar avatar-32 bg-light rounded-circle text-white p-1"
@@ -35,17 +40,20 @@
                     data-target="#viewFeedbackModal" id="viewFeedbackButton">View Feedback</a>
                 {% else %}
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#feedbackModal">Submit Feedback</a>
+                <a class="dropdown-item" href="{% url 'view_favourites' %}" data-toggle="modal"
+                    data-target="#viewFavouritesModal">View
+                    Favourites</a>
+                <a class="dropdown-item" href="{% url 'view_profile' %}">Your Profile</a>
                 {% endif %}
-
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                <!-- If user is not logged in, hide the link -->
-                {% else %}
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Log in</a>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#registerModal">Register</a>
-                {% endif %}
             </div>
+            {% else %}
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#loginModal">Log in</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#registerModal">Register</a>
+            {% endif %}
         </div>
+    </div>
 </nav>
 
 <!-- The Feedback popup Modal -->

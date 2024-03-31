@@ -1,3 +1,12 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap JS Bundle (includes Popper) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script src="../static/forms.js"></script>
+
 <!-- login popup -->
 <div class="modal" id="loginModal">
     <div class="modal-dialog modal-dialog-centered">
@@ -8,15 +17,15 @@
             </div>
             <div class="row justify-content-center">
                 <form class="col-lg-8 col-md-8 col-sm-10" action="{% url 'login' %}" method="post"
-                      onsubmit="return validateLoginForm()">
+                    onsubmit="return validateLoginForm()">
                     {% csrf_token %}
                     <div class="mb-3 mt-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username">
+                        <input type="text" class="form-control" id="username" name="username" data-toggle="tooltip" title="Please enter your username">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password" name="password" data-toggle="tooltip" title="Please enter your password">
                     </div>
                     <div class="mt-3 mb-3">
                         <button type="submit" class="btn btn-primary">Login</button>
@@ -24,45 +33,120 @@
                     </div>
                 </form>
             </div>
-            <script src="../static/forms.js"></script>
         </div>
     </div>
 </div>
+<!-- End login popup -->
 
 <!-- register popup -->
 <div class="modal" id="registerModal">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content foreground">
             <div class="modal-header">
                 <h4 class="modal-title">Create Account</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="row justify-content-center">
-                <form class="col-lg-8 col-md-8 col-sm-10" action="{% url 'register' %}" method="post"
-                      onsubmit="return validateRegisterForm()">
+                <form class="col-lg-8 col-md-8 col-sm-10" id="registerForm" action="{% url 'register' %}" method="post"
+                    onsubmit="return validateRegisterForm()">
                     {% csrf_token %}
-                    <div class="mb-3 mt-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="registerUsername" name="username">
+                    <div class="form-row mt-3">
+                        <div class="form-group col-md-6 pr-md-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="registerUsername" name="username" data-toggle="tooltip" title="Please enter a username">
+                            <small class="form-text text-muted">Choose wisely, you cannot change your username.</small>
+                        </div>
+                        <div class="form-group col-md-6 pl-md-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" name="email" data-toggle="tooltip" title="Please enter a valid email">
+                        </div>
                     </div>
-                    <div class="mb-3 mt-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="registerEmail" name="email">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 pr-md-3">
+                            <label for="phone_number" class="form-label">Phone number (optional)</label>
+                            <input type="tel" class="form-control" id="phone" name="phone_number" data-bs-toggle="tooltip" title="Invalid phone number">
+                            <small class="form-text text-muted">We only use your phone number for weather alerts.</small>
+                        </div>
+                        <div class="form-group col-md-6 pl-md-3">
+                            <label>User Type</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="user_type" id="commonUser" value="CU"
+                                    checked>
+                                <label class="form-check-label" for="commonUser">
+                                    Common User
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="user_type" id="fireStaff" value="FS">
+                                <label class="form-check-label" for="fireStaff">
+                                    Fire Staff
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="registerPassword" name="password">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 pr-md-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" name="password" data-toggle="tooltip" title="Password must be at least 8 characters">
+                        </div>
+                        <div class="form-group col-md-6 pl-md-3">
+                            <label for="password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="password" data-toggle="tooltip" title="Passwords must match">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="password">
-                    </div>
-                    <div class="mt-3 mb-3">
-                        <button type="submit" class="btn btn-primary">Register</button>
+                    <div class="form-row">
+                        <div class="text-right form-group col-md-12 mt-3">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
                     </div>
                 </form>
             </div>
-            <script src="../static/forms.js"></script>
         </div>
     </div>
 </div>
+<!-- end register popup -->
+
+<!-- Phone number script stuff needs to be in this file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+
+<script>
+    const phoneInputField = document.querySelector("#phone");
+    const iti = window.intlTelInput(phoneInputField, {
+        initialCountry: "ca",
+        preferredCountries: ["ca", "us"],
+        nationalMode: false,
+        autoFormat: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+</script>
+
+<!-- CSS for phone number darkmode (wouldn't work for me in an external file)-->
+<style>
+    .iti.iti--allow-dropdown {
+        background: #333;
+        color: #fff;
+    }
+
+    .iti__selected-flag {
+        background: #333;
+        color: #fff;
+        border-radius: 10%;
+    }
+
+    .iti__country-list {
+        background: #333;
+        color: #fff;
+    }
+
+    .iti__country {
+        border-bottom: 1px solid #444;
+    }
+
+    .iti__country:hover, .iti__country.iti__highlight {
+        background-color: #555;
+    }
+
+    .iti__selected-flag .iti__arrow {
+        border-top-color: #fff;
+    }
+</style>

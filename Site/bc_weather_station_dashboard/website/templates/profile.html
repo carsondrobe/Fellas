@@ -1,0 +1,238 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/forms.js"></script>
+    <title>User Profile</title>
+</head>
+
+<body class="background">
+    <!-- NAVBAR -->
+    {% include 'navbar.html' %}
+
+    <div class="container mt-4">
+        <!-- Welcome Message -->
+        <div class="card rounded mb-4 foreground">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h4>Welcome, {{ user.username }}!</h4>
+                    <h4>Your Profile</h4>
+            </div>
+        </div>
+        <!-- Edit Profile Form -->
+        <div class="card text-white foreground mb-3 border">
+            <div class="card-header shadow-lg d-flex justify-content-center rounded">Account details</div>
+            <div class="card-body">
+                {% if form %}
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-md-6 mb-3">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control bg-light py-1" id="username" value="{{ user.username }}"
+                            readonly>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control bg-light py-1" id="email" name="email"
+                            value="{{ user.email }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone_number" class="form-label">Phone number:</label>
+                        <div>
+                            <input type="tel" class="form-control bg-light" id="phone" name="phone_number"
+                                data-bs-toggle="tooltip" title="Invalid phone number">
+                            <small class="form-text text-muted">We only use your phone number for weather
+                                alerts.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="user_type" class="form-label">{{ form.user_type.label_tag }}</label>
+                        <input type="hidden" id="user_type" name="user_type"
+                            value="{{ form.user_type.value|default:'' }}">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% if form.user_type.value == "CU" %}
+                                Common user
+                                {% elif form.user_type.value == "FS" %}
+                                Fire related staff
+                                {% else %}
+                                Select User Type
+                                {% endif %}
+                            </button>
+                            <small class="form-text text-muted">This sets your homepage preference.</small>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% for choice in form.user_type.field.choices %}
+                                <a class="dropdown-item" href="#"
+                                    onclick="selectUserType('{{ choice.0 }}', '{{ choice.1 }}')">
+                                    {% if choice.0 == "CU" %}
+                                    Common user
+                                    {% elif choice.0 == "FS" %}
+                                    Fire related staff
+                                    {% endif %}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function selectUserType(value, text) {
+                            document.getElementById('user_type').value = value;
+                            document.getElementById('dropdownMenuButton').textContent = text;
+                        }
+                    </script>
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
+
+                </form>
+                {% else %}
+                <p class="text-light">No form available</p>
+                {% endif %}
+                {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Form errors: {{ form.errors }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Favorite Stations -->
+        <div class="card text-white border foreground mb-3">
+            <div class="card-header shadow-lg d-flex justify-content-center rounded mb-3">
+                Favorite Stations
+            </div>
+            <div class="row">
+                {% for station in user.userprofile.favorite_stations.all %}
+                <div class="col-md-4">
+                    <ul class="list-group list-group-flush">
+                        <li class="mb-3 rounded list-group-item bg-info">
+                            {{ station.STATION_NAME }}
+                        </li>
+                    </ul>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item foreground rounded">
+                            No favorite stations.
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Submitted Feedback -->
+        <div class="card rounded text-white border foreground">
+            <div class="card-header shadow-lg d-flex justify-content-center rounded mb-3">
+                Submitted Feedback
+            </div>
+            <div class="row">
+                {% for feedback in non_addressed_feedbacks %}
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="mb-3 rounded list-group-item {% if feedback.status == 'SUB' %}list-group-item-success{% elif feedback.status == 'REV' %}list-group-item-warning{% endif %}"
+                            id="feedback-{{ feedback.id }}">
+                            <h5 class="mb-1">Feedback</h5>
+                            <p class="mb-1"><strong>Content:</strong> {{ feedback.message }}</p>
+                            <p class="mb-1"><strong>Status:</strong> {{ feedback.get_status_display }}</p>
+                        </li>
+                    </ul>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item foreground rounded">
+                            No new feedback submitted. You can submit feedback from the profile
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+        <!-- Phone number script stuff needs to be in this file -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                const phoneInputField = document.querySelector("#phone");
+                const emailInputField = document.querySelector("#email");
+                const iti = window.intlTelInput(phoneInputField, {
+                    initialCountry: "ca",
+                    preferredCountries: ["ca", "us"],
+                    nationalMode: false,
+                    autoFormat: true,
+                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+                });
+
+                // Set the value of the phone input field to the current user's phone number
+                iti.setNumber("{{ user.userprofile.phone_number }}");
+
+                // Add event listener for form submit
+                $('form').on('submit', function (event) {
+                    if (!iti.isValidNumber()) {
+                        event.preventDefault();
+                        alert('Please enter a valid phone number.');
+                    }
+                    if (!emailInputField.value) {
+                        event.preventDefault();
+                        alert('Please enter an email.');
+                    }
+                });
+            });
+        </script>
+
+        <!-- CSS for phone number darkmode (wouldn't work for me in an external file)-->
+        <style>
+            .iti.iti--allow-dropdown {
+                background: #333;
+                color: #fff;
+            }
+
+            .iti__selected-flag {
+                background: #333;
+                color: #fff;
+                border-radius: 10%;
+            }
+
+            .iti__country-list {
+                background: #333;
+                color: #fff;
+            }
+
+            .iti__country {
+                border-bottom: 1px solid #444;
+            }
+
+            .iti__country:hover,
+            .iti__country.iti__highlight {
+                background-color: #555;
+            }
+
+            .iti__selected-flag .iti__arrow {
+                border-top-color: #fff;
+            }
+        </style>
+</body>
+
+</html>
