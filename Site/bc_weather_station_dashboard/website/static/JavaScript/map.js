@@ -120,7 +120,7 @@ function updateData(stationCode) {
             }
         })
         .then(stationData => {
-            if (stationData !== undefined) {
+            if (stationData !== undefined && stationData !== null) {
                 // Set current station data to station with stationCode
                 var currentStationData = stationData.find(measure => measure.STATION_CODE === stationCode);
                 updateDataHTML(currentStationData);
@@ -133,7 +133,7 @@ function updateData(stationCode) {
 
 // Update HTML elements on right side
 function updateDataHTML(currentStationData) {
-    if (currentStationData.HOURLY_TEMPERATURE) {
+    if (currentStationData.HOURLY_TEMPERATURE !== undefined) {
         document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
     }
     // Update the HTML elements with the station's relative humidity data
@@ -152,11 +152,11 @@ function updateDataHTML(currentStationData) {
         document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
     }
     // Update the HTML elements with the station's snow depth data
-    if (currentStationData.SNOW_DEPTH) {
+    if (currentStationData.SNOW_DEPTH !== undefined) {
         document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
     }
     // Update the HTML elements with the station's snow quality data
-    if (currentStationData.SNOW_DEPTH_QUALITY) {
+    if (currentStationData.SNOW_DEPTH_QUALITY !== undefined) {
         document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
     }
     // Update the HTML elements with the station's wind speed data
@@ -165,7 +165,7 @@ function updateDataHTML(currentStationData) {
         updateWindSpeed(currentStationData.HOURLY_WIND_SPEED);
     }
     // Update the HTML elements with the station's wind direction data
-    if (currentStationData.HOURLY_WIND_DIRECTION) {
+    if (currentStationData.HOURLY_WIND_DIRECTION !== undefined) {
         // Get the wind direction in degrees
         var windDirectionDegrees = currentStationData.HOURLY_WIND_DIRECTION;
         // Update the text display append to the wind direction widget
@@ -175,7 +175,7 @@ function updateDataHTML(currentStationData) {
         windArrow.draw();
     }
     // Update the HTML elements with the station's wind gust data
-    if (currentStationData.HOURLY_WIND_GUST) {
+    if (currentStationData.HOURLY_WIND_GUST !== undefined) {
         document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
     }
 }
@@ -301,8 +301,8 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
         updateDataHTML(currentStationCode);
     });
 
-    // Function for displaying search bar station
-    document.getElementById("search-btn").addEventListener("click", function () {
+    // Add event listener for search bar and button
+    document.getElementById("search-btn").addEventListener("click", function() {
         // Set variable for input
         let input = document.getElementById('searchInput').value;
         // Go through all of the weather stations
@@ -312,6 +312,12 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
                 createMarker(station, 1);
             }
         });
+    });
+
+    // Add event listener for find me button
+    document.getElementById("find-me-btn").addEventListener("click", function() {
+        // Call check location function to display closest station
+        checkLocation();
     });
 });
 

@@ -79,3 +79,16 @@
     z-index: 1000;
     width: 4.5rem;
 }
+
+#find-me-btn {
+    background-color: #67676752;
+    color: #fff; 
+    border: 1px solid #868585; 
+    padding: 10px;
+    cursor: pointer;
+    height: 3em;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    z-index: 1000;
+}
