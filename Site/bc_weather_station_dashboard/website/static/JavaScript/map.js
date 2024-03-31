@@ -148,7 +148,7 @@ function updateDataHTML(currentStationData) {
         progressBar.setValue(relativeHumidity);
     }
     // Update the HTML elements with the station's precipitation data
-    if (currentStationData.HOURLY_PRECIPITATION) {
+    if (currentStationData.HOURLY_PRECIPITATION !== undefined) {
         document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
     }
     // Update the HTML elements with the station's snow depth data
