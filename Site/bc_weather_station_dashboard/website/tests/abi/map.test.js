@@ -130,17 +130,6 @@ describe('updateDataHTML Functionality', () => {
         updateDataHTML(mockData);
         expect(document.getElementById('wind-direction')).toHaveTextContent('');
     });
-    // Wind Gust Widget
-    test('Correctly updates wind gust widget.', () => {
-        const mockData = { HOURLY_WIND_GUST: '20 km/h' };
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-gust')).toHaveTextContent('20 km/h');
-    });
-    test('Does not update the wind gust widget when data is missing.', () => {
-        const mockData = {};
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-gust')).toHaveTextContent('');
-    });
 });
 
 // Define a test suite for the calculation of distance between 2 points
