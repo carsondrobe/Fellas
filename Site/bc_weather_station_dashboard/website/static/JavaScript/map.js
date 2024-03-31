@@ -159,10 +159,13 @@ function updateDataHTML(currentStationData) {
     if (currentStationData.SNOW_DEPTH_QUALITY) {
         document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
     }
-    // Update the HTML elements with the station's wind speed data
-    if (currentStationData.HOURLY_WIND_SPEED) {
+    // Update the HTML elements with the station's wind data
+    if (currentStationData.HOURLY_WIND_SPEED && currentStationData.HOURLY_WIND_GUST) {
         document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
-        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED);
+        var windGustText = currentStationData.HOURLY_WIND_GUST + " km/h";
+        document.getElementById('wind-gust').innerHTML = windGustText;
+
+        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);
     }
     // Update the HTML elements with the station's wind direction data
     if (currentStationData.HOURLY_WIND_DIRECTION) {
@@ -173,10 +176,6 @@ function updateDataHTML(currentStationData) {
         // Create a new WindArrow with the updated wind direction
         var windArrow = new WindArrow(windDirectionDegrees);
         windArrow.draw();
-    }
-    // Update the HTML elements with the station's wind gust data
-    if (currentStationData.HOURLY_WIND_GUST) {
-        document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
     }
 }
 
