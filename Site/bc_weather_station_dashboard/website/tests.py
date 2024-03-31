@@ -19,9 +19,10 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 import re
 from website.forms import FeedbackForm
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
+from website.views import add_to_favourites
+from django.utils import timezone
 from .models import UserProfile
-
 
 
 # Begin models tests
@@ -275,7 +276,7 @@ class WSUploadCommandTestCase(TestCase):
             self.assertEqual(ws.ELEVATION, row["ELEVATION"])
             self.assertEqual(
                 ws.INSTALL_DATE,
-                pd.to_datetime(row["INSTALL_DATE"], format="%Y/%m/%d %H:%M:%S%z"),
+                timezone.make_naive(pd.to_datetime(row["INSTALL_DATE"], format="%Y/%m/%d %H:%M:%S%z")),
             )
 
 
@@ -383,16 +384,142 @@ class UpdateFeedbackStatusTestCase(TestCase):
         # Reload feedback object to check if it's updated
         updated_feedback = Feedback.objects.get(id=feedback.id)
         self.assertEqual(updated_feedback.status, "resolved")
-        
+
+
+class AddFavouriteStationTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.station = WeatherStation.objects.create(
+            X=1.0,
+            Y=1.0,
+            WEATHER_STATIONS_ID=1,
+            STATION_CODE=1,
+            STATION_NAME="Test Station",
+            STATION_ACRONYM="TS",
+            ELEVATION=1,
+            INSTALL_DATE=timezone.now(),
+        )
+        self.user_profile = UserProfile.objects.create(user=self.user)
+        self.url = reverse("add_to_favourites")
+
+    def test_add_to_favourites_authenticated(self):
+        self.client.login(username="testuser", password="12345")
+        response = self.client.post(self.url, {"station_code": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": True})
+        self.assertIn(self.station, self.user.userprofile.favorite_stations.all())
+
+    def test_add_to_favourites_unauthenticated(self):
+        response = self.client.post(self.url, {"station_code": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": False})
+
+    def test_add_to_favourites_get_request(self):
+        self.client.login(username="testuser", password="12345")
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"success": False})
+
+
+class ViewFavouritesTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.profile = UserProfile.objects.create(user=self.user)
+        self.station = WeatherStation.objects.create(
+            X=1.0,
+            Y=1.0,
+            WEATHER_STATIONS_ID=1,
+            STATION_CODE=1,
+            STATION_NAME="Test Station",
+            STATION_ACRONYM="TS",
+            ELEVATION=1,
+            INSTALL_DATE=timezone.now(),
+        )
+        self.profile.favorite_stations.add(self.station)
+
+    def test_view_favourites(self):
+        self.client.login(username="testuser", password="12345")
+        response = self.client.get("/view_favourites/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            [
+                {
+                    "id": 1,
+                    "code": 1,
+                    "name": "Test Station",
+                    "acronym": "TS",
+                    "latitude": 1.0,
+                    "longitude": 1.0,
+                    "elevation": 1,
+                    "install_date": self.station.INSTALL_DATE.strftime("%Y-%m-%d"),
+                }
+            ],
+        )
+
+
+class DeleteFavouriteTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.profile = UserProfile.objects.create(user=self.user)
+        self.station = WeatherStation.objects.create(
+            X=1.0,
+            Y=1.0,
+            WEATHER_STATIONS_ID=1,
+            STATION_CODE=1,
+            STATION_NAME="Test Station",
+            STATION_ACRONYM="TS",
+            ELEVATION=1,
+            INSTALL_DATE=timezone.now(),
+        )
+        self.profile.favorite_stations.add(self.station)
+
+    def test_delete_favourite(self):
+        self.client.login(username="testuser", password="12345")
+        response = self.client.post(
+            "/delete_favourite/", {"station_name": "Test Station"}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"success": True})
+        self.assertNotIn(self.station, self.user.userprofile.favorite_stations.all())
+
+
+class ViewFavouriteButtonTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.profile = UserProfile.objects.create(user=self.user)
+        self.station = WeatherStation.objects.create(
+            X=1.0,
+            Y=1.0,
+            WEATHER_STATIONS_ID=1,
+            STATION_CODE=1,
+            STATION_NAME="Test Station",
+            STATION_ACRONYM="TS",
+            ELEVATION=1,
+            INSTALL_DATE=timezone.now(),
+        )
+        self.profile.favorite_stations.add(self.station)
+
+    def test_display_fav_button(self):
+        self.client.login(username="testuser", password="12345")
+        response = self.client.post("/display_fav_button/", {"station_code": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"success": True})
+
+
 # Profile page tests in views.py
 class ProfileViewTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.user = User.objects.create_user(username="testuser", password="12345")
         self.user_profile = UserProfile.objects.create(user=self.user)
-        self.client.login(username='testuser', password='12345')
+        self.client.login(username="testuser", password="12345")
 
     def test_view_profile(self):
-        response = self.client.get(reverse('view_profile'))
+        response = self.client.get(reverse("view_profile"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'profile.html')
+        self.assertTemplateUsed(response, "profile.html")

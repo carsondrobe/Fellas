@@ -31,6 +31,8 @@ function initMarkerIcon(markerIcon) {
         shadowUrl: "../../static/marker-shadow.png",
         iconSize: [35, 65],
         iconAnchor: [12, 41],
+        iconSize: [35, 65],
+        iconAnchor: [12, 41],
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
     });
@@ -68,6 +70,43 @@ function fetchWeatherStationInfo() {
 
 // Function to update the data on the right column
 function updateData(stationCode) {
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    //send a POST request to weather view to update station code
+    $.ajax({
+        url: '/display_fav_button/',  // replace with the URL of your view
+        type: 'POST',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        data: {
+            'station_code': stationCode,
+        },
+        success: function (response) {
+            if (response.success === true) {
+                $('#favourite-button').hide();
+            } else {
+                $('#favourite-button').show();
+            }
+        }
+    });
+
     // Return date from date picker and fetch all of the data for the clicked station
     return fetch("/station_data/?datetime=" + getSelectedDate())
         .then(response => {
@@ -163,6 +202,7 @@ function checkLocation() {
         // geolocation is not available
         console.log("Geolocation is not available on this browser.");
     }
+
 }
 
 // Function to get user's location 
@@ -200,6 +240,7 @@ function getClosestStation(position) {
 // Function to create a marker with an option to display it (if display is 1, marker pop up is enabled)
 function createMarker(station, display) {
     var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
+    var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
         .addTo(map)
         .bindPopup(
             `<b>Station ID: ${station.id}</b><br>` +
@@ -218,6 +259,7 @@ function createMarker(station, display) {
         updateData(currentStationCode);
     });
     // If display is 1, display
+
     if (display === 1) {
         // Display current station's data and open its popup
         marker.fire('click');
@@ -225,7 +267,6 @@ function createMarker(station, display) {
         document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
     }
 }
-
 // Function to compute the distance between 2 points using longitude and latitude
 function computeDistance(longitude1, latitude1, longitude2, latitude2) {
     // Set variables to compute distance using Haversine equation

@@ -19,6 +19,7 @@
 *.tar.gz
 *.rar
 *.pyc
+.env
 
 Site/bc_weather_station_dashboard/htmlcov
 .vscode
@@ -33,5 +34,5 @@ venv
 node_modules
 .nyc_output
 
-# env
+# env file
 .env
