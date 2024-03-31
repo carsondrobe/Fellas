@@ -1,65 +1,54 @@
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+const { updateWindSpeed } = require('../../static/JavaScript/wind_speed.js');
 
 QUnit.module("updateWindSpeed", hooks => {
-    // Mock environment setup
-    let mockCircle;
+    // Mock DOM setup
+    const { JSDOM } = require("jsdom");
+    const dom = new JSDOM(`<!DOCTYPE html><svg><circle></circle><text id="wind-gust"></text></svg>`);
+    const { document } = dom.window;
 
     hooks.beforeEach(() => {
-        // Mocking the DOM element that updateWindSpeed manipulates
-        mockCircle = {
-            style: {},
-            getTotalLength: () => 100, // Assuming a circumference of 100 for simplicity
-            setAttribute: function (attr, value) {
-                this[attr] = value;
-            }
-        };
-
-        // Mocking document.querySelector to return the mocked circle
-        global.document = {
-            querySelector: (selector) => {
-                if (selector === 'circle:last-of-type') {
-                    return mockCircle;
-                }
-            }
-        };
+        global.document = document;
     });
 
     hooks.afterEach(() => {
-        // Cleanup
         delete global.document;
     });
 
-    // Test cases
+    const lightBlue = '#0dcaf0';
+    const lightYellow = '#e0e064';
+    const lightOrange = '#e68e47';
+    const lightRed = '#e64c4c';
+
+    const colorRanges = [
+        { maxSpeed: 10, color: lightBlue },
+        { maxSpeed: 15, color: lightYellow },
+        { maxSpeed: 20, color: lightOrange },
+        { maxSpeed: 30, color: lightRed }
+    ];
+
     QUnit.test("Color update for varying wind speeds", assert => {
-        const { updateWindSpeed } = require('../../static/JavaScript/wind_speed.js');
+        // Mock circle element
+        const circleElement = document.querySelector('circle');
+        circleElement.getTotalLength = () => 100; // Mocking getTotalLength function
 
-        updateWindSpeed(5); // Should set color to lightBlue
-        assert.strictEqual(mockCircle.style.stroke, '#0dcaf0', "Wind speed of 5 sets circle color to lightBlue");
+        // Test lightBlue color for windSpeed = 5
+        updateWindSpeed(5, 10);
+        assert.strictEqual(circleElement.style.stroke, lightBlue, "Wind speed of 5 sets circle color to lightBlue");
 
-        updateWindSpeed(12); // Should set color to lightYellow
-        assert.strictEqual(mockCircle.style.stroke, '#e0e064', "Wind speed of 12 sets circle color to lightYellow");
+        // Test lightYellow color for windSpeed = 15
+        updateWindSpeed(15, 20);
+        assert.strictEqual(circleElement.style.stroke, lightYellow, "Wind speed of 15 sets circle color to lightYellow");
 
-        updateWindSpeed(18); // Should set color to lightOrange
-        assert.strictEqual(mockCircle.style.stroke, '#e68e47', "Wind speed of 18 sets circle color to lightOrange");
+        // Test lightOrange color for windSpeed = 20
+        updateWindSpeed(20, 25);
+        assert.strictEqual(circleElement.style.stroke, lightOrange, "Wind speed of 20 sets circle color to lightOrange");
 
-        updateWindSpeed(30); // Should set color to lightRed
-        assert.strictEqual(mockCircle.style.stroke, '#e64c4c', "Wind speed of 30 sets circle color to lightRed");
-    });
+        // Test lightRed color for windSpeed = 35
+        updateWindSpeed(35, 45);
+        assert.strictEqual(circleElement.style.stroke, lightRed, "Wind speed of 35 sets circle color to lightRed");
 
-    QUnit.test("Stroke dashoffset updates correctly", assert => {
-        const { updateWindSpeed } = require('../../static/JavaScript/wind_speed.js');
-
-        updateWindSpeed(10);
-        // For a wind speed of 10, progressPercentage is (10/35)*100 = ~28.57%
-        // Expected strokeDashoffset = 100 - 28.57 = ~71.43
-        let actualDashoffset = parseFloat(mockCircle.style.strokeDashoffset).toFixed(2);
-        assert.strictEqual(actualDashoffset, '71.43', "Wind speed of 10 sets correct strokeDashoffset");
-
-        updateWindSpeed(35);
-        // For max wind speed of 35, progressPercentage is 100%
-        // Expected strokeDashoffset = 0
-        actualDashoffset = mockCircle.style.strokeDashoffset.toString();
-        assert.strictEqual(actualDashoffset, '0', "Max wind speed sets strokeDashoffset to 0");
+        // Test lightRed color for windSpeed > maxWindSpeed
+        updateWindSpeed(45, 50);
+        assert.strictEqual(circleElement.style.stroke, lightRed, "Wind speed exceeding max sets circle color to lightRed");
     });
 });

@@ -20,7 +20,7 @@ function updateWindSpeed(windSpeed, windGust) {
     }
 
     const maxWindSpeed = 40;
-    if (windSpeed >= maxWindSpeed) {
+    if (windSpeed >= 30) {
         currentColor = lightRed;
     }
     const progressPercentage = (windSpeed / maxWindSpeed) * 100;
