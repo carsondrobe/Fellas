@@ -93,7 +93,7 @@ class Command(BaseCommand):
 
             for user_profile in user_profiles:
                 phone_number = user_profile.phone_number
-                message = "Extreme weather conditions detected: " + " ".join(extreme_conditions) + " Please stay safe."
+                message = f"Extreme weather conditions detected at {station.STATION_NAME}: " + " ".join(extreme_conditions) + " Please stay safe."
                 send_sms_alert(phone_number, message)
 
                 # Create a new Alert object and save it to the database
@@ -105,7 +105,6 @@ class Command(BaseCommand):
                     alert_active=True
                 )
                 alert.save()
-                    
     def handle(self, *args, **kwargs) -> None:
         """Handles the command, calls the other methods. You can change the date range here."""
         # Create a date range for when you want to scrape the data
