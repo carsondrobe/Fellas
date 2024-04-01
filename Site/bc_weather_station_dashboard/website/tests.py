@@ -597,7 +597,10 @@ class CsvScrapeTest(TestCase):
         )
 
     @patch('website.management.commands.csv_scrape.send_sms_alert')
-    def test_check_for_extreme_conditions(self, mock_send_sms_alert):
+    def test_check_for_extreme_conditions_favorite_station(self, mock_send_sms_alert):
+        # Add station to user's favorite stations
+        self.user_profile.favorite_stations.add(self.station)
+
         # Create a Command instance
         command = csv_scrape.Command()
 
@@ -617,7 +620,8 @@ class CsvScrapeTest(TestCase):
 
         # Check that an SMS alert was sent
         self.assertTrue(mock_send_sms_alert.called)
-        print(mock_send_sms_alert.call_args)
+        if mock_send_sms_alert.called:
+            print("Message sent:", mock_send_sms_alert.call_args[0][1])
 
         # Check that an Alert instance was created
         self.assertEqual(Alert.objects.count(), 1)
@@ -626,6 +630,33 @@ class CsvScrapeTest(TestCase):
         self.assertEqual(alert.alert_type, 'Weather')
         self.assertEqual(alert.station, self.station)
         self.assertTrue(alert.alert_active)
+
+    @patch('website.management.commands.csv_scrape.send_sms_alert')
+    def test_check_for_extreme_conditions_not_favorite_station(self, mock_send_sms_alert):
+        # Create a Command instance
+        command = csv_scrape.Command()
+
+        # Create a row_data dictionary
+        row_data = {
+            'DATE_TIME': '2022-01-01 00:00:00',
+            'STATION_CODE': 1,
+            'HOURLY_TEMPERATURE': 50,
+            'HOURLY_WIND_SPEED': 60,
+            'HOURLY_PRECIPITATION': 70,
+            'STATION_NAME': 'Test Station',
+            'station': self.station
+        }
+
+        # Call the check_for_extreme_conditions method
+        command.check_for_extreme_conditions(row_data)
+
+        # Check that an SMS alert was not sent
+        self.assertFalse(mock_send_sms_alert.called)
+        if mock_send_sms_alert.called:
+            print("Message sent:", mock_send_sms_alert.call_args[0][1])
+
+        # Check that an Alert instance was not created
+        self.assertEqual(Alert.objects.count(), 0)
         
     @patch('website.management.commands.csv_scrape.Command.download_csv')
     @patch('website.management.commands.csv_scrape.Command.update_model_with_csv')

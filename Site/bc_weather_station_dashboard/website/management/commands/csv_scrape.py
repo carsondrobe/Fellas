@@ -71,6 +71,9 @@ class Command(BaseCommand):
             
     def check_for_extreme_conditions(self, row_data):
         """Checks for extreme weather conditions and sends an SMS alert if any are found."""
+        # Initialize the message variable
+        message = ''
+
         # Check for extreme weather conditions
         extreme_conditions = []
         if row_data['HOURLY_TEMPERATURE'] < -20:
@@ -82,22 +85,26 @@ class Command(BaseCommand):
             extreme_conditions.append(f"Current Wind Speed is: {row_data['HOURLY_WIND_SPEED']}km/h and Precipitation is: {row_data['HOURLY_PRECIPITATION']}mm these are both high.")
 
         if extreme_conditions:
-            # Fetch the phone numbers from the User Profile model
-            user_profiles = UserProfile.objects.all()
+            # Fetch the station from the row data
+            station = WeatherStation.objects.get(STATION_NAME=row_data['STATION_NAME'])
+
+            # Fetch the user profiles where the station is in the user's favourite stations list
+            user_profiles = UserProfile.objects.filter(favorite_stations__id=station.id)
+
             for user_profile in user_profiles:
                 phone_number = user_profile.phone_number
                 message = "Extreme weather conditions detected: " + " ".join(extreme_conditions) + " Please stay safe."
                 send_sms_alert(phone_number, message)
 
-            # Create a new Alert object and save it to the database
-            alert = Alert(
-                alert_name='Extreme Weather Conditions',
-                message=message,
-                alert_type='Weather',
-                station=WeatherStation.objects.get(STATION_NAME=row_data['STATION_NAME']),
-                alert_active=True
-            )
-            alert.save()
+                # Create a new Alert object and save it to the database
+                alert = Alert(
+                    alert_name='Extreme Weather Conditions',
+                    message=message,
+                    alert_type='Weather',
+                    station=station,
+                    alert_active=True
+                )
+                alert.save()
                     
     def handle(self, *args, **kwargs) -> None:
         """Handles the command, calls the other methods. You can change the date range here."""
