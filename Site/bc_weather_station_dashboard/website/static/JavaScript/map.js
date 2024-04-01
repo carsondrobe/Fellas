@@ -137,50 +137,78 @@ function updateData(stationCode) {
 
 // Update HTML elements on right side
 function updateDataHTML(currentStationData) {
-    if (currentStationData.HOURLY_TEMPERATURE !== undefined) {
-        document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
-    }
-    // Update the HTML elements with the station's relative humidity data
-    if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
-        // Get the relative humidity
-        var relativeHumidity = currentStationData.HOURLY_RELATIVE_HUMIDITY;
-        // Get the progress bar element
-        const progressBarElement = document.querySelector('#humidity-progress-bar');
-        // Create a new SemiCircleProgressBar with the progress bar element
-        const progressBar = new SemiCircleProgressBar(progressBarElement);
-        // Set the value of the progress bar to the relative humidity
-        progressBar.setValue(relativeHumidity);
-    }
-    // Update the HTML elements with the station's precipitation data
-    if (currentStationData.HOURLY_PRECIPITATION !== undefined) {
-        document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
-    }
-    // Update the HTML elements with the station's snow depth data
-    if (currentStationData.SNOW_DEPTH !== undefined) {
-        document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
-    }
-    // Update the HTML elements with the station's snow quality data
-    if (currentStationData.SNOW_DEPTH_QUALITY !== undefined) {
-        document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
-    }
-    // Update the HTML elements with the station's wind speed data
-    if (currentStationData.HOURLY_WIND_SPEED) {
-        document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
-        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED);
-    }
-    // Update the HTML elements with the station's wind direction data
-    if (currentStationData.HOURLY_WIND_DIRECTION !== undefined) {
-        // Get the wind direction in degrees
-        var windDirectionDegrees = currentStationData.HOURLY_WIND_DIRECTION;
-        // Update the text display append to the wind direction widget
-        document.getElementById('wind-direction').innerHTML = "<h5>Wind Direction " + windDirectionDegrees + "&deg;</h5>";
-        // Create a new WindArrow with the updated wind direction
-        var windArrow = new WindArrow(windDirectionDegrees);
-        windArrow.draw();
-    }
-    // Update the HTML elements with the station's wind gust data
-    if (currentStationData.HOURLY_WIND_GUST !== undefined) {
-        document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
+    // Get the current page's path
+    var path = window.location.pathname;
+
+    // Check if the current page is weather.html
+    if (path.endsWith('/weather/')) {
+        if (currentStationData.HOURLY_TEMPERATURE !== undefined) {
+            document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
+        }
+        // Update the HTML elements with the station's relative humidity data
+        if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
+            // Get the relative humidity
+            var relativeHumidity = currentStationData.HOURLY_RELATIVE_HUMIDITY;
+            // Get the progress bar element
+            const progressBarElement = document.querySelector('#humidity-progress-bar');
+            // Create a new SemiCircleProgressBar with the progress bar element
+            const progressBar = new SemiCircleProgressBar(progressBarElement);
+            // Set the value of the progress bar to the relative humidity
+            progressBar.setValue(relativeHumidity);
+        }
+        // Update the HTML elements with the station's precipitation data
+        if (currentStationData.HOURLY_PRECIPITATION !== undefined) {
+            document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
+        }
+        // Update the HTML elements with the station's snow depth data
+        if (currentStationData.SNOW_DEPTH !== undefined) {
+            document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
+        }
+        // Update the HTML elements with the station's snow quality data
+        if (currentStationData.SNOW_DEPTH_QUALITY !== undefined) {
+            document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
+        }
+        // Update the HTML elements with the station's wind speed data
+        if (currentStationData.HOURLY_WIND_SPEED) {
+            document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
+            updateWindSpeed(currentStationData.HOURLY_WIND_SPEED);
+        }
+        // Update the HTML elements with the station's wind direction data
+        if (currentStationData.HOURLY_WIND_DIRECTION !== undefined) {
+            // Get the wind direction in degrees
+            var windDirectionDegrees = currentStationData.HOURLY_WIND_DIRECTION;
+            // Update the text display append to the wind direction widget
+            document.getElementById('wind-direction').innerHTML = "<h5>Wind Direction " + windDirectionDegrees + "&deg;</h5>";
+            // Create a new WindArrow with the updated wind direction
+            var windArrow = new WindArrow(windDirectionDegrees);
+            windArrow.draw();
+        }
+        // Update the HTML elements with the station's wind gust data
+        if (currentStationData.HOURLY_WIND_GUST !== undefined) {
+            document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
+        }
+    // Check if the current page is fire.html
+    } else if (path.endsWith('/fire/')) {
+        // Update the HTML elements with the station's fine fuel moisture code data
+        updateFFMC(currentStationData.FINE_FUEL_MOISTURE_CODE);
+
+        // Update the HTML elements with the station's duff moisture code data
+        updateDMC(currentStationData.DUFF_MOISTURE_CODE);
+
+        // Update the HTML elements with the station's drought code data
+        updateDC(currentStationData.DROUGHT_CODE);
+
+        // Update the HTML elements with the station's initial spread index data
+        updateISI(currentStationData.INITIAL_SPREAD_INDEX);
+
+        // Update the HTML elements with the station's buildup index data
+        updateBUI(currentStationData.BUILDUP_INDEX);
+
+        // Update the HTML elements with the station's fire weather index data
+        updateFWI(currentStationData.FIRE_WEATHER_INDEX);
+
+        // Update the HTML elements with the station's danger rating data
+        updateDangerRating(currentStationData.DANGER_RATING);
     }
 }
 

@@ -80,6 +80,11 @@ describe('updateDataHTML Functionality', () => {
             <div id="wind-gust"></div>
         `;
     });
+
+    // Mock window.location.pathname
+    delete window.location;
+    window.location = { pathname: '/weather/' };
+
     // Temperature Widget
     test('Correctly updates temperature widget.', () => {
         const mockData = { HOURLY_TEMPERATURE: '25°C' };
