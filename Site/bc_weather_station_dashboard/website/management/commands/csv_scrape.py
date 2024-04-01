@@ -2,7 +2,6 @@ import warnings
 from datetime import timedelta
 from django.core.management.base import BaseCommand
 import requests
-from django.utils import timezone
 from datetime import date
 from datetime import datetime
 from website.models import StationData,WeatherStation
@@ -55,7 +54,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs) -> None:
         """Handles the command, calls the other methods. You can change the date range here."""
         # Create a date range for when you want to scrape the data
-        start_date =  date.today() #date(2024, 3, 19) # Change the start date (make sure this start_date and end_date are in the same year)
+        start_date = date.today() - timedelta(days=1)  # Yesterday's date #date(2024, 3, 19) # Change the start date (make sure this start_date and end_date are in the same year)
         end_date = date.today() # Change the end date
         delta = timedelta(days=1)
         dates = []
