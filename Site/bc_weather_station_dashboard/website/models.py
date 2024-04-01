@@ -109,15 +109,11 @@ class Dashboard(models.Model):
 
 
 class Alert(models.Model):
-    user = models.ManyToManyField(User)
     alert_name = models.CharField(max_length=200)
-    message = models.CharField(max_length=200)
+    message = models.TextField()
     alert_type = models.CharField(max_length=200)
-    station_data = models.ManyToManyField(StationData)
-    alert_active = models.BooleanField()
-
-    def __str__(self):
-        return self.alert_name
+    station = models.ForeignKey(WeatherStation, on_delete=models.CASCADE, null=True)
+    alert_active = models.BooleanField(default=False)
 
 
 class Feedback(models.Model):

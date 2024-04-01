@@ -4,9 +4,24 @@ from django.core.management.base import BaseCommand
 import requests
 from datetime import date
 from datetime import datetime
-from website.models import StationData,WeatherStation
+from website.models import StationData, WeatherStation, UserProfile, Alert
 import pandas as pd
 import os
+from twilio.rest import Client
+from django.conf import settings
+
+# Twilio setup
+account_sid = settings.TWILIO_ACCOUNT_SID
+auth_token = settings.TWILIO_AUTH_TOKEN
+client = Client(account_sid, auth_token)
+
+def send_sms_alert(phone_number, message):
+    """Sends an SMS alert to a given phone number."""
+    message = client.messages.create(
+        body=message,
+        from_=settings.TWILIO_PHONE_NUMBER,
+        to=phone_number
+    )
 
 class Command(BaseCommand):
     help = 'Manually download current day CSV data and update StationData model to run use the command: python manage.py csv_scrape.'
@@ -51,6 +66,39 @@ class Command(BaseCommand):
             # Create a new StationData object or update the existing one
             StationData.objects.get_or_create(**row_data)
 
+            # Check for extreme weather conditions for the current row
+            self.check_for_extreme_conditions(row_data)
+            
+    def check_for_extreme_conditions(self, row_data):
+        """Checks for extreme weather conditions and sends an SMS alert if any are found."""
+        # Check for extreme weather conditions
+        extreme_conditions = []
+        if row_data['HOURLY_TEMPERATURE'] < -20:
+            extreme_conditions.append(f"Temperature: {row_data['HOURLY_TEMPERATURE']}°C is below -20°C")
+        elif row_data['HOURLY_TEMPERATURE'] > 40:
+            extreme_conditions.append(f"Temperature: {row_data['HOURLY_TEMPERATURE']}°C is above 40°C")
+
+        if row_data['HOURLY_WIND_SPEED'] > 50 and row_data['HOURLY_PRECIPITATION'] > 50:
+            extreme_conditions.append(f"Wind Speed: {row_data['HOURLY_WIND_SPEED']}km/h and Precipitation: {row_data['HOURLY_PRECIPITATION']}mm are both high")
+
+        if extreme_conditions:
+            # Fetch the phone numbers from the User Profile model
+            user_profiles = UserProfile.objects.all()
+            for user_profile in user_profiles:
+                phone_number = user_profile.phone_number
+                message = "Extreme weather conditions detected: " + " ".join(extreme_conditions) + ". Please stay safe."
+                send_sms_alert(phone_number, message)
+
+            # Create a new Alert object and save it to the database
+            alert = Alert(
+                alert_name='Extreme Weather Conditions',
+                message=message,
+                alert_type='Weather',
+                station=WeatherStation.objects.get(STATION_NAME=row_data['STATION_NAME']),
+                alert_active=True
+            )
+            alert.save()
+                    
     def handle(self, *args, **kwargs) -> None:
         """Handles the command, calls the other methods. You can change the date range here."""
         # Create a date range for when you want to scrape the data
