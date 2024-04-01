@@ -1,8 +1,8 @@
-name: CSV scrape automation hourly
+name: CSV scrape automation
 
 on:
   schedule:
-    - cron: '*/23 * * * *'
+    - cron: '*/18 * * * *'
   workflow_dispatch:
     
 
