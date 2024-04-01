@@ -2,8 +2,7 @@ name: CSV scrape automation hourly
 
 on:
   schedule:
-    # Runs at the 18th minute of every hour
-    - cron: '18 * * * *'
+    - cron: '*/23 * * * *'
   workflow_dispatch:
     
 
