@@ -23,6 +23,7 @@ from django.test import TestCase, Client, RequestFactory
 from website.views import add_to_favourites
 from django.utils import timezone
 from .models import UserProfile
+from datetime import date
 
 
 # Begin models tests
@@ -155,13 +156,23 @@ class AlertModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         test_user = User.objects.create_user(username="testuser", password="12345")
+        test_station = WeatherStation.objects.create(
+            X=0, 
+            Y=0, 
+            WEATHER_STATIONS_ID=1, 
+            STATION_CODE=123, 
+            STATION_NAME="Test Station", 
+            STATION_ACRONYM="TS", 
+            ELEVATION=100, 
+            INSTALL_DATE=date.today()
+        )
         Alert.objects.create(
             alert_name="Test Alert",
             message="Test Message",
             alert_type="Test Type",
+            station=test_station,
             alert_active=True,
         )
-
     def test_alert_name_label(self):
         # This test checks if the verbose name of the 'alert_name' field is correctly set to 'alert name'
         alert = Alert.objects.get(id=1)
@@ -179,7 +190,6 @@ class AlertModelTest(TestCase):
         alert = Alert.objects.get(id=1)
         expected_object_name = f"{alert.alert_name}"
         self.assertEquals(expected_object_name, str(alert))
-
 
 class FeedbackModelTest(TestCase):
     @classmethod

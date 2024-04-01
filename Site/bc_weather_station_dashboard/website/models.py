@@ -114,6 +114,9 @@ class Alert(models.Model):
     alert_type = models.CharField(max_length=200)
     station = models.ForeignKey(WeatherStation, on_delete=models.CASCADE, null=True)
     alert_active = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.alert_name
 
 
 class Feedback(models.Model):
