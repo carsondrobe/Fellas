@@ -276,7 +276,7 @@ class WSUploadCommandTestCase(TestCase):
             self.assertEqual(ws.ELEVATION, row["ELEVATION"])
             self.assertEqual(
                 ws.INSTALL_DATE,
-                pd.to_datetime(row["INSTALL_DATE"], format="%Y/%m/%d %H:%M:%S%z"),
+                timezone.make_naive(pd.to_datetime(row["INSTALL_DATE"], format="%Y/%m/%d %H:%M:%S%z")),
             )
 
 
