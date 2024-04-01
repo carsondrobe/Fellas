@@ -34,11 +34,20 @@
     {% include 'navbar.html' %}
 
     <div class="container-fluid">
-        <div class="row pt-3">
+        <div class="row">
             <!-- Station Map Column -->
             <div class="col-md-4 col-sm-12 text-center border-right">
-                <h2 id="station-name-code"></h2>
-                <hr>
+                <div class="foreground d-flex justify-content-between align-items-center mb-2" style="height: 65px;">
+                    <div class="align-self-center pt-2">
+                        <h4 id="station-name-code" class="foreground"></h4>
+                    </div>
+                    {% if request.user.is_authenticated %}
+
+                    <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
+                        id="favourite-button">Favourite</button>
+
+                    {% endif %}
+                </div>
                 <!-- Leaflet Map Implementation -->
                 <div id="map" style="height: 50em; width: 100%;"></div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
@@ -58,8 +67,14 @@
             </div>
             <!-- Fire Information Column -->
             <div class="col-md-8">
-                <h2>Fire Information</h2>
-                <hr>
+                <div class="foreground d-flex justify-content-between align-items-center" style="height: 65px;">
+                    <div class="align-self-center pl-3 pt-2">
+                        <h3>Fire Information</h3>
+                    </div>
+                    <div>
+                        <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
+                    </div>
+                </div>
                 <div class="container">
                     <div class="row">
                         <!-- Column 1 -->

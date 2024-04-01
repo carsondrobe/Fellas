@@ -42,10 +42,11 @@
             <!-- Station Map Column -->
             {% comment %} If you want to make map only take up 1/3 of page, use line below {% endcomment %}
             {% comment %} <div class="col-4 text-center border-right border-dark"> {% endcomment %}
-            <div class="col-6 text-center border-right border-dark">
-                <div style="display: flex; align-items: center; justify-content: center;">
-
-                    <h2 id="station-name-code" class="foreground"></h2>
+            <div class="col-md-6 col-sm-12 text-center border-right">
+                <div class="foreground d-flex justify-content-between align-items-center mb-2" style="height: 65px;">
+                    <div class="align-self-center pt-2">
+                        <h4 id="station-name-code" class="foreground"></h4>
+                    </div>
                     {% if request.user.is_authenticated %}
 
                     <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
@@ -76,9 +77,9 @@
             </div>
             <!-- Weather Data Column -->
             <div class="col-6 ">
-                <div class="foreground d-flex justify-content-between align-items-center">
-                    <div class="align-self-center ml-3 mt-1">
-                        <h2>Weather</h2>
+                <div class="foreground d-flex justify-content-between align-items-center" style="height: 65px;">
+                    <div class="align-self-center pl-3 pt-2">
+                        <h3>Weather</h3>
                     </div>
                     <div>
                         <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
