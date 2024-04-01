@@ -74,19 +74,19 @@ class Command(BaseCommand):
         # Check for extreme weather conditions
         extreme_conditions = []
         if row_data['HOURLY_TEMPERATURE'] < -20:
-            extreme_conditions.append(f"Temperature: {row_data['HOURLY_TEMPERATURE']}°C is below -20°C")
+            extreme_conditions.append(f"Current temperature is {row_data['HOURLY_TEMPERATURE']}°C. Please stay warm!")
         elif row_data['HOURLY_TEMPERATURE'] > 40:
-            extreme_conditions.append(f"Temperature: {row_data['HOURLY_TEMPERATURE']}°C is above 40°C")
+            extreme_conditions.append(f"Current temperature is {row_data['HOURLY_TEMPERATURE']}°C. Please stay cool!")
 
         if row_data['HOURLY_WIND_SPEED'] > 50 and row_data['HOURLY_PRECIPITATION'] > 50:
-            extreme_conditions.append(f"Wind Speed: {row_data['HOURLY_WIND_SPEED']}km/h and Precipitation: {row_data['HOURLY_PRECIPITATION']}mm are both high")
+            extreme_conditions.append(f"Current Wind Speed is: {row_data['HOURLY_WIND_SPEED']}km/h and Precipitation is: {row_data['HOURLY_PRECIPITATION']}mm these are both high.")
 
         if extreme_conditions:
             # Fetch the phone numbers from the User Profile model
             user_profiles = UserProfile.objects.all()
             for user_profile in user_profiles:
                 phone_number = user_profile.phone_number
-                message = "Extreme weather conditions detected: " + " ".join(extreme_conditions) + ". Please stay safe."
+                message = "Extreme weather conditions detected: " + " ".join(extreme_conditions) + " Please stay safe."
                 send_sms_alert(phone_number, message)
 
             # Create a new Alert object and save it to the database
