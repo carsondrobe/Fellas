@@ -289,7 +289,7 @@
         }
     </script>
     <script>
-        // Set tomorrow's date when the button is clicked
+        // Set tomorrow's date when the button is clicked adn call prediction function
         document.getElementById('tomorrow-forecast').addEventListener('click', function() {
             var tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
@@ -304,6 +304,8 @@
             // Trigger the change event to update the displayed date
             var event = new Event('change');
             date_input.dispatchEvent(event);
+
+            // Call the prediction function
         });
     </script>
 </body>

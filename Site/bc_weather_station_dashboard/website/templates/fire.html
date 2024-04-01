@@ -279,6 +279,26 @@
         alert("{{error}}");
         {% endif %}
     </script>
+    <script>
+        // Set tomorrow's date when the button is clicked adn call prediction function
+        document.getElementById('tomorrow-forecast').addEventListener('click', function() {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+    
+            // Format the date in the format expected by the datepicker
+            var formattedDate = tomorrow.toISOString().split('T')[0];
+    
+            // Set the date in the datepicker
+            const date_input = document.querySelector('.datepicker-input');
+            date_input.value = formattedDate;
+    
+            // Trigger the change event to update the displayed date
+            var event = new Event('change');
+            date_input.dispatchEvent(event);
+
+            // Call the prediction function
+        });
+    </script>
 
     <!-- JS for widgets -->
     <script src="{% static 'JavaScript/danger_rating.js' %}"></script>
