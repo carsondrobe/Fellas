@@ -53,8 +53,22 @@ function fetchWeatherStationInfo() {
             }
         })
         .then(data => {
-            // Call function to get user location
-            checkLocation();
+            // Check if there is a station in local storage
+            let storedStation = localStorage.getItem('station');
+            if (storedStation) {
+                // If there is, use it
+                let station = JSON.parse(storedStation);
+                // Find the station in the data
+                let selectedStation = data.find(s => s.id === station.id);
+                if (selectedStation) {
+                    createMarker(selectedStation, 1);
+                    // Call updateData with the correct station code
+                    updateData(selectedStation.code);
+                }
+            } else {
+                // If there isn't, get user location
+                checkLocation();
+            }
             // Create marker for each weather station
             data.forEach(station => {
                 createMarker(station, 0);
@@ -67,6 +81,37 @@ function fetchWeatherStationInfo() {
             return undefined;
         });
 }
+
+window.onload = function() {
+    // Retrieve station and date from localStorage
+    var storedStationCode = localStorage.getItem('currentStationCode');
+    var storedDate = localStorage.getItem('selectedDate');
+
+    // If station and date are stored, update the data
+    if (storedStationCode && storedDate) {
+        updateData(storedStationCode);
+        // Set the selected date in the date picker
+        document.getElementById('selected_date').innerHTML = storedDate;
+    }
+};
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const date_input = document.querySelector('.datepicker-input');
+    if (date_input) {
+        date_input.addEventListener('change', function (e) {
+            // Get the selected date
+            const selected_date = getSelectedDate();
+
+            // Retrieve the stored station code
+            var storedStationCode = localStorage.getItem('currentStationCode');
+
+            // Call updateData with the stored station code and the selected date
+            if (storedStationCode) {
+                updateData(storedStationCode, selected_date);
+            }
+        });
+    }
+});
 
 // Function to update the data on the right column
 function updateData(stationCode) {
@@ -108,7 +153,11 @@ function updateData(stationCode) {
     });
 
     // Return date from date picker and fetch all of the data for the clicked station
-    return fetch("/station_data/?datetime=" + getSelectedDate())
+    var selectedDate = getSelectedDate();
+    if (!selectedDate.endsWith("12:00:00")) {
+        selectedDate += " 12:00:00";
+    }
+    return fetch("/station_data/?datetime=" + selectedDate)
         .then(response => {
             // If station data is found
             var errorMsg = document.getElementById("error-msg");
@@ -132,11 +181,19 @@ function updateData(stationCode) {
         })
         .catch(error => {
             console.error(error);
+        })
+        .finally(() => {
+            // Store station code and selected date in localStorage
+            localStorage.setItem('currentStationCode', stationCode);
+            localStorage.setItem('selectedDate', getSelectedDate());
         });
 }
 
 // Update HTML elements on right side
 function updateDataHTML(currentStationData) {
+
+    console.log(currentStationData);
+    console.log(window.location.pathname);
     // Get the current page's path
     var path = window.location.pathname;
 
@@ -221,7 +278,7 @@ function getSelectedDate() {
         var day = new Date().getDate().toString().padStart(2, '0');
         datePicker = `${year}-${month}-${day}`;
     }
-    return datePicker + " 12:00:00";
+    return datePicker;
 }
 
 // Function to check if geolocation is available
@@ -289,6 +346,9 @@ function createMarker(station, display) {
         currentStationCode = station.code;
         document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
         updateData(currentStationCode);
+
+        // Store selected station in local storage
+        localStorage.setItem('station', JSON.stringify(station));
     });
     // If display is 1, display
 
