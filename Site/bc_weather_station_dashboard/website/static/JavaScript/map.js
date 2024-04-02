@@ -108,6 +108,7 @@ function updateData(stationCode) {
     });
     // If user is on Today's date, fetch latest otherwise fetch the selected date at 12:00:00
     var selectedDate = document.getElementById('selected_date').innerHTML;
+    document.getElementById('last-updated-time').textContent = '';
     var dataUrl = `/station_data/?`;
     if(selectedDate == "Today") {
         dataUrl += `latest=true&station_code=${stationCode}`;
@@ -123,6 +124,12 @@ function updateData(stationCode) {
             if (response.ok) {
                 errorMsg.innerHTML = "";
                 errorMsg.style.display = "none";
+                // Update last updated at time
+                if(selectedDate == "Today") {
+                    document.getElementById('last-updated-time').textContent = 'Just Now';
+                } else {
+                    document.getElementById('last-updated-time').textContent = '12:00 PM';
+                }
                 return response.json();
                 // If station data for this datetime is not found/error occurs
             } else {
