@@ -108,13 +108,31 @@ function updateData(stationCode) {
     });
     // If user is on Today's date, fetch latest otherwise fetch the selected date at 12:00:00
     var selectedDate = document.getElementById('selected_date').innerHTML;
+    const checkbox = document.getElementById('12pm-checkbox');
+    const checkboxContainer = document.getElementById('checkboxContainer');
+    checkbox.disabled = false;
+    checkboxContainer.style.display = "inline";
     document.getElementById('last-updated-time').textContent = '';
     var dataUrl = `/station_data/?`;
     if(selectedDate == "Today") {
         dataUrl += `latest=true&station_code=${stationCode}`;
+        if(new Date().getHours() >= 15) {
+            if(checkbox.checked) {
+                var today = new Date();
+                var year = today.getFullYear();
+                var month = String(today.getMonth() + 1).padStart(2, '0');
+                var day = String(today.getDate()).padStart(2, '0');
+                var dateTime = `${year}-${month}-${day} 12:00:00`;
+                dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
+            }
+        } else {
+            checkbox.disabled = true;
+        }
+        // console.log(dataUrl);
     } else {
         var dateTime = selectedDate + ' 12:00:00';
         dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
+        checkboxContainer.style.display = "none";
     }
     // Return date from date picker and fetch all of the data for the clicked station
     return fetch(dataUrl)
