@@ -7,10 +7,10 @@
     <div id="date_selector" class="ml-auto">
         <strong><span id="selected_date" class="text-white p-2">Today</span></strong>
         <img class="datepicker-toggle-button" src="../static/images/calendar_icon.svg" alt="calendar icon" width="30">
-        <input type="date" class="datepicker-input">
+        <input type="date" class="datepicker-input" id="datepicker">
     </div>
     <script>
-        const date_input = document.querySelector('.datepicker-input');
+        const date_input = document.querySelector('#datepicker');
         const selected_date = document.querySelector('#selected_date');
         date_input.addEventListener('change', function (e) {
             const date = new Date(e.target.value);

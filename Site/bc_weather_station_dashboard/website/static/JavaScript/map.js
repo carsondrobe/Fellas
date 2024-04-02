@@ -91,23 +91,23 @@ window.onload = function() {
     if (storedStationCode && storedDate) {
         updateData(storedStationCode);
         // Set the selected date in the date picker
+        const date = new Date(storedDate);
+        const dateString = date.toISOString().split('T')[0]; // Convert the date to yyyy-mm-dd format
+        document.getElementById('datepicker').value = dateString;
         document.getElementById('selected_date').innerHTML = storedDate;
     }
 };
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    const date_input = document.querySelector('.datepicker-input');
+    const date_input = document.getElementById('datepicker');
     if (date_input) {
         date_input.addEventListener('change', function (e) {
-            // Get the selected date
-            const selected_date = getSelectedDate();
-
             // Retrieve the stored station code
             var storedStationCode = localStorage.getItem('currentStationCode');
 
             // Call updateData with the stored station code and the selected date
             if (storedStationCode) {
-                updateData(storedStationCode, selected_date);
+                updateData(storedStationCode);
             }
         });
     }
