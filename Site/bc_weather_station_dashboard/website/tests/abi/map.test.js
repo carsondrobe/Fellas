@@ -80,6 +80,11 @@ describe('updateDataHTML Functionality', () => {
             <div id="wind-gust"></div>
         `;
     });
+
+    // Mock window.location.pathname
+    delete window.location;
+    window.location = { pathname: '/weather/' };
+
     // Temperature Widget
     test('Correctly updates temperature widget.', () => {
         const mockData = { HOURLY_TEMPERATURE: '25°C' };
@@ -189,12 +194,6 @@ describe('checkLocation() Functionality', () => {
             }),
         };
     });
-    // Commented out because failing
-    // // Create a test for checkLocation when geolocation is available
-    // test('Correctly calls getCurrentPosition if geolocation is available.', () => {    
-    //     checkLocation();
-    //     expect(navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
-    // });
     // Create a test for checkLocation when geolocation is not available
     test('Correctly logs message if geolocation is not available.', () => {
         delete global.navigator.geolocation;
