@@ -263,11 +263,16 @@ function getSelectedDate() {
         var year = new Date().getFullYear();
         var month = (new Date().getMonth() + 1).toString().padStart(2, '0');
         var day = new Date().getDate().toString().padStart(2, '0');
-        datePicker = `${year}-${month}-${day}`;
+        var hour = new Date().getHours().toString().padStart(2, '0');
+        datePicker = `${year}-${month}-${day} ${hour}:00:00`;
+    } else {
+        var hour = new Date().getHours().toString().padStart(2, '0');
+        datePicker = datePicker + " " + hour + ":00:00";
+        // datePicker = datePicker + " 12:00:00";
     }
-    return datePicker + " 12:00:00";
+    console.log(datePicker);
+    return datePicker;
 }
-
 // Function to check if geolocation is available
 function checkLocation() {
     // If geolocation is available
