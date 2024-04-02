@@ -107,11 +107,13 @@ function updateData(stationCode) {
         }
     });
     // If user is on Today's date, fetch latest otherwise fetch the selected date at 12:00:00
-    var dataUrl = undefined;
-    if(document.getElementById('selected_date').innerHTML == "Today") {
-        dataUrl = `/station_data/?latest=true`;
+    var selectedDate = document.getElementById('selected_date').innerHTML;
+    var dataUrl = `/station_data/?`;
+    if(selectedDate == "Today") {
+        dataUrl += `latest=true&station_code=${stationCode}`;
     } else {
-        dataUrl = `/station_data/?datetime=` + document.getElementById('selected_date').innerHTML + " 12:00:00";
+        var dateTime = selectedDate + ' 12:00:00';
+        dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
     }
     // Return date from date picker and fetch all of the data for the clicked station
     return fetch(dataUrl)

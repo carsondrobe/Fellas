@@ -197,13 +197,17 @@ def update_feedback_status(request):
 def station_data(request):
     # Check if the request is for the latest data
     latest = request.GET.get("latest", "false").lower() == "true"
+    station_code = request.GET.get("station_code", None)
 
     # Handle request for the latest data
     if latest:
-        latest_entry = StationData.objects.aggregate(latest_date=Max('DATE_TIME'))['latest_date']
+        queryset = StationData.objects
+        if station_code:
+            queryset = queryset.filter(STATION_CODE=station_code)
+        latest_entry = queryset.aggregate(latest_date=Max('DATE_TIME'))['latest_date']
         if latest_entry is None:
             return JsonResponse({"error": "No data available"}, status=404)
-        data = StationData.objects.filter(DATE_TIME=latest_entry)
+        data = queryset.filter(DATE_TIME=latest_entry)
     
     else:
         # Get the selected date from the query
@@ -211,8 +215,11 @@ def station_data(request):
         if selected_date is None or selected_date == "undefined":
             return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
         
-        # Filter the station data to only retrieve data from the specified date
-        data = StationData.objects.filter(DATE_TIME=selected_date)
+        # Filter the station data to only retrieve data from the specified date and station code
+        queryset = StationData.objects.filter(DATE_TIME=selected_date)
+        if station_code:
+            queryset = queryset.filter(STATION_CODE=station_code)
+        data = queryset
 
     if not data.exists():
         return JsonResponse({"error": "No data found"}, status=404)
