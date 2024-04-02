@@ -106,10 +106,16 @@ function updateData(stationCode) {
             }
         }
     });
-
+    // If user is on Today's date, fetch latest otherwise fetch the selected date at 12:00:00
+    var dataUrl = undefined;
+    if(document.getElementById('selected_date').innerHTML == "Today") {
+        dataUrl = `/station_data/?latest=true`;
+    } else {
+        dataUrl = `/station_data/?datetime=` + document.getElementById('selected_date').innerHTML + " 12:00:00";
+    }
     // Return date from date picker and fetch all of the data for the clicked station
-    return fetch("/station_data/?datetime=" + getSelectedDate())
-        .then(response => {
+    return fetch(dataUrl)
+            .then(response => {
             // If station data is found
             var errorMsg = document.getElementById("error-msg");
             if (response.ok) {
@@ -256,23 +262,6 @@ function updateDataHTML(currentStationData) {
     }
 }
 
-// Function to get the selected date from the date picker
-function getSelectedDate() {
-    var datePicker = document.getElementById('selected_date').innerHTML;
-    if (datePicker === "Today") {
-        var year = new Date().getFullYear();
-        var month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-        var day = new Date().getDate().toString().padStart(2, '0');
-        var hour = new Date().getHours().toString().padStart(2, '0');
-        datePicker = `${year}-${month}-${day} ${hour}:00:00`;
-    } else {
-        var hour = new Date().getHours().toString().padStart(2, '0');
-        datePicker = datePicker + " " + hour + ":00:00";
-        // datePicker = datePicker + " 12:00:00";
-    }
-    console.log(datePicker);
-    return datePicker;
-}
 // Function to check if geolocation is available
 function checkLocation() {
     // If geolocation is available
@@ -407,7 +396,6 @@ module.exports = {
     initMap,
     initMarkerIcon,
     updateDataHTML,
-    getSelectedDate,
     checkLocation,
     computeDistance
 };
