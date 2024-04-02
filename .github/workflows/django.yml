@@ -26,7 +26,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Django tests with coverage
-      run:  coverage run --source='.' Site/bc_weather_station_dashboard/manage.py test website.tests
+      run: |
+        export TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+        export TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+        coverage run --source='.' Site/bc_weather_station_dashboard/manage.py test website.tests
     - name: Check for 80% Django test coverage
       run: |
         coverage report --fail-under=80
