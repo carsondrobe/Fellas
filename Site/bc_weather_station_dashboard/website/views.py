@@ -14,6 +14,7 @@ from twilio.rest import Client
 from django.conf import settings
 from .models import UserProfile
 from .forms import UserProfileForm
+from django.db.models import Max
 
 
 current_page = "weather"
@@ -194,28 +195,41 @@ def update_feedback_status(request):
 
 
 def station_data(request):
-    # Get the selected date from the query
-    selected_date = request.GET.get("datetime", None)
-    # Check if date is undefined
-    if selected_date == "undefined":
-        return JsonResponse(
-            {"error": "No data found for the specified date and time"}, status=404
-        )
-    # Filter the station data to only retrieve data from specified date
-    data = StationData.objects.filter(DATE_TIME=selected_date)
-    # Check if the data is empty
+    # Check if the request is for the latest data
+    latest = request.GET.get("latest", "false").lower() == "true"
+    station_code = request.GET.get("station_code", None)
+
+    # Handle request for the latest data
+    if latest:
+        queryset = StationData.objects
+        if station_code:
+            queryset = queryset.filter(STATION_CODE=station_code)
+        latest_entry = queryset.aggregate(latest_date=Max('DATE_TIME'))['latest_date']
+        if latest_entry is None:
+            return JsonResponse({"error": "No data available"}, status=404)
+        data = queryset.filter(DATE_TIME=latest_entry)
+    
+    else:
+        # Get the selected date from the query
+        selected_date = request.GET.get("datetime", None)
+        if selected_date is None or selected_date == "undefined":
+            return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        
+        # Filter the station data to only retrieve data from the specified date and station code
+        queryset = StationData.objects.filter(DATE_TIME=selected_date)
+        if station_code:
+            queryset = queryset.filter(STATION_CODE=station_code)
+        data = queryset
+
     if not data.exists():
-        # Return an empty JSON response of an error message indicating no data was found
-        return JsonResponse(
-            {"error": "No data found for the specified date and time"}, status=404
-        )
+        return JsonResponse({"error": "No data found"}, status=404)
     # Create dictionary of data
     measures = [
         {
             "created_at_timestamp": measure.created_at_timestamp,
             "STATION_CODE": measure.STATION_CODE,
             "STATION_NAME": measure.STATION_NAME,
-            "DATE_TIME": measure.DATE_TIME,
+            "DATE_TIME": measure.DATE_TIME.strftime("%Y-%m-%d %H:%M:%S"),
             "HOURLY_PRECIPITATION": measure.HOURLY_PRECIPITATION,
             "HOURLY_TEMPERATURE": measure.HOURLY_TEMPERATURE,
             "HOURLY_RELATIVE_HUMIDITY": measure.HOURLY_RELATIVE_HUMIDITY,
