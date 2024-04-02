@@ -187,7 +187,7 @@ function updateDataHTML(currentStationData) {
         if (currentStationData.HOURLY_WIND_GUST !== undefined) {
             document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
         }
-    // Check if the current page is fire.html
+        // Check if the current page is fire.html
     } else if (path.endsWith('/fire/')) {
         // Update the HTML elements with the station's fine fuel moisture code data
         updateFFMC(currentStationData.FINE_FUEL_MOISTURE_CODE);
@@ -209,6 +209,50 @@ function updateDataHTML(currentStationData) {
 
         // Update the HTML elements with the station's danger rating data
         updateDangerRating(currentStationData.DANGER_RATING);
+    }
+    if (currentStationData.HOURLY_TEMPERATURE) {
+        document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
+    }
+    // Update the HTML elements with the station's relative humidity data
+    if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
+        // Get the relative humidity
+        var relativeHumidity = currentStationData.HOURLY_RELATIVE_HUMIDITY;
+        // Get the progress bar element
+        const progressBarElement = document.querySelector('#humidity-progress-bar');
+        // Create a new SemiCircleProgressBar with the progress bar element
+        const progressBar = new SemiCircleProgressBar(progressBarElement);
+        // Set the value of the progress bar to the relative humidity
+        progressBar.setValue(relativeHumidity);
+    }
+    // Update the HTML elements with the station's precipitation data
+    if (currentStationData.HOURLY_PRECIPITATION) {
+        document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
+    }
+    // Update the HTML elements with the station's snow depth data
+    if (currentStationData.SNOW_DEPTH) {
+        document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
+    }
+    // Update the HTML elements with the station's snow quality data
+    if (currentStationData.SNOW_DEPTH_QUALITY) {
+        document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
+    }
+    // Update the HTML elements with the station's wind data
+    if (currentStationData.HOURLY_WIND_SPEED && currentStationData.HOURLY_WIND_GUST) {
+        document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
+        var windGustText = currentStationData.HOURLY_WIND_GUST + " km/h";
+        document.getElementById('wind-gust').innerHTML = windGustText;
+
+        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);
+    }
+    // Update the HTML elements with the station's wind direction data
+    if (currentStationData.HOURLY_WIND_DIRECTION) {
+        // Get the wind direction in degrees
+        var windDirectionDegrees = currentStationData.HOURLY_WIND_DIRECTION;
+        // Update the text display append to the wind direction widget
+        document.getElementById('wind-direction').innerHTML = "<h5>Wind Direction " + windDirectionDegrees + "&deg;</h5>";
+        // Create a new WindArrow with the updated wind direction
+        var windArrow = new WindArrow(windDirectionDegrees);
+        windArrow.draw();
     }
 }
 
@@ -334,7 +378,7 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Add event listener for search bar and button
-    document.getElementById("search-btn").addEventListener("click", function() {
+    document.getElementById("search-btn").addEventListener("click", function () {
         // Set variable for input
         let input = document.getElementById('searchInput').value;
         // Go through all of the weather stations
@@ -347,7 +391,7 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Add event listener for find me button
-    document.getElementById("find-me-btn").addEventListener("click", function() {
+    document.getElementById("find-me-btn").addEventListener("click", function () {
         // Call check location function to display closest station
         checkLocation();
     });
