@@ -6,7 +6,9 @@ var markerIcon;
 var closestStation;
 
 // Initialize map
-map = initMap(map);
+if(!map) {
+    map = initMap(map);
+}
 
 // Create custom marker icon
 markerIcon = initMarkerIcon(markerIcon);
