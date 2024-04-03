@@ -3,6 +3,7 @@ var currentStationCode;
 var weatherStations;
 var map;
 var markerIcon;
+var closestStation;
 
 // Initialize map
 map = initMap(map);
@@ -125,7 +126,7 @@ function updateData(stationCode) {
         var dateTime = selectedDate + ' 12:00:00';
         dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
     }
-    console.log(dataUrl);
+    // console.log(dataUrl);
     // Return date from date picker and fetch all of the data for the clicked station
     return fetch(dataUrl)
             .then(response => {
@@ -213,8 +214,8 @@ function updateDataHTML(currentStationData) {
             document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
             var windGustText = currentStationData.HOURLY_WIND_GUST + " km/h";
             document.getElementById('wind-gust').innerHTML = windGustText;
-    
-            updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);        }
+            updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);        
+        }
         // Check if the current page is fire.html
     } else if (path.endsWith('/fire/')) {
         // Update the HTML elements with the station's fine fuel moisture code data
@@ -258,10 +259,9 @@ function getClosestStation(position) {
     // Get user's longitude and latitude and set max
     var userLongitude = position.coords.longitude;
     var userLatitude = position.coords.latitude;
-    // Set variables for max, datalist, and closest station
+    // Set variables for max, datalist
     var max = Number.MAX_VALUE;
     let datalist = document.getElementById('search-suggestions');
-    var closestStation;
     // Go through all of the weather stations
     weatherStations.forEach(station => {
         // Get stations longitude and latitude
@@ -288,7 +288,6 @@ function getClosestStation(position) {
 // Function to create a marker with an option to display it (if display is 1, marker pop up is enabled)
 function createMarker(station, display) {
     var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
-    var marker = L.marker([station.latitude, station.longitude], { icon: markerIcon })
         .addTo(map)
         .bindPopup(
             `<b>Station ID: ${station.id}</b><br>` +
@@ -307,7 +306,6 @@ function createMarker(station, display) {
         updateData(currentStationCode);
     });
     // If display is 1, display
-
     if (display === 1) {
         // Display current station's data and open its popup
         marker.fire('click');
