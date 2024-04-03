@@ -203,8 +203,11 @@ function updateDataHTML(currentStationData) {
         }
         // Update the HTML elements with the station's wind gust data
         if (currentStationData.HOURLY_WIND_GUST !== undefined) {
-            document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
-        }
+            document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
+            var windGustText = currentStationData.HOURLY_WIND_GUST + " km/h";
+            document.getElementById('wind-gust').innerHTML = windGustText;
+    
+            updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);        }
         // Check if the current page is fire.html
     } else if (path.endsWith('/fire/')) {
         // Update the HTML elements with the station's fine fuel moisture code data
