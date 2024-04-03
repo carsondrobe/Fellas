@@ -36,11 +36,13 @@
     <div class="container-fluid">
         <div class="row pt-3">
             <!-- Station Map Column -->
-            <div class="col-md-4 col-sm-12 text-center border-right">
+            <div class="col-md-4 col-sm-12 text-center border-right border-dark">
                 <h2 id="station-name-code"></h2>
                 <hr>
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 50em; width: 100%;"></div>
+                <div id="map" style="height: 50em; width: 100%;">
+                    <button id="find-me-btn">Find me!</button>
+                </div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
                 <!-- Search bar -->
                 <div class="container mt-4">
@@ -58,7 +60,9 @@
             </div>
             <!-- Fire Information Column -->
             <div class="col-md-8">
-                <h2>Fire Information</h2>
+                <h2 class="foreground text-center">
+                    Fire Information
+                </h2>
                 <hr>
                 <div class="container">
                     <div class="row">
