@@ -106,15 +106,19 @@ function updateData(stationCode) {
             }
         }
     });
-    // If user is on Today's date, fetch latest otherwise fetch the selected date at 12:00:00
+    // If user is on Today's date on weather.html, fetch latest otherwise fetch the selected date at 12:00:00
     var selectedDate = document.getElementById('selected_date').innerHTML;
     var dataUrl = `/station_data/?`;
-    if(selectedDate == "Today") {
+    if(window.location.pathname.endsWith("fire.html")) {
+        var dateTime = selectedDate + ' 12:00:00';
+        dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
+    } else if(selectedDate == "Today") {
         dataUrl += `latest=true&station_code=${stationCode}`;
     } else {
         var dateTime = selectedDate + ' 12:00:00';
         dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
     }
+    console.log(dataUrl);
     // Return date from date picker and fetch all of the data for the clicked station
     return fetch(dataUrl)
             .then(response => {
