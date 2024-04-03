@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="../static/home.css">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/home.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/search_bar.css' %}">
-
+    <script src="{% static 'home.js' %}"></script>
 
 
     <title>Dashboard</title>
@@ -63,6 +63,10 @@
                 <h2 class="foreground text-center">
                     Fire Information
                 </h2>
+                <!-- Last updated time -->
+                <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
+                onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
+                style="cursor: default;"></span>
                 <hr>
                 <div class="container">
                     <div class="row">
