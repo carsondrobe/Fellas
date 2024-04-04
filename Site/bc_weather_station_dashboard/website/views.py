@@ -28,12 +28,13 @@ def home(request, **kwargs):
 
     context = {"user_type": user_type}
     if current_page == "weather":
-        return weather(request, **kwargs, **context)
+        # return weather(request, **kwargs, **context)
+        return redirect("weather")
     elif current_page == "fire":
-        return fire(request, **kwargs, **context)
+        # return fire(request, **kwargs, **context)
+        return redirect("fire")
     else:
         raise ValueError("Invalid page", current_page)
-    # return redirect("weather")
 
 def weather(request, **kwargs):
     global current_page
