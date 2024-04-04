@@ -34,13 +34,24 @@
     {% include 'navbar.html' %}
 
     <div class="container-fluid">
-        <div class="row pt-3">
+        <div class="row">
             <!-- Station Map Column -->
             <div class="col-md-4 col-sm-12 text-center border-right">
-                <h2 id="station-name-code"></h2>
-                <hr>
+                <div class="foreground d-flex justify-content-between align-items-center mb-3" style="height: 60px;">
+                    <div class="align-self-center pt-2">
+                        <h4 id="station-name-code" class="foreground"></h4>
+                    </div>
+                    {% if request.user.is_authenticated %}
+
+                    <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
+                        id="favourite-button">Favourite</button>
+
+                    {% endif %}
+                </div>
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 50em; width: 100%;"></div>
+                <div id="map" style="height: 60em; width: 100%;">
+                    <button id="find-me-btn">Find me!</button>
+                </div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
                 <!-- Search bar -->
                 <div class="container mt-4">
@@ -58,8 +69,14 @@
             </div>
             <!-- Fire Information Column -->
             <div class="col-md-8">
-                <h2>Fire Information</h2>
-                <hr>
+                <div class="foreground d-flex justify-content-between align-items-center mb-1" style="height: 60px;">
+                    <div class="align-self-center pl-3 pt-1">
+                        <h3>Fire Information</h3>
+                    </div>
+                    <div>
+                        <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
+                    </div>
+                </div>
                 <div class="container">
                     <div class="row">
                         <!-- Column 1 -->
@@ -263,6 +280,63 @@
         {% if error %}
         alert("{{error}}");
         {% endif %}
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.favourite-button').click(function () {
+                // hide button
+                $(this).hide();
+                var stationCode = getStationCode();
+
+                $.ajax({
+                    url: "{% url 'add_to_favourites' %}",
+                    type: "POST",
+                    data: { 'station_code': stationCode },
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    success: function (data) {
+                        console.log("Successfully added to favourites");
+                    }
+                });
+            });
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
+        }
+    </script>
+    <script>
+        // Set tomorrow's date when the button is clicked adn call prediction function
+        document.getElementById('tomorrow-forecast').addEventListener('click', function() {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate());
+    
+            // Format the date in the format expected by the datepicker
+            var formattedDate = tomorrow.toISOString().split('T')[0];
+    
+            // Set the date in the datepicker
+            const date_input = document.querySelector('.datepicker-input');
+            date_input.value = formattedDate;
+    
+            // Trigger the change event to update the displayed date
+            var event = new Event('change');
+            date_input.dispatchEvent(event);
+
+            // Call the prediction function
+        });
     </script>
 
     <!-- JS for widgets -->

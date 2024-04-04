@@ -39,6 +39,10 @@ function initMarkerIcon(markerIcon) {
     return markerIcon;
 }
 
+window.onload = function() {
+    fetchWeatherStationInfo();
+};
+
 // Create function to fetch weather station information
 function fetchWeatherStationInfo() {
     return fetch('/weather_stations_information/')
@@ -53,8 +57,31 @@ function fetchWeatherStationInfo() {
             }
         })
         .then(data => {
-            // Call function to get user location
-            checkLocation();
+            // Check if there is a station in local storage
+            let storedStation = localStorage.getItem('station');
+            if (storedStation) {
+                // If there is, use it
+                let station = JSON.parse(storedStation);
+                // Find the station in the data
+                let selectedStation = data.find(s => s.id === station.id);
+                if (selectedStation) {
+                    createMarker(selectedStation, 1);
+                }
+            } else {
+                // If there isn't, get user location
+                checkLocation();
+            }
+            // Retrieve date from localStorage
+            var storedDate = localStorage.getItem('selectedDate');
+
+            // If date is stored, update the date picker
+            if (storedDate) {
+                // Set the selected date in the date picker
+                const date = new Date(storedDate);
+                const dateString = date.toISOString().split('T')[0]; // Convert the date to yyyy-mm-dd format
+                document.getElementById('datepicker').value = dateString;
+                document.getElementById('selected_date').innerHTML = storedDate;
+            }
             // Create marker for each weather station
             data.forEach(station => {
                 createMarker(station, 0);
@@ -108,7 +135,11 @@ function updateData(stationCode) {
     });
 
     // Return date from date picker and fetch all of the data for the clicked station
-    return fetch("/station_data/?datetime=" + getSelectedDate())
+    var selectedDate = getSelectedDate();
+    if (!selectedDate.endsWith("12:00:00")) {
+        selectedDate += " 12:00:00";
+    }
+    return fetch("/station_data/?datetime=" + selectedDate)
         .then(response => {
             // If station data is found
             var errorMsg = document.getElementById("error-msg");
@@ -128,10 +159,16 @@ function updateData(stationCode) {
                 // Set current station data to station with stationCode
                 var currentStationData = stationData.find(measure => measure.STATION_CODE === stationCode);
                 updateDataHTML(currentStationData);
+                console.log("updatehtml" + currentStationData);
             }
         })
         .catch(error => {
             console.error(error);
+        })
+        .finally(() => {
+            // Store station code and selected date in localStorage
+            localStorage.setItem('currentStationCode', stationCode);
+            localStorage.setItem('selectedDate', getSelectedDate());
         });
 }
 
@@ -187,7 +224,7 @@ function updateDataHTML(currentStationData) {
         if (currentStationData.HOURLY_WIND_GUST !== undefined) {
             document.getElementById('wind-gust').innerHTML = currentStationData.HOURLY_WIND_GUST;
         }
-    // Check if the current page is fire.html
+        // Check if the current page is fire.html
     } else if (path.endsWith('/fire/')) {
         // Update the HTML elements with the station's fine fuel moisture code data
         updateFFMC(currentStationData.FINE_FUEL_MOISTURE_CODE);
@@ -210,6 +247,50 @@ function updateDataHTML(currentStationData) {
         // Update the HTML elements with the station's danger rating data
         updateDangerRating(currentStationData.DANGER_RATING);
     }
+    if (currentStationData.HOURLY_TEMPERATURE) {
+        document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
+    }
+    // Update the HTML elements with the station's relative humidity data
+    if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
+        // Get the relative humidity
+        var relativeHumidity = currentStationData.HOURLY_RELATIVE_HUMIDITY;
+        // Get the progress bar element
+        const progressBarElement = document.querySelector('#humidity-progress-bar');
+        // Create a new SemiCircleProgressBar with the progress bar element
+        const progressBar = new SemiCircleProgressBar(progressBarElement);
+        // Set the value of the progress bar to the relative humidity
+        progressBar.setValue(relativeHumidity);
+    }
+    // Update the HTML elements with the station's precipitation data
+    if (currentStationData.HOURLY_PRECIPITATION) {
+        document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
+    }
+    // Update the HTML elements with the station's snow depth data
+    if (currentStationData.SNOW_DEPTH) {
+        document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
+    }
+    // Update the HTML elements with the station's snow quality data
+    if (currentStationData.SNOW_DEPTH_QUALITY) {
+        document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
+    }
+    // Update the HTML elements with the station's wind data
+    if (currentStationData.HOURLY_WIND_SPEED && currentStationData.HOURLY_WIND_GUST) {
+        document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
+        var windGustText = currentStationData.HOURLY_WIND_GUST + " km/h";
+        document.getElementById('wind-gust').innerHTML = windGustText;
+
+        updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);
+    }
+    // Update the HTML elements with the station's wind direction data
+    if (currentStationData.HOURLY_WIND_DIRECTION) {
+        // Get the wind direction in degrees
+        var windDirectionDegrees = currentStationData.HOURLY_WIND_DIRECTION;
+        // Update the text display append to the wind direction widget
+        document.getElementById('wind-direction').innerHTML = "<h5>Wind Direction " + windDirectionDegrees + "&deg;</h5>";
+        // Create a new WindArrow with the updated wind direction
+        var windArrow = new WindArrow(windDirectionDegrees);
+        windArrow.draw();
+    }
 }
 
 // Function to get the selected date from the date picker
@@ -221,7 +302,7 @@ function getSelectedDate() {
         var day = new Date().getDate().toString().padStart(2, '0');
         datePicker = `${year}-${month}-${day}`;
     }
-    return datePicker + " 12:00:00";
+    return datePicker;
 }
 
 // Function to check if geolocation is available
@@ -289,6 +370,9 @@ function createMarker(station, display) {
         currentStationCode = station.code;
         document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
         updateData(currentStationCode);
+
+        // Store selected station in local storage
+        localStorage.setItem('station', JSON.stringify(station));
     });
     // If display is 1, display
 
@@ -315,14 +399,27 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
     document.getElementById('date_selector').addEventListener('change', function () {
         // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
-        document.getElementById('temperature').innerHTML = "N/A";
-        // document.getElementById('relative-humidity').innerHTML = "N/A";
-        document.getElementById('precipitation').innerHTML = "N/A";
-        document.getElementById('snow-depth').innerHTML = "N/A";
-        document.getElementById('snow-quality').innerHTML = "N/A";
-        document.getElementById('wind-speed').innerHTML = "N/A";
-        document.getElementById('wind-direction').innerHTML = "N/A";
-        document.getElementById('wind-gust').innerHTML = "N/A";
+        if (document.getElementById('temperature')) {
+            document.getElementById('temperature').innerHTML = "N/A";
+        }
+        if (document.getElementById('precipitation')) {
+            document.getElementById('precipitation').innerHTML = "N/A";
+        }
+        if (document.getElementById('snow-depth')) {
+            document.getElementById('snow-depth').innerHTML = "N/A";
+        }
+        if (document.getElementById('snow-quality')) {
+            document.getElementById('snow-quality').innerHTML = "N/A";
+        }
+        if (document.getElementById('wind-speed')) {
+            document.getElementById('wind-speed').innerHTML = "N/A";
+        }
+        if (document.getElementById('wind-direction')) {
+            document.getElementById('wind-direction').innerHTML = "N/A";
+        }
+        if (document.getElementById('wind-gust')) {
+            document.getElementById('wind-gust').innerHTML = "N/A";
+        }
         // Update all data since date time is changing
         updateData(currentStationCode);
     });
@@ -334,7 +431,7 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Add event listener for search bar and button
-    document.getElementById("search-btn").addEventListener("click", function() {
+    document.getElementById("search-btn").addEventListener("click", function () {
         // Set variable for input
         let input = document.getElementById('searchInput').value;
         // Go through all of the weather stations
@@ -347,7 +444,7 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Add event listener for find me button
-    document.getElementById("find-me-btn").addEventListener("click", function() {
+    document.getElementById("find-me-btn").addEventListener("click", function () {
         // Call check location function to display closest station
         checkLocation();
     });
