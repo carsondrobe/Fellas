@@ -162,14 +162,14 @@ describe('getSelectedDate() Functionality', () => {
         document.getElementById('selected_date').innerHTML = "Today";
         const fixedDate = new Date('2024-03-19T12:00:00Z');
         jest.useFakeTimers().setSystemTime(fixedDate);
-        expect(getSelectedDate()).toBe('2024-03-19 12:00:00');
+        expect(getSelectedDate()).toBe('2024-03-19');
         jest.useRealTimers();
     });
     // Create a test for getting the datetime when date picker is set to a specific date
     test('Correctly returns the current date and time when date picker is set to a specific date.', () => {
         const specificDate = '2024-03-19';
         document.getElementById('selected_date').innerHTML = specificDate;
-        expect(getSelectedDate()).toBe(specificDate + ' 12:00:00');
+        expect(getSelectedDate()).toBe(specificDate);
     });
 });
 
