@@ -26,10 +26,6 @@ function validateRegisterForm() {
     const email = document.getElementById('registerEmail');
     const password = document.getElementById('registerPassword');
     const confirmPassword = document.getElementById('confirmPassword');
-    const phoneNumber = iti.getNumber();
-
-    // E.164 format regex
-    const e164Format = /^\+[1-9]\d{1,14}$/;
 
     // Initializing tooltips
     $(username).tooltip();
@@ -109,6 +105,17 @@ $(document).ready(function() {
     // Adding event listener to dynamically filled phone number
     phone.on('change', function() {
         if (phone.val() && !e164Format.test(phone.val())) {
+            phone.addClass('validation-error');
+            phone.tooltip('show');
+        } else {
+            phone.removeClass('validation-error');
+            phone.tooltip('hide');
+        }
+    });
+    // Adding event listener to form submit event
+    $('#registerForm').on('submit', function(e) {
+        if (!phone.val() || !e164Format.test(phone.val())) {
+            e.preventDefault();
             phone.addClass('validation-error');
             phone.tooltip('show');
         } else {
