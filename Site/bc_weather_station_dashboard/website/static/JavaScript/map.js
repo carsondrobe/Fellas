@@ -174,9 +174,6 @@ function updateData(stationCode) {
 
 // Update HTML elements on right side
 function updateDataHTML(currentStationData) {
-
-    console.log(currentStationData);
-    console.log(window.location.pathname);
     // Get the current page's path
     var path = window.location.pathname;
 
@@ -358,14 +355,27 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
     document.getElementById('date_selector').addEventListener('change', function () {
         // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
-        document.getElementById('temperature').innerHTML = "N/A";
-        // document.getElementById('relative-humidity').innerHTML = "N/A";
-        document.getElementById('precipitation').innerHTML = "N/A";
-        document.getElementById('snow-depth').innerHTML = "N/A";
-        document.getElementById('snow-quality').innerHTML = "N/A";
-        document.getElementById('wind-speed').innerHTML = "N/A";
-        document.getElementById('wind-direction').innerHTML = "N/A";
-        document.getElementById('wind-gust').innerHTML = "N/A";
+        if (document.getElementById('temperature')) {
+            document.getElementById('temperature').innerHTML = "N/A";
+        }
+        if (document.getElementById('precipitation')) {
+            document.getElementById('precipitation').innerHTML = "N/A";
+        }
+        if (document.getElementById('snow-depth')) {
+            document.getElementById('snow-depth').innerHTML = "N/A";
+        }
+        if (document.getElementById('snow-quality')) {
+            document.getElementById('snow-quality').innerHTML = "N/A";
+        }
+        if (document.getElementById('wind-speed')) {
+            document.getElementById('wind-speed').innerHTML = "N/A";
+        }
+        if (document.getElementById('wind-direction')) {
+            document.getElementById('wind-direction').innerHTML = "N/A";
+        }
+        if (document.getElementById('wind-gust')) {
+            document.getElementById('wind-gust').innerHTML = "N/A";
+        }
         // Update all data since date time is changing
         updateData(currentStationCode);
     });
