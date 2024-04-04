@@ -87,24 +87,24 @@ class Command(BaseCommand):
         if extreme_conditions:
             # Fetch the station from the row data
             station = WeatherStation.objects.get(STATION_NAME=row_data['STATION_NAME'])
-
             # Fetch the user profiles where the station is in the user's favourite stations list
             user_profiles = UserProfile.objects.filter(favorite_stations__id=station.id)
-
+            
             for user_profile in user_profiles:
                 phone_number = user_profile.phone_number
-                message = f"Extreme weather conditions detected at {station.STATION_NAME}: " + " ".join(extreme_conditions) + " Please stay safe."
-                send_sms_alert(phone_number, message)
+                if phone_number:
+                    message = f"Extreme weather conditions detected at {station.STATION_NAME}: " + " ".join(extreme_conditions) + " Please stay safe."
+                    send_sms_alert(phone_number, message)
 
-                # Create a new Alert object and save it to the database
-                alert = Alert(
-                    alert_name='Extreme Weather Conditions',
-                    message=message,
-                    alert_type='Weather',
-                    station=station,
-                    alert_active=True
-                )
-                alert.save()
+                    # Save Alert to the database
+                    alert = Alert(
+                        alert_name='Extreme Weather Conditions',
+                        message=message,
+                        alert_type='Weather',
+                        station=station,
+                        alert_active=True
+                    )
+                    alert.save()
 
     def create_date_range(self, start_date, end_date):
         """Creates a date range."""
