@@ -13,7 +13,7 @@ global.L = {
 // Create variables for fetch mocking and functions, and jsdom
 const fetchMock = require('jest-fetch-mock');
 fetchMock.enableMocks();
-const { initMap, initMarkerIcon, computeDistance, updateDataHTML, checkLocation } = require('../../static/JavaScript/map');
+const { initMap, initMarkerIcon, computeDistance, updateDataHTML, getSelectedDate, checkLocation } = require('../../static/JavaScript/map');
 require('@testing-library/jest-dom');
 
 // Define a test suite for the initialization of leaflet map and markers
@@ -148,6 +148,28 @@ describe('computeDistance() Functionality', () => {
     test('Correctly computes distance between two of the same points.', () => {
         const distance = computeDistance(0, 0, 0, 0);
         expect(distance).toBeCloseTo(0, 0);
+    });
+});
+
+// Define a test suite for the getSelectedDate() function
+describe('getSelectedDate() Functionality', () => {
+    // Create dom element before each test
+    beforeAll(() => {
+        document.body.innerHTML = `<div id="selected_date"></div>`;
+    });
+    // Create a test for getting the datetime when date picker is set to Today
+    test('Correctly returns the current date and time when date picker is set to "Today".', () => {
+        document.getElementById('selected_date').innerHTML = "Today";
+        const fixedDate = new Date('2024-03-19T12:00:00Z');
+        jest.useFakeTimers().setSystemTime(fixedDate);
+        expect(getSelectedDate()).toBe('2024-03-19');
+        jest.useRealTimers();
+    });
+    // Create a test for getting the datetime when date picker is set to a specific date
+    test('Correctly returns the current date and time when date picker is set to a specific date.', () => {
+        const specificDate = '2024-03-19';
+        document.getElementById('selected_date').innerHTML = specificDate;
+        expect(getSelectedDate()).toBe(specificDate);
     });
 });
 

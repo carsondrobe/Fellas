@@ -42,6 +42,10 @@ function initMarkerIcon(markerIcon) {
     return markerIcon;
 }
 
+window.onload = function() {
+    fetchWeatherStationInfo();
+};
+
 // Create function to fetch weather station information
 function fetchWeatherStationInfo() {
     return fetch('/weather_stations_information/')
@@ -56,8 +60,34 @@ function fetchWeatherStationInfo() {
             }
         })
         .then(data => {
-            // Call function to get user location
-            checkLocation();
+            // Check if there is a station in local storage
+            let storedStation = localStorage.getItem('station');
+            // Retrieve date from localStorage
+            var storedDate = localStorage.getItem('selectedDate');
+            if (storedStation && storedDate) {
+                // console.log(storedDate);
+                // console.log(storedStation);
+                // Set the selected date in the date picker
+                const date = new Date(storedDate);
+                const dateString = date.toISOString().split('T')[0]; // Convert the date to yyyy-mm-dd format
+                if(document.getElementById('selected_date').innerHTML == "Today" && dateString == getSelectedDate()) {
+                    checkLocation();
+                } else {
+                    document.getElementById('datepicker').value = dateString;
+                    document.getElementById('selected_date').innerHTML = storedDate;
+                    // If there is, use it
+                    let station = JSON.parse(storedStation);
+                    // Find the station in the data
+                    let selectedStation = data.find(s => s.id === station.id);
+                    if (selectedStation) {
+                        // closestStation = storedStation;
+                        createMarker(selectedStation, 1);
+                    }
+                }
+            } else {
+                // If there isn't, get user location
+                checkLocation();
+            }
             // Create marker for each weather station
             data.forEach(station => {
                 createMarker(station, 0);
@@ -109,24 +139,19 @@ function updateData(stationCode) {
             }
         }
     });
-    // If user is on Today's date on weather.html, fetch latest otherwise fetch the selected date at 12:00:00
-    var selectedDate = document.getElementById('selected_date').innerHTML;
+
+    // Return date from date picker and fetch all of the data for the clicked station
+    var selectedDate = getSelectedDate() + " 12:00:00";
     document.getElementById('last-updated-time').textContent = '';
     var dataUrl = `/station_data/?`;
-    if(selectedDate == "Today") {
+    if(document.getElementById('selected_date').innerHTML == "Today") {
         if(window.location.pathname.endsWith("fire/")) {
-            var today = new Date();
-            var year = today.getFullYear();
-            var month = String(today.getMonth() + 1).padStart(2, '0');
-            var day = String(today.getDate()).padStart(2, '0');
-            var dateTime = `${year}-${month}-${day} 12:00:00`;
-            dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
+            dataUrl += `datetime=${getSelectedDate()} 12:00:00&station_code=${stationCode}`;
         } else {
             dataUrl += `latest=true&station_code=${stationCode}`;
         }
     } else {
-        var dateTime = selectedDate + ' 12:00:00';
-        dataUrl += `datetime=${dateTime}&station_code=${stationCode}`;
+        dataUrl += `datetime=${getSelectedDate()} 12:00:00&station_code=${stationCode}`;
     }
     // console.log(dataUrl);
     // Return date from date picker and fetch all of the data for the clicked station
@@ -138,7 +163,7 @@ function updateData(stationCode) {
                 errorMsg.innerHTML = "";
                 errorMsg.style.display = "none";
                 // Update last updated at time
-                if(selectedDate == "Today") {
+                if(document.getElementById('selected_date').innerHTML == "Today") {
                     document.getElementById('last-updated-time').textContent = 'Just Now';
                 } else {
                     document.getElementById('last-updated-time').textContent = '12:00 PM';
@@ -160,6 +185,11 @@ function updateData(stationCode) {
         })
         .catch(error => {
             console.error(error);
+        })
+        .finally(() => {
+            // Store station code and selected date in localStorage
+            localStorage.setItem('currentStationCode', stationCode);
+            localStorage.setItem('selectedDate', getSelectedDate());
         });
 }
 
@@ -243,6 +273,18 @@ function updateDataHTML(currentStationData) {
     }
 }
 
+// Function to get the selected date from the date picker
+function getSelectedDate() {
+    var datePicker = document.getElementById('selected_date').innerHTML;
+    if (datePicker === "Today") {
+        var year = new Date().getFullYear();
+        var month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+        var day = new Date().getDate().toString().padStart(2, '0');
+        datePicker = `${year}-${month}-${day}`;
+    }
+    return datePicker;
+}
+
 // Function to check if geolocation is available
 function checkLocation() {
     // If geolocation is available
@@ -306,6 +348,8 @@ function createMarker(station, display) {
         currentStationCode = station.code;
         document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
         updateData(currentStationCode);
+         // Store selected station in local storage
+         localStorage.setItem('station', JSON.stringify(station));
     });
     // If display is 1, display
     if (display === 1) {
@@ -365,6 +409,7 @@ module.exports = {
     initMap,
     initMarkerIcon,
     updateDataHTML,
+    getSelectedDate,
     checkLocation,
     computeDistance
 };
