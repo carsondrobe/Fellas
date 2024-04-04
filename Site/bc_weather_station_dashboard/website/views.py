@@ -28,13 +28,12 @@ def home(request, **kwargs):
 
     context = {"user_type": user_type}
     if current_page == "weather":
-        # return weather(request, **kwargs, **context)
-        return redirect("weather")
+        return render(request, "weather.html", kwargs)
     elif current_page == "fire":
-        # return fire(request, **kwargs, **context)
-        return redirect("fire")
+        return render(request, "weather.html", kwargs)
     else:
         raise ValueError("Invalid page", current_page)
+    # return redirect("weather")
 
 def weather(request, **kwargs):
     global current_page
@@ -60,7 +59,7 @@ def fire(request, **kwargs):
     global current_page
     current_page = "fire"
     kwargs["template_name"] = "fire"
-    return render(request, "fire.html", kwargs)
+    return render(request, "weather.html", kwargs)
 
 
 def login_user(request):
