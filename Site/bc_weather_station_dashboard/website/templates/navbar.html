@@ -7,16 +7,22 @@
     <div id="date_selector" class="ml-auto">
         <strong><span id="selected_date" class="text-white p-2">Today</span></strong>
         <img class="datepicker-toggle-button" src="../static/images/calendar_icon.svg" alt="calendar icon" width="30">
-        <input type="date" class="datepicker-input">
+        <input type="date" class="datepicker-input" id="datepicker">
     </div>
-    <script> // should be moved to a separate file when we make one
-        const date_input = document.querySelector('.datepicker-input');
+    <script>
+        const date_input = document.querySelector('#datepicker');
         const selected_date = document.querySelector('#selected_date');
         date_input.addEventListener('change', function (e) {
             const date = new Date(e.target.value);
             const adjusted_date = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-            if (adjusted_date.toDateString() === new Date().toDateString()) {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+    
+            if (adjusted_date.toDateString() === today.toDateString()) {
                 selected_date.textContent = "Today";
+            } else if (adjusted_date.toDateString() === tomorrow.toDateString()) {
+                selected_date.textContent = "Tomorrow";
             } else {
                 selected_date.textContent = adjusted_date.toLocaleDateString('en-CA');
             }
@@ -87,3 +93,4 @@
         </div>
     </div>
 </div>
+<script src="{% static 'js/map.js' %}"></script>

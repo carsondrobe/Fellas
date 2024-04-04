@@ -4,50 +4,53 @@ on:
   schedule:
     - cron: '*/18 * * * *'
   workflow_dispatch:
-    
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        strategy:
-            max-parallel: 4
-            matrix:
-                python-version: [3.10.9]
-        
-        steps:
-        - uses: actions/checkout@v3
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v3
-          with:
-              python-version: ${{ matrix.python-version }}
-        - name: Install dependencies
-          run: |
-              python -m pip install --upgrade pip
-              pip install -r requirements.txt
-        - name: Check URL accessibility
-          run: |
-            date_str=$(date +"%Y-%m-%d")
-            year=$(date +"%Y")
-            url="https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/$year/$date_str.csv"
-            status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null "$url")
-            echo "URL: $url"
-            echo "Status code: $status_code"
-        - name: Check database connectivity
-          run: |
-            echo -e "from django.db import connections\ntry:\n\tconnections['default'].cursor()\n\tprint('Success!')\nexcept Exception as e:\n\tprint('Failed to open cursor:', str(e))" | python manage.py shell
-          working-directory: Site/bc_weather_station_dashboard
-        - name: Set permissions
-          run: chmod -R 777 .
-        - name: Stash changes to all other files
-          run: git stash --keep-index
-        - name: Run Django management command
-          run: python manage.py csv_scrape
-          working-directory: Site/bc_weather_station_dashboard
-        - name: Stage changes to db.sqlite3
-          run: git add Site/bc_weather_station_dashboard/db.sqlite3
-        - name: Commit and push changes
-          run: |
-              git config --local user.email "action@github.com"
-              git config --local user.name "GitHub Action"
-              git commit -m "Update database" || exit 0
-              git push --force https://${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.10.9]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Check URL accessibility
+      run: |
+        date_str=$(date +"%Y-%m-%d")
+        year=$(date +"%Y")
+        url="https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/$year/$date_str.csv"
+        status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null "$url")
+        echo "URL: $url"
+        echo "Status code: $status_code"
+    - name: Check database connectivity
+      run: |
+        echo -e "from django.db import connections\ntry:\n\tconnections['default'].cursor()\n\tprint('Success!')\nexcept Exception as e:\n\tprint('Failed to open cursor:', str(e))" | python manage.py shell
+      working-directory: Site/bc_weather_station_dashboard
+    - name: Set permissions
+      run: chmod -R 777 .
+    - name: Stash changes to all other files
+      run: git stash --keep-index
+    - name: Run Django management command
+      env:
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }} # Configure in repo settings
+        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }} # Configure in repo settings
+        TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }} # Configure in repo settings
+      run: python manage.py csv_scrape
+      working-directory: Site/bc_weather_station_dashboard
+    - name: Stage changes to db.sqlite3
+      run: git add Site/bc_weather_station_dashboard/db.sqlite3
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Update database" || exit 0
+        git push --force https://${{ secrets.GITHUB_TOKEN }}@github.com/carsondrobe/Fellas.git

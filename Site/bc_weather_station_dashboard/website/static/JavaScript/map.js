@@ -42,6 +42,10 @@ function initMarkerIcon(markerIcon) {
     return markerIcon;
 }
 
+window.onload = function() {
+    fetchWeatherStationInfo();
+};
+
 // Create function to fetch weather station information
 function fetchWeatherStationInfo() {
     return fetch('/weather_stations_information/')
@@ -56,8 +60,31 @@ function fetchWeatherStationInfo() {
             }
         })
         .then(data => {
-            // Call function to get user location
-            checkLocation();
+            // Check if there is a station in local storage
+            let storedStation = localStorage.getItem('station');
+            if (storedStation) {
+                // If there is, use it
+                let station = JSON.parse(storedStation);
+                // Find the station in the data
+                let selectedStation = data.find(s => s.id === station.id);
+                if (selectedStation) {
+                    createMarker(selectedStation, 1);
+                }
+            } else {
+                // If there isn't, get user location
+                checkLocation();
+            }
+            // Retrieve date from localStorage
+            var storedDate = localStorage.getItem('selectedDate');
+
+            // If date is stored, update the date picker
+            if (storedDate) {
+                // Set the selected date in the date picker
+                const date = new Date(storedDate);
+                const dateString = date.toISOString().split('T')[0]; // Convert the date to yyyy-mm-dd format
+                document.getElementById('datepicker').value = dateString;
+                document.getElementById('selected_date').innerHTML = storedDate;
+            }
             // Create marker for each weather station
             data.forEach(station => {
                 createMarker(station, 0);
@@ -156,10 +183,16 @@ function updateData(stationCode) {
                 // Set current station data to station with stationCode
                 var currentStationData = stationData.find(measure => measure.STATION_CODE === stationCode);
                 updateDataHTML(currentStationData);
+                console.log("updatehtml" + currentStationData);
             }
         })
         .catch(error => {
             console.error(error);
+        })
+        .finally(() => {
+            // Store station code and selected date in localStorage
+            localStorage.setItem('currentStationCode', stationCode);
+            localStorage.setItem('selectedDate', getSelectedDate());
         });
 }
 
@@ -306,6 +339,9 @@ function createMarker(station, display) {
         currentStationCode = station.code;
         document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
         updateData(currentStationCode);
+
+        // Store selected station in local storage
+        localStorage.setItem('station', JSON.stringify(station));
     });
     // If display is 1, display
     if (display === 1) {

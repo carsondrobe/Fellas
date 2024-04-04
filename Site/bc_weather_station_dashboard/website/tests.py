@@ -23,7 +23,12 @@ from django.test import TestCase, Client, RequestFactory
 from website.views import add_to_favourites
 from django.utils import timezone
 from .models import UserProfile
-
+from datetime import date
+from unittest.mock import patch, mock_open, MagicMock
+from datetime import datetime
+from website.management.commands import csv_scrape
+import csv
+import pandas as pd
 
 # Begin models tests
 
@@ -155,13 +160,23 @@ class AlertModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         test_user = User.objects.create_user(username="testuser", password="12345")
+        test_station = WeatherStation.objects.create(
+            X=0, 
+            Y=0, 
+            WEATHER_STATIONS_ID=1, 
+            STATION_CODE=123, 
+            STATION_NAME="Test Station", 
+            STATION_ACRONYM="TS", 
+            ELEVATION=100, 
+            INSTALL_DATE=date.today()
+        )
         Alert.objects.create(
             alert_name="Test Alert",
             message="Test Message",
             alert_type="Test Type",
+            station=test_station,
             alert_active=True,
         )
-
     def test_alert_name_label(self):
         # This test checks if the verbose name of the 'alert_name' field is correctly set to 'alert name'
         alert = Alert.objects.get(id=1)
@@ -179,7 +194,6 @@ class AlertModelTest(TestCase):
         alert = Alert.objects.get(id=1)
         expected_object_name = f"{alert.alert_name}"
         self.assertEquals(expected_object_name, str(alert))
-
 
 class FeedbackModelTest(TestCase):
     @classmethod
@@ -523,3 +537,204 @@ class ProfileViewTest(TestCase):
         response = self.client.get(reverse("view_profile"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "profile.html")
+
+class CsvScrapeTest(TestCase):
+    def setUp(self):
+        # Create a WeatherStation instance
+        from datetime import date
+
+        self.station = WeatherStation.objects.create(
+            X=1.0,
+            Y=1.0,
+            WEATHER_STATIONS_ID=1,
+            STATION_CODE=1,
+            STATION_NAME="Test Station",
+            STATION_ACRONYM="TS",
+            ELEVATION=1,
+            INSTALL_DATE=timezone.now(),
+        )
+        # Create a UserProfile instance
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.user_profile = UserProfile.objects.create(user=self.user, phone_number='+12503066199')
+        # Create a StationData instance
+        self.station_data = StationData.objects.create(
+            station=self.station,
+            created_at_timestamp=datetime.now(),
+            STATION_CODE=1,
+            STATION_NAME='TEST_NAME',
+            DATE_TIME=datetime.now(),
+            HOURLY_PRECIPITATION=0.0,
+            HOURLY_TEMPERATURE=0.0,
+            HOURLY_RELATIVE_HUMIDITY=0.0,
+            HOURLY_WIND_SPEED=0.0,
+            HOURLY_WIND_DIRECTION=0.0,
+            HOURLY_WIND_GUST=0.0,
+            HOURLY_FINE_FUEL_MOISTURE_CODE=0.0,
+            HOURLY_INITIAL_SPREAD_INDEX=0.0,
+            HOURLY_FIRE_WEATHER_INDEX=0.0,
+            PRECIPITATION=0.0,
+            FINE_FUEL_MOISTURE_CODE=0.0,
+            INITIAL_SPREAD_INDEX=0.0,
+            FIRE_WEATHER_INDEX=0.0,
+            DUFF_MOISTURE_CODE=0.0,
+            DROUGHT_CODE=0.0,
+            BUILDUP_INDEX=0.0,
+            DANGER_RATING=0.0,
+            RN_1_PLUVIO1=0.0,
+            SNOW_DEPTH=0.0,
+            SNOW_DEPTH_QUALITY=0.0,
+            PRECIP_PLUVIO1_STATUS=0.0,
+            PRECIP_PLUVIO1_TOTAL=0.0,
+            RN_1_PLUVIO2=0.0,
+            PRECIP_PLUVIO2_STATUS=0.0,
+            PRECIP_PLUVIO2_TOTAL=0.0,
+            RN_1_RIT=0.0,
+            PRECIP_RIT_STATUS=0.0,
+            PRECIP_RIT_TOTAL=0.0,
+            PRECIP_RGT=0.0,
+            SOLAR_RADIATION_LICOR=0.0,
+            SOLAR_RADIATION_CM3=0.0
+        )
+
+    @patch('website.management.commands.csv_scrape.send_sms_alert')
+    def test_check_for_extreme_conditions_favorite_station(self, mock_send_sms_alert):
+        # Add station to user's favorite stations
+        self.user_profile.favorite_stations.add(self.station)
+
+        # Create a Command instance
+        command = csv_scrape.Command()
+
+        # Create a row_data dictionary
+        row_data = {
+            'DATE_TIME': '2022-01-01 00:00:00',
+            'STATION_CODE': 1,
+            'HOURLY_TEMPERATURE': 50,
+            'HOURLY_WIND_SPEED': 60,
+            'HOURLY_PRECIPITATION': 70,
+            'STATION_NAME': 'Test Station',
+            'station': self.station
+        }
+
+        # Call the check_for_extreme_conditions method
+        command.check_for_extreme_conditions(row_data)
+
+        # Check that an SMS alert was sent
+        self.assertTrue(mock_send_sms_alert.called)
+        if mock_send_sms_alert.called:
+            print("Message sent:", mock_send_sms_alert.call_args[0][1])
+
+        # Check that an Alert instance was created
+        self.assertEqual(Alert.objects.count(), 1)
+        alert = Alert.objects.first()
+        self.assertEqual(alert.alert_name, 'Extreme Weather Conditions')
+        self.assertEqual(alert.alert_type, 'Weather')
+        self.assertEqual(alert.station, self.station)
+        self.assertTrue(alert.alert_active)
+
+    @patch('website.management.commands.csv_scrape.send_sms_alert')
+    def test_check_for_extreme_conditions_not_favorite_station(self, mock_send_sms_alert):
+        # Create a Command instance
+        command = csv_scrape.Command()
+
+        # Create a row_data dictionary
+        row_data = {
+            'DATE_TIME': '2022-01-01 00:00:00',
+            'STATION_CODE': 1,
+            'HOURLY_TEMPERATURE': 50,
+            'HOURLY_WIND_SPEED': 60,
+            'HOURLY_PRECIPITATION': 70,
+            'STATION_NAME': 'Test Station',
+            'station': self.station
+        }
+
+        # Call the check_for_extreme_conditions method
+        command.check_for_extreme_conditions(row_data)
+
+        # Check that an SMS alert was not sent
+        self.assertFalse(mock_send_sms_alert.called)
+        if mock_send_sms_alert.called:
+            print("Message sent:", mock_send_sms_alert.call_args[0][1])
+
+        # Check that an Alert instance was not created
+        self.assertEqual(Alert.objects.count(), 0)
+        
+    @patch('website.management.commands.csv_scrape.Command.download_csv')
+    @patch('website.management.commands.csv_scrape.Command.update_model_with_csv')
+    def test_handle(self, mock_update_model_with_csv, mock_download_csv):
+        # Create a Command instance
+        command = csv_scrape.Command()
+
+        # Mock the return value of download_csv
+        mock_download_csv.return_value = True
+
+        # Call the handle method
+        command.handle()
+
+        # Check that download_csv and update_model_with_csv were called
+        self.assertEqual(mock_download_csv.call_count, 1)
+        mock_update_model_with_csv.assert_called_once()
+        
+    @patch('pandas.read_csv')
+    def test_update_model_with_csv(self, mock_read_csv):
+        # Create a Command instance
+        command = csv_scrape.Command()
+
+        # Mock the return value of pd.read_csv
+        mock_read_csv.return_value = pd.DataFrame([{
+            'STATION_CODE': 1,
+            'STATION_NAME': 'TEST_NAME',
+            'DATE_TIME': '2024033100',
+            'HOURLY_PRECIPITATION': 0.0,
+            'HOURLY_TEMPERATURE': 0.0,
+            'HOURLY_RELATIVE_HUMIDITY': 0.0,
+            'HOURLY_WIND_SPEED': 0.0,
+            'HOURLY_WIND_DIRECTION': 0.0,
+            'HOURLY_WIND_GUST': 0.0,
+            'HOURLY_FINE_FUEL_MOISTURE_CODE': 0.0,
+            'HOURLY_INITIAL_SPREAD_INDEX': 0.0,
+            'HOURLY_FIRE_WEATHER_INDEX': 0.0,
+            'PRECIPITATION': 0.0,
+            'FINE_FUEL_MOISTURE_CODE': 0.0,
+            'INITIAL_SPREAD_INDEX': 0.0,
+            'FIRE_WEATHER_INDEX': 0.0,
+            'DUFF_MOISTURE_CODE': 0.0,
+            'DROUGHT_CODE': 0.0,
+            'BUILDUP_INDEX': 0.0,
+            'DANGER_RATING': 0.0,
+            'RN_1_PLUVIO1': 0.0,
+            'SNOW_DEPTH': 0.0,
+            'SNOW_DEPTH_QUALITY': 0.0,
+            'PRECIP_PLUVIO1_STATUS': 0.0,
+            'PRECIP_PLUVIO1_TOTAL': 0.0,
+            'RN_1_PLUVIO2': 0.0,
+            'PRECIP_PLUVIO2_STATUS': 0.0,
+            'PRECIP_PLUVIO2_TOTAL': 0.0,
+            'RN_1_RIT': 0.0,
+            'PRECIP_RIT_STATUS': 0.0,
+            'PRECIP_RIT_TOTAL': 0.0,
+            'PRECIP_RGT': 0.0,
+            'SOLAR_RADIATION_LICOR': 0.0,
+            'SOLAR_RADIATION_CM3': 0.0,
+        }])
+
+        # Call the update_model_with_csv method
+        command.update_model_with_csv('testfile.csv')
+
+        # Check that pd.read_csv was called with the correct arguments
+        mock_read_csv.assert_called_once_with('testfile.csv')
+
+    @patch('website.management.commands.csv_scrape.Command.download_csv')
+    @patch('website.management.commands.csv_scrape.Command.update_model_with_csv')
+    def test_handle(self, mock_update_model_with_csv, mock_download_csv):
+        # Create a Command instance
+        command = csv_scrape.Command()
+
+        # Mock the return value of download_csv
+        mock_download_csv.return_value = True
+
+        # Call the handle method
+        command.handle()
+
+        # Check that download_csv was called twice and update_model_with_csv was called twice
+        self.assertEqual(mock_download_csv.call_count, 2)
+        self.assertEqual(mock_update_model_with_csv.call_count, 2)
