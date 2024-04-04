@@ -280,6 +280,43 @@
         {% endif %}
     </script>
     <script>
+        $(document).ready(function () {
+            $('.favourite-button').click(function () {
+                // hide button
+                $(this).hide();
+                var stationCode = getStationCode();
+
+                $.ajax({
+                    url: "{% url 'add_to_favourites' %}",
+                    type: "POST",
+                    data: { 'station_code': stationCode },
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    success: function (data) {
+                        console.log("Successfully added to favourites");
+                    }
+                });
+            });
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
+        }
+    </script>
+    <script>
         // Set tomorrow's date when the button is clicked adn call prediction function
         document.getElementById('tomorrow-forecast').addEventListener('click', function() {
             var tomorrow = new Date();
