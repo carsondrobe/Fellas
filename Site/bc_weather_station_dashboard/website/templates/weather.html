@@ -292,7 +292,7 @@
         // Set tomorrow's date when the button is clicked adn call prediction function
         document.getElementById('tomorrow-forecast').addEventListener('click', function() {
             var tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate());
+            tomorrow.setDate(tomorrow.getDate() + 1);
     
             // Format the date in the format expected by the datepicker
             var formattedDate = tomorrow.toISOString().split('T')[0];
