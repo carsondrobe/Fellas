@@ -23,6 +23,8 @@ from django.test import TestCase, Client, RequestFactory
 from website.views import add_to_favourites
 from django.utils import timezone
 from .models import UserProfile
+from django.core import mail
+import re
 
 
 # Begin models tests
@@ -276,7 +278,9 @@ class WSUploadCommandTestCase(TestCase):
             self.assertEqual(ws.ELEVATION, row["ELEVATION"])
             self.assertEqual(
                 ws.INSTALL_DATE,
-                timezone.make_naive(pd.to_datetime(row["INSTALL_DATE"], format="%Y/%m/%d %H:%M:%S%z")),
+                timezone.make_naive(
+                    pd.to_datetime(row["INSTALL_DATE"], format="%Y/%m/%d %H:%M:%S%z")
+                ),
             )
 
 
@@ -523,3 +527,37 @@ class ProfileViewTest(TestCase):
         response = self.client.get(reverse("view_profile"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "profile.html")
+
+
+class PasswordResetTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testuser", password="abc12345", email="test@example.com"
+        )
+        self.user.is_active = True
+        self.user.save()
+
+    def test_password_reset(self):
+        # Simulate visiting the password reset page and submitting the form
+        response = self.client.get(reverse("password_reset"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            reverse("password_reset"), {"email": "test@example.com"}
+        )
+        self.assertRedirects(response, reverse("password_reset_done"))
+
+        # Directly set the new password
+        self.user.set_password("newpassword123")
+        self.user.save()
+
+        # Simulate visiting the login page and submitting the login form
+        response = self.client.get(reverse("login"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            reverse("login"), {"username": "testuser", "password": "newpassword123"}
+        )
+
+        # Check for redirection to the home page or dashboard after login
+        # Replace 'some_home_view' with the name of the view or URL pattern you use for the home page or dashboard
+        self.assertRedirects(response, reverse("home"))
