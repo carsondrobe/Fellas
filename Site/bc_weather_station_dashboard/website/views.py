@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from .forms import FeedbackForm
 from django.http import JsonResponse
-from .models import WeatherStation, Feedback, StationData, UserProfile
+from .models import WeatherStation, Feedback, StationData, UserProfile, Alert
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -330,3 +330,19 @@ def delete_favourite(request):
             request.user.userprofile.favorite_stations.remove(station)
             return JsonResponse({"success": True})
     return JsonResponse({"success": False})
+
+@login_required
+def alerts_view(request):
+    alerts = Alert.objects.select_related('station').all()
+    data = [
+        {
+            "alert_name": alert.alert_name,
+            "message": alert.message,
+            "alert_type": alert.alert_type,
+            "station_id": alert.station.id if alert.station else None,
+            "station_name": alert.station.STATION_NAME if alert.station else None,
+            "alert_active": alert.alert_active,
+        }
+        for alert in alerts
+    ]
+    return JsonResponse(data, safe=False)
