@@ -14,6 +14,8 @@ from twilio.rest import Client
 from django.conf import settings
 from .models import UserProfile
 from .forms import UserProfileForm
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetCompleteView
 
 
 current_page = "weather"
@@ -79,7 +81,7 @@ def login_user(request):
             # Invalid username or password
             return home(request, error="Invalid username or password")
 
-    return home(request, error="Invalid request")
+    return home(request)
 
 
 def logout_user(request):
@@ -316,3 +318,8 @@ def delete_favourite(request):
             request.user.userprofile.favorite_stations.remove(station)
             return JsonResponse({"success": True})
     return JsonResponse({"success": False})
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    def get_success_url(self):
+        return reverse_lazy("login")

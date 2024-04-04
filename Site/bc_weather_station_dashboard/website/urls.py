@@ -19,7 +19,9 @@ from . import views
 from django.urls import path
 from .views import weather_stations_information
 from .views import station_data
-
+from .views import CustomPasswordResetCompleteView
+from django.contrib.auth import views as auth_views
+from django.shortcuts import redirect
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -51,4 +53,23 @@ urlpatterns = [
     path("view_favourites/", views.view_favourites, name="view_favourites"),
     path("delete_favourite/", views.delete_favourite, name="delete_favourite"),
     path("profile/", views.view_profile, name="view_profile"),
+    path(
+        "password_reset/", auth_views.PasswordResetView.as_view(), name="password_reset"
+    ),
+    path(
+        "password_reset/done/",
+        auth_views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "reset/done/",
+        CustomPasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
+    path("accounts/login/", lambda request: redirect("login", permanent=False)),
 ]
