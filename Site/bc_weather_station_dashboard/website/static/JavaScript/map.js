@@ -201,7 +201,23 @@ function updateDataHTML(currentStationData) {
     // Check if the current page is weather.html
     if (path.endsWith('/weather/')) {
         if (currentStationData.HOURLY_TEMPERATURE !== undefined) {
-            document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
+            var temperature = currentStationData.HOURLY_TEMPERATURE;
+            document.getElementById('temperature').innerHTML = temperature;
+
+            var temperatureCard = document.getElementById('temperature-card');
+            temperatureCard.className = 'card rounded shadow text-white h-100';
+
+            if (temperature < 0) {
+                temperatureCard.classList.add('bg-primary'); 
+            } else if (temperature < 10) {
+                temperatureCard.classList.add('bg-info'); 
+            } else if (temperature < 20) {
+                temperatureCard.classList.add('bg-success'); 
+            } else if (temperature < 30) {
+                temperatureCard.classList.add('bg-warning'); 
+            } else {
+                temperatureCard.classList.add('bg-danger'); 
+            }
         }
         // Update the HTML elements with the station's relative humidity data
         if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
