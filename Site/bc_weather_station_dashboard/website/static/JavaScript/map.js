@@ -199,7 +199,7 @@ function updateDataHTML(currentStationData) {
     var path = window.location.pathname;
 
     // Check if the current page is weather.html
-    if (path.endsWith('/weather/')) {
+    if (document.getElementById("weather-title")) {
         if (currentStationData.HOURLY_TEMPERATURE !== undefined) {
             document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
         }

@@ -31,10 +31,7 @@ def home(request, **kwargs):
         return fire(request, **kwargs, **context)
     else:
         raise ValueError("Invalid page", current_page)
-    # return redirect("weather")
 
-def root(request):
-    return redirect(reverse("weather"))
 def weather(request, **kwargs):
     global current_page
     current_page = "weather"

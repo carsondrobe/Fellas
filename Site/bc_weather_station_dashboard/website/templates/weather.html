@@ -80,7 +80,7 @@
             <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
                 <div class="foreground d-flex justify-content-between align-items-center" style="height: 60px;">
                     <div class="align-self-center pl-3 pt-1">
-                        <h3>Weather</h3>
+                        <h3 id="weather-title">Weather</h3>
                     </div>
                     <div>
                         <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
@@ -93,7 +93,7 @@
                 <!-- Row 1 -->
                 <div class="row pt-4 justify-content-center">
                     <!-- Temperature Card -->
-                    <div class="col-md-3 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground h-75">
+                    <div class="col-md-3 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground">
                         <div class="card rounded shadow bg-info text-white">
                             <div class="card-body text-center p-4">
                                 <!-- Temp icon and title -->
@@ -118,7 +118,54 @@
                     </div>
                     <!-- End Temperature card -->
 
+                    <!-- Snow Depth Card -->
+                    <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0" style="min-width: 16em">
+                        <div class="card foreground">
+                            <div class="card-body text-center p-4 d-flex flex-column justify-content-between" id="snow-depth"> </div>
+                        </div>
+                    </div>
 
+                    <!-- Relative Humidity Card -->
+                    <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0 ">
+                        <div class="card foreground">
+                            <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
+                                <!-- Humidity icon and title -->
+                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
+                                    <span class="mr-2">
+                                        <img src="{% static 'images/humidity.svg' %}" alt="Humidity Icon"
+                                            class="weather-icon">
+                                    </span>
+                                    <span>Relative Humidity</span>
+                                </h5>
+                                <!-- Humidity progress bar -->
+                                <div id="humidity-progress-bar"></div> <!-- Container for the progress bar -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="row pt-4 justify-content-center">
+                    <!-- Precipitation Card -->
+                    <div class="col-md-3">
+                        <div class="card mb-md-0 mb-3 mx-md-0 mx-4 foreground align-items-center justify-content-center">
+                            <div class="card-body text-center align-items-center justify-content-center">
+                                <h5 class="card-title">Precipitation</h5>
+                                <div class="precipitation-container">
+                                    <div id="cloud" class="cloud"></div>
+                                </div>
+                                <h2 class="card-text" id="precipitation">N/A</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Wind Direction Card -->
+                    <div class="col-md-3">
+                        <div class="card rounded shadow mb-md-0 mb-3  mx-md-0 mx-4 foreground">
+                            <div class="card-body text-center" id="wind-direction">
+                                <h5 class="card-title">Wind Direction</h5>
+                                <h2 class="card-text" id="wind-direction">N/A</h2>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Wind Speed Card -->
                     <div class="col-md-3 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0" style="min-width: 240px;">
                         <div class="card foreground">
@@ -152,56 +199,6 @@
                                     <h5 class="card-title">Wind Gust </h5>
                                     <h5 class="card-text" id="wind-gust">N/A</h5>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Relative Humidity Card -->
-                    <div class="col-md-3 col-sm-12 card rounded text-white foreground mr-md-0 mx-3 mb-5 mb-md-0">
-                        <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
-                            <!-- Humidity icon and title -->
-                            <div>
-                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
-                                    <span class="mr-2">
-                                        <img src="{% static 'images/humidity.svg' %}" alt="Humidity Icon"
-                                            class="weather-icon">
-                                    </span>
-                                    <span>Relative Humidity</span>
-                                </h5>
-                                <!-- Humidity progress bar -->
-                                <div id="humidity-progress-bar"></div> <!-- Container for the progress bar -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Row 2 -->
-                <div class="row pt-4 justify-content-center">
-                    <!-- Precipitation Card -->
-                    <div class="col-md-3">
-                        <div class="card mb-md-0 mb-3 mx-md-0 mx-4 foreground">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Precipitation</h5>
-                                <div class="precipitation-container">
-                                    <div id="cloud" class="cloud"></div>
-                                </div>
-                                <h2 class="card-text" id="precipitation">N/A</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Wind Direction Card -->
-                    <div class="col-md-3">
-                        <div class="card rounded shadow mb-md-0 mb-3  mx-md-0 mx-4 foreground">
-                            <div class="card-body text-center" id="wind-direction">
-                                <h5 class="card-title">Wind Direction</h5>
-                                <h2 class="card-text" id="wind-direction">N/A</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Snow Depth Card -->
-                    <div class="col-md-3">
-                        <div class="card mx-md-0 mx-4 foreground h-75">
-                            <div class="card-body text-center" id="snow-depth">
-                                <h5 class="card-title">Snow Depth</h5>
-                                <h2 class="card-text" id="snow-depth">N/A</h2>
                             </div>
                         </div>
                     </div>
