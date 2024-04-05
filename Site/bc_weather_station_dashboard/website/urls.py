@@ -51,6 +51,6 @@ urlpatterns = [
     path("view_favourites/", views.view_favourites, name="view_favourites"),
     path("delete_favourite/", views.delete_favourite, name="delete_favourite"),
     path("profile/", views.view_profile, name="view_profile"),
-    path('alerts/', views.alerts_view, name='alerts'),
-    
+    path("alerts/", views.alerts_view, name="alerts"),
+    path("predictions/", views.predictions, name="predictions"),
 ]

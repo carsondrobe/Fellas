@@ -15,6 +15,13 @@ from django.conf import settings
 from .models import UserProfile
 from .forms import UserProfileForm
 from django.db.models import Max
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib
+import io
+import urllib, base64
+import numpy as np
+import datetime
 
 
 current_page = "weather"
@@ -34,6 +41,7 @@ def home(request, **kwargs):
     else:
         raise ValueError("Invalid page", current_page)
     # return redirect("weather")
+
 
 def weather(request, **kwargs):
     global current_page
@@ -204,17 +212,19 @@ def station_data(request):
         queryset = StationData.objects
         if station_code:
             queryset = queryset.filter(STATION_CODE=station_code)
-        latest_entry = queryset.aggregate(latest_date=Max('DATE_TIME'))['latest_date']
+        latest_entry = queryset.aggregate(latest_date=Max("DATE_TIME"))["latest_date"]
         if latest_entry is None:
             return JsonResponse({"error": "No data available"}, status=404)
         data = queryset.filter(DATE_TIME=latest_entry)
-    
+
     else:
         # Get the selected date from the query
         selected_date = request.GET.get("datetime", None)
         if selected_date is None or selected_date == "undefined":
-            return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
-        
+            return JsonResponse(
+                {"error": "No data found for the specified date and time"}, status=404
+            )
+
         # Filter the station data to only retrieve data from the specified date and station code
         queryset = StationData.objects.filter(DATE_TIME=selected_date)
         if station_code:
@@ -331,9 +341,10 @@ def delete_favourite(request):
             return JsonResponse({"success": True})
     return JsonResponse({"success": False})
 
+
 @login_required
 def alerts_view(request):
-    alerts = Alert.objects.select_related('station').all()
+    alerts = Alert.objects.select_related("station").all()
     data = [
         {
             "alert_name": alert.alert_name,
@@ -346,3 +357,38 @@ def alerts_view(request):
         for alert in alerts
     ]
     return JsonResponse(data, safe=False)
+
+
+### Predictions
+# Receives request from view_predictions.js
+# This function generates a plot
+# and returns the URI of the plot to the frontend. Essentially passing back an encoded image
+# to the frontend.
+
+
+def predictions(request):
+    matplotlib.use("agg")  # IMPORTANT for Django to use matplotlib
+
+    # Example data for scatter plot
+    x = np.array([1, 2, 3, 4, 5])
+    y = np.array([2, 3, 2, 4, 3])
+
+    # Set figure size here (width, height) in inches
+    plt.figure(figsize=(10, 6))  # Example size: 10 inches by 6 inches
+
+    # Create a scatter plot
+    plt.scatter(x, y)
+
+    # Adding title
+    plt.title("Tomorrow's Prediction")
+
+    # Save the plot to a buffer
+    buf = io.BytesIO()
+    plt.savefig(
+        buf, format="png", bbox_inches="tight"
+    )  # Ensuring no clipping of the figure
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = urllib.parse.quote(string)
+
+    return JsonResponse({"uri": uri})
