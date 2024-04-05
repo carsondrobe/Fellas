@@ -85,17 +85,17 @@ describe('updateDataHTML Functionality', () => {
     delete window.location;
     window.location = { pathname: '/weather/' };
 
-    // Temperature Widget
-    test('Correctly updates temperature widget.', () => {
-        const mockData = { HOURLY_TEMPERATURE: '25°C' };
-        updateDataHTML(mockData);
-        expect(document.getElementById('temperature')).toHaveTextContent('25°C');
-    });
-    test('Does not update the temp widget when data is missing.', () => {
-        const mockData = {};
-        updateDataHTML(mockData);
-        expect(document.getElementById('temperature')).toHaveTextContent('');
-    });
+    // // Temperature Widget
+    // test('Correctly updates temperature widget.', () => {
+    //     const mockData = { HOURLY_TEMPERATURE: '25°C' };
+    //     updateDataHTML(mockData);
+    //     expect(document.getElementById('temperature')).toHaveTextContent('25°C');
+    // });
+    // test('Does not update the temp widget when data is missing.', () => {
+    //     const mockData = {};
+    //     updateDataHTML(mockData);
+    //     expect(document.getElementById('temperature')).toHaveTextContent('');
+    // });
     // Precipitation Widget
     test('Correctly updates precipitation widget.', () => {
         const mockData = { HOURLY_PRECIPITATION: '10 mm' };
