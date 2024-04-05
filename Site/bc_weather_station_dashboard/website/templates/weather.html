@@ -39,10 +39,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Station Map Column -->
-            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center border-right border-dark">
-                <h2 id="station-name-code" class="foreground"></h2>
-            {% comment %} If you want to make map only take up 1/3 of page, use line below {% endcomment %}
-            {% comment %} <div class="col-4 text-center border-right border-dark"> {% endcomment %}
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 text-center border-right border-dark">
                 <div class="foreground d-flex justify-content-between align-items-center mb-3" style="height: 60px;">
                     <div class="align-self-center pt-2">
                         <h4 id="station-name-code" class="foreground"></h4>
@@ -56,7 +53,7 @@
                 </div>
 
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 60em; width: 100%;">
+                <div id="map" style="height: 53em; width: 100%;">
                     <button id="find-me-btn">Find me!</button>
                 </div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
@@ -75,7 +72,12 @@
                 <hr>
             </div>
             <!-- Weather Data Column -->
-            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+{#            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">#}
+{#                <h2 class="foreground text-center">#}
+{#                    Weather#}
+{#                </h2>#}
+
+            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
                 <div class="foreground d-flex justify-content-between align-items-center" style="height: 60px;">
                     <div class="align-self-center pl-3 pt-1">
                         <h3>Weather</h3>
@@ -206,7 +208,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Popups -->

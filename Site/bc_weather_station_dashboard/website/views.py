@@ -18,8 +18,6 @@ from django.db.models import Max
 
 
 current_page = "weather"
-
-
 def home(request, **kwargs):
     try:
         user_type = request.user.userprofile.user_type
@@ -35,6 +33,8 @@ def home(request, **kwargs):
         raise ValueError("Invalid page", current_page)
     # return redirect("weather")
 
+def root(request):
+    return redirect(reverse("weather"))
 def weather(request, **kwargs):
     global current_page
     current_page = "weather"
@@ -75,7 +75,7 @@ def login_user(request):
             # User is valid, log them in
             login(request, user)
             # Redirect to the home page
-            return redirect(reverse("home"))
+            return home(request)
         else:
             # Invalid username or password
             return home(request, error="Invalid username or password")
@@ -120,7 +120,7 @@ def register(request):
         to=phone_number,
     )
 
-    return redirect(reverse("home"))
+    return home(request)
 
 
 def weather_stations_information(request):

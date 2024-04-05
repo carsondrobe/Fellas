@@ -1,6 +1,9 @@
 function drawSnowDepth(depth){
+    if (depth === undefined || depth < 0){
+        depth = 0;
+    }
     let container = document.getElementById('snow-depth');
-    var loc = window.location.pathname;
+    let loc = window.location.pathname;
     console.log("Current working directory: " + loc);
     let snowImage = "/static/images/snow_container_empty.svg"
     let titleTag = `<h4>Snow Depth</h4>`;
@@ -25,4 +28,4 @@ function drawSnowDepth(depth){
     let width = container.offsetWidth;
 }
 
-drawSnowDepth(10);
+drawSnowDepth(0);
