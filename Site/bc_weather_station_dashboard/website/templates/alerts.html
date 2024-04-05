@@ -1,0 +1,74 @@
+<!-- Coursel styling -->
+<style>
+    .carousel-control-prev, .carousel-control-next {
+        width: 5%;
+    }
+    .carousel-control-prev {
+        margin-left: -5%;
+    }
+    .carousel-control-next {
+        margin-right: -5%;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal" id="alertsModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content foreground">
+            <div class="modal-header">
+                <h5 class="modal-title">Alerts</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Carousel will be inserted here -->
+                <div id="alertsCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <!-- Alerts will be inserted here -->
+                    </div>
+                    <a class="carousel-control-prev" href="#alertsCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#alertsCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script that populates the carousel with the alerts -->
+<script>
+    $(document).ready(function () {
+        $('#alertsModal').on('show.bs.modal', function (event) {
+            $.ajax({
+                url: '/alerts/',
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $('.carousel-inner').html('');
+                    if (data.length === 0) {
+                        $('.carousel-inner').append('<div class="carousel-item active"><p>No alerts</p></div>');
+                    } else {
+                        $.each(data, function (i, alert) {
+                            var activeClass = i === 0 ? ' active' : '';
+                            var alertClass = alert.alert_active ? 'list-group-item-danger' : 'list-group-item-success';
+                            $('.carousel-inner').append(`
+                                <div class="carousel-item${activeClass}" data-interval="8000">
+                                    <div class="card rounded ${alertClass}">
+                                        <div class="card-body rounded">
+                                            <div class="card-header rounded">${alert.alert_name} - ${alert.station_name}</div>
+                                            <p class="card-text">${alert.message}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>

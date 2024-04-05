@@ -3,14 +3,19 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
-
 from .forms import FeedbackForm
 from django.http import JsonResponse
-from .models import WeatherStation, Feedback, StationData
+from .models import WeatherStation, Feedback, StationData, UserProfile, Alert
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from twilio.rest import Client
+from django.conf import settings
+from .models import UserProfile
+from .forms import UserProfileForm
+from django.db.models import Max
+
 
 current_page = "weather"
 
@@ -28,17 +33,32 @@ def home(request, **kwargs):
         return fire(request, **kwargs, **context)
     else:
         raise ValueError("Invalid page", current_page)
-
+    # return redirect("weather")
 
 def weather(request, **kwargs):
     global current_page
     current_page = "weather"
+
+    kwargs["template_name"] = "weather"
     return render(request, "weather.html", kwargs)
+
+
+def display_fav_button(request):
+    if request.method == "POST":
+        station_code = request.POST.get("station_code")
+        if request.user.is_authenticated:
+            user_profile = UserProfile.objects.get(user=request.user)
+            weather_station = WeatherStation.objects.get(STATION_CODE=station_code)
+            if weather_station in user_profile.favorite_stations.all():
+                return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
 
 
 def fire(request, **kwargs):
     global current_page
     current_page = "fire"
+    kwargs["template_name"] = "fire"
     return render(request, "fire.html", kwargs)
 
 
@@ -72,15 +92,33 @@ def register(request):
     print("register", request.POST)
     username = request.POST.get("username")
     email = request.POST.get("email")
+    phone_number = request.POST.get("phone_number")
+    user_type = request.POST.get("user_type")
     password = request.POST.get("password")
-    if not username or not email or not password:
+    if not username or not email or not password or not phone_number:
         return HttpResponse("Please fill in all fields", status=400)
 
     # Create the user
     user = User.objects.create_user(username, email, password)
     user.save()
-    # Log the user in
+
+    # Creates the "user profile" model with information
+    user_profile = UserProfile(
+        user=user, phone_number=phone_number, user_type=user_type
+    )
+    user_profile.save()
+
+    # Logs user in
     login(request, user)
+
+    # Send SMS after successful registration
+    client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+
+    message = client.messages.create(
+        body=f"Hey {username}!\n Thank you for registering with the BC Weather & Wildfire Dashboard for important weather alerts. -Fellas",
+        from_=settings.TWILIO_PHONE_NUMBER,
+        to=phone_number,
+    )
 
     return redirect(reverse("home"))
 
@@ -157,28 +195,41 @@ def update_feedback_status(request):
 
 
 def station_data(request):
-    # Get the selected date from the query
-    selected_date = request.GET.get("datetime", None)
-    # Check if date is undefined
-    if selected_date == "undefined":
-        return JsonResponse(
-            {"error": "No data found for the specified date and time"}, status=404
-        )
-    # Filter the station data to only retrieve data from specified date
-    data = StationData.objects.filter(DATE_TIME=selected_date)
-    # Check if the data is empty
+    # Check if the request is for the latest data
+    latest = request.GET.get("latest", "false").lower() == "true"
+    station_code = request.GET.get("station_code", None)
+
+    # Handle request for the latest data
+    if latest:
+        queryset = StationData.objects
+        if station_code:
+            queryset = queryset.filter(STATION_CODE=station_code)
+        latest_entry = queryset.aggregate(latest_date=Max('DATE_TIME'))['latest_date']
+        if latest_entry is None:
+            return JsonResponse({"error": "No data available"}, status=404)
+        data = queryset.filter(DATE_TIME=latest_entry)
+    
+    else:
+        # Get the selected date from the query
+        selected_date = request.GET.get("datetime", None)
+        if selected_date is None or selected_date == "undefined":
+            return JsonResponse({"error": "No data found for the specified date and time"}, status=404)
+        
+        # Filter the station data to only retrieve data from the specified date and station code
+        queryset = StationData.objects.filter(DATE_TIME=selected_date)
+        if station_code:
+            queryset = queryset.filter(STATION_CODE=station_code)
+        data = queryset
+
     if not data.exists():
-        # Return an empty JSON response of an error message indicating no data was found
-        return JsonResponse(
-            {"error": "No data found for the specified date and time"}, status=404
-        )
+        return JsonResponse({"error": "No data found"}, status=404)
     # Create dictionary of data
     measures = [
         {
             "created_at_timestamp": measure.created_at_timestamp,
             "STATION_CODE": measure.STATION_CODE,
             "STATION_NAME": measure.STATION_NAME,
-            "DATE_TIME": measure.DATE_TIME,
+            "DATE_TIME": measure.DATE_TIME.strftime("%Y-%m-%d %H:%M:%S"),
             "HOURLY_PRECIPITATION": measure.HOURLY_PRECIPITATION,
             "HOURLY_TEMPERATURE": measure.HOURLY_TEMPERATURE,
             "HOURLY_RELATIVE_HUMIDITY": measure.HOURLY_RELATIVE_HUMIDITY,
@@ -215,3 +266,83 @@ def station_data(request):
     ]
     # Return the data as a json resonse
     return JsonResponse(measures, safe=False)
+
+
+@login_required
+def view_profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    non_addressed_feedbacks = request.user.feedbacks.exclude(status="ADD")
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            request.user.email = request.POST.get("email")
+            request.user.save()
+            return redirect("view_profile")
+    else:
+        form = UserProfileForm(instance=user_profile)
+    return render(
+        request,
+        "profile.html",
+        {
+            "form": form,
+            "user_profile": user_profile,
+            "non_addressed_feedbacks": non_addressed_feedbacks,
+        },
+    )
+
+
+def add_to_favourites(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            station_code = request.POST.get("station_code")
+            station = WeatherStation.objects.get(STATION_CODE=station_code)
+            request.user.userprofile.favorite_stations.add(station)
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False})
+
+
+def view_favourites(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "User is not logged in"}, status=200)
+    favourites = request.user.userprofile.favorite_stations.all()
+    data = [
+        {
+            "id": station.WEATHER_STATIONS_ID,
+            "code": station.STATION_CODE,
+            "name": station.STATION_NAME,
+            "acronym": station.STATION_ACRONYM,
+            "latitude": station.Y,
+            "longitude": station.X,
+            "elevation": station.ELEVATION,
+            "install_date": station.INSTALL_DATE.strftime("%Y-%m-%d"),
+        }
+        for station in favourites
+    ]
+    return JsonResponse(data, safe=False)
+
+
+def delete_favourite(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            station_name = request.POST.get("station_name")
+            station = WeatherStation.objects.get(STATION_NAME=station_name)
+            request.user.userprofile.favorite_stations.remove(station)
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False})
+
+@login_required
+def alerts_view(request):
+    alerts = Alert.objects.select_related('station').all()
+    data = [
+        {
+            "alert_name": alert.alert_name,
+            "message": alert.message,
+            "alert_type": alert.alert_type,
+            "station_id": alert.station.id if alert.station else None,
+            "station_name": alert.station.STATION_NAME if alert.station else None,
+            "alert_active": alert.alert_active,
+        }
+        for alert in alerts
+    ]
+    return JsonResponse(data, safe=False)

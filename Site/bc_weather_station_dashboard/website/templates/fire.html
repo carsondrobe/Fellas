@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="../static/home.css">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/home.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/search_bar.css' %}">
-
+    <script src="{% static 'home.js' %}"></script>
 
 
     <title>Dashboard</title>
@@ -34,13 +34,24 @@
     {% include 'navbar.html' %}
 
     <div class="container-fluid">
-        <div class="row pt-3">
+        <div class="row">
             <!-- Station Map Column -->
-            <div class="col-4 text-center border-right border-dark">
-                <h2 id="station-name-code"></h2>
-                <hr>
+            <div class="col-md-4 col-sm-12 text-center border-right">
+                <div class="foreground d-flex justify-content-between align-items-center mb-3" style="height: 60px;">
+                    <div class="align-self-center pt-2">
+                        <h4 id="station-name-code" class="foreground"></h4>
+                    </div>
+                    {% if request.user.is_authenticated %}
+
+                    <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
+                        id="favourite-button">Favourite</button>
+
+                    {% endif %}
+                </div>
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 50em; width: 100%;"></div>
+                <div id="map" style="height: 50em; width: 100%;">
+                    <button id="find-me-btn">Find me!</button>
+                </div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
                 <!-- Search bar -->
                 <div class="container mt-4">
@@ -51,167 +62,175 @@
                         </div>
                     </div>
                         <datalist id="search-suggestions">
-                            <option value="1">1</option>
                         </datalist>
                 </div>
                 <hr>
             </div>
             <!-- Fire Information Column -->
             <div class="col-md-8">
-                <h2>Fire Information</h2>
-                <hr>
-                <div class="row">
-                    <!-- Column 1 -->
-                    <div class="col-md-7">
-                        <!-- Row 1 -->
-                        <div class="row">
-                            <!-- Moisture Codes -->
-                            <div class="card w-auto p-2 ml-3 background">
-                                <div class="row">
-                                <!-- FFMC Card -->
-                                    <div class="text-center widget-y mr-2 p-2 foreground">
-                                        <h5 class="card-title">Fine Fuel Moisture Code</h5>
-                                        <div class="axis-y-container mt-3 mb-4">
-                                            <div class="axis-y">
-                                                <!-- Color-coded segments -->
-                                                <div class="segment-y red" style="height: 16%; top: 0;"></div>
-                                                <div class="segment-y orange" style="height: 4%; top: 16%;"></div>
-                                                <div class="segment-y yellow" style="height: 6%; top: 20%;"></div>
-                                                <div class="segment-y green" style="height: 14%; top: 26%;"></div>
-                                                <div class="segment-y blue" style="height: 60%; top: 40%;"></div>
-                                                <!-- ticks -->
-                                                <div class="tick-y" style="top: 100%;"><label>0</label></div>
-                                                <div class="tick-y" style="top: 40%;"><label>80</label></div>
-                                                <div class="tick-y" style="top: 26%;"><label>87</label></div>
-                                                <div class="tick-y" style="top: 20%;"><label>90</label></div>
-                                                <div class="tick-y" style="top: 16%;"><label>92</label></div>
-                                            </div>
-                                            <div class="arrow-ffmc" id="arrow-ffmc">
-                                                <div class="arrow-value-ffmc" id="arrowValue-ffmc"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <!-- DMC Card -->
-                                    <div class="text-center widget-y mr-2 p-2 foreground">
-                                        <h5 class="card-title">Duff Moisture Code</h5>
-                                        <div class="axis-y-container mt-3 mb-4">
-                                            <div class="axis-y">
-                                                <!-- Color-coded segments -->
-                                                <div class="segment-y red" style="height: 22.5%; top: 0;"></div>
-                                                <div class="segment-y orange" style="height: 26.25%; top: 22.5%;"></div>
-                                                <div class="segment-y yellow" style="height: 17.5%; top: 48.75%;"></div>
-                                                <div class="segment-y green" style="height: 18.75%; top: 66.25%;"></div>
-                                                <div class="segment-y blue" style="height: 15%; top: 85%;"></div>
-                                                <!-- ticks -->
-                                                <div class="tick-y" style="top: 100%;"><label>0</label></div>
-                                                <div class="tick-y" style="top: 85%;"><label>12</label></div>
-                                                <div class="tick-y" style="top: 66.25%;"><label>27</label></div>
-                                                <div class="tick-y" style="top: 48.75%;"><label>41</label></div>
-                                                <div class="tick-y" style="top: 22.5%;"><label>62</label></div>
-                                            </div>
-                                            <div class="arrow-dmc" id="arrow-dmc">
-                                                <div class="arrow-value-dmc" id="arrowValue-dmc"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <!-- DC Card -->
-                                    <div class="text-center widget-y p-2 foreground">
-                                        <h5 class="card-title">Drought<br>Code</h5>
-                                        <div class="axis-y-container mt-3 mb-4">
-                                            <div class="axis-y">
-                                                <!-- Color-coded segments -->
-                                                <div class="segment-y red" style="height: 25%; top: 0;"></div>
-                                                <div class="segment-y orange" style="height: 25%; top: 25%;"></div>
-                                                <div class="segment-y yellow" style="height: 20%; top: 50%;"></div>
-                                                <div class="segment-y green" style="height: 15%; top: 70%;"></div>
-                                                <div class="segment-y blue" style="height: 15%; top: 85%;"></div>
-                                                <!-- ticks -->
-                                                <div class="tick-y" style="top: 100%;"><label>0</label></div>
-                                                <div class="tick-y" style="top: 85%;"><label>150</label></div>
-                                                <div class="tick-y" style="top: 70%;"><label>300</label></div>
-                                                <div class="tick-y" style="top: 50%;"><label>500</label></div>
-                                                <div class="tick-y" style="top: 25%;"><label>750</label></div>
-                                            </div>
-                                            <div class="arrow-dc" id="arrow-dc">
-                                                <div class="arrow-value-dc" id="arrowValue-dc"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Row 2 -->
-                        <div class="row w-auto mt-3 ml-3 ">
-                            <!-- Row 2 -->
-                            <div class="row w-auto mt-3 ml-3 ">
-                                <!-- Danger Rating Card -->
-                                    <div class="card d-flex justify-content-center align-items-center text-center px-3 pt-2 foreground">
-                                        <h5 class="card-title">Fire Danger Rating</h5>
-                                        <div class="fire-danger-widget">
-                                            <div class="box low">LOW</div>
-                                            <div class="box moderate">MODERATE</div>
-                                            <div class="box high">HIGH</div>
-                                            <div class="box extreme">EXTREME</div>
-                                            <div class="line"></div>
-                                            <div class="arrow-danger-rating" id="arrow-danger-rating"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
+                <div class="foreground d-flex justify-content-between align-items-center mb-1" style="height: 60px;">
+                    <div class="align-self-center pl-3 pt-1">
+                        <h3>Fire Information</h3>
                     </div>
-                    <!-- Column 2 -->
-                    <div class="col">
-                        <!-- Indexes -->
-                        <div class="card w-auto p-2 ml-3 background">
-                            <!-- ISI Card -->
-                            <div class="text-center widget-x p-2 mb-2 foreground">
-                                <h5 class="card-title">Initial Spread Index</h5>
-                                <div class="axis-x-container">
-                                    <div class="axis-x">
-                                        <!-- Color-coded segments -->
-                                        <div class="segment-x blue" style="width: 8%; left: 0;"></div>
-                                        <div class="segment-x green" style="width: 12%; left: 8%;"></div>
-                                        <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
-                                        <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
-                                        <div class="segment-x red" style="width: 41%; left: 60%;"></div>
-                                        <!-- ticks -->
-                                        <div class="tick-x" style="left: 0;"><label>0</label></div>
-                                        <div class="tick-x" style="left: 8%;"><label>2</label></div>
-                                        <div class="tick-x" style="left: 20%;"><label>5</label></div>
-                                        <div class="tick-x" style="left: 40%;"><label>10</label></div>
-                                        <div class="tick-x" style="left: 60%;"><label>15</label></div>
-                                    </div>
-                                    <div class="arrow-isi" id="arrow-isi">
-                                        <div class="arrow-value-isi" id="arrowValue-isi"></div>
+                    <div>
+                        <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
+                    </div>
+                </div>
+                <!-- Last updated time -->
+                <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
+                onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
+                style="cursor: default;"></span>
+                <div class="container">
+                    <div class="row">
+                        <!-- Column 1 -->
+                        <div class="col-md-7">
+                            <!-- Row 1 -->
+                            <div class="row d-flex justify-content-center">
+                                <!-- Moisture Codes -->
+                                <div class="card p-2 ml-2 background">
+                                    <div class="row">
+                                    <!-- FFMC Card -->
+                                        <div class="text-center widget-y mr-2 p-2 foreground">
+                                            <h5 class="card-title">Fine Fuel Moisture Code</h5>
+                                            <div class="axis-y-container mt-3 mb-4">
+                                                <div class="axis-y">
+                                                    <!-- Color-coded segments -->
+                                                    <div class="segment-y red" style="height: 16%; top: 0;"></div>
+                                                    <div class="segment-y orange" style="height: 4%; top: 16%;"></div>
+                                                    <div class="segment-y yellow" style="height: 6%; top: 20%;"></div>
+                                                    <div class="segment-y green" style="height: 14%; top: 26%;"></div>
+                                                    <div class="segment-y blue" style="height: 60%; top: 40%;"></div>
+                                                    <!-- ticks -->
+                                                    <div class="tick-y" style="top: 100%;"><label>0</label></div>
+                                                    <div class="tick-y" style="top: 40%;"><label>80</label></div>
+                                                    <div class="tick-y" style="top: 26%;"><label>87</label></div>
+                                                    <div class="tick-y" style="top: 20%;"><label>90</label></div>
+                                                    <div class="tick-y" style="top: 16%;"><label>92</label></div>
+                                                </div>
+                                                <div class="arrow-ffmc" id="arrow-ffmc">
+                                                    <div class="arrow-value-ffmc" id="arrowValue-ffmc"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- DMC Card -->
+                                        <div class="text-center widget-y mr-2 p-2 foreground">
+                                            <h5 class="card-title">Duff Moisture Code</h5>
+                                            <div class="axis-y-container mt-3 mb-4">
+                                                <div class="axis-y">
+                                                    <!-- Color-coded segments -->
+                                                    <div class="segment-y red" style="height: 22.5%; top: 0;"></div>
+                                                    <div class="segment-y orange" style="height: 26.25%; top: 22.5%;"></div>
+                                                    <div class="segment-y yellow" style="height: 17.5%; top: 48.75%;"></div>
+                                                    <div class="segment-y green" style="height: 18.75%; top: 66.25%;"></div>
+                                                    <div class="segment-y blue" style="height: 15%; top: 85%;"></div>
+                                                    <!-- ticks -->
+                                                    <div class="tick-y" style="top: 100%;"><label>0</label></div>
+                                                    <div class="tick-y" style="top: 85%;"><label>12</label></div>
+                                                    <div class="tick-y" style="top: 66.25%;"><label>27</label></div>
+                                                    <div class="tick-y" style="top: 48.75%;"><label>41</label></div>
+                                                    <div class="tick-y" style="top: 22.5%;"><label>62</label></div>
+                                                </div>
+                                                <div class="arrow-dmc" id="arrow-dmc">
+                                                    <div class="arrow-value-dmc" id="arrowValue-dmc"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- DC Card -->
+                                        <div class="text-center widget-y p-2 foreground">
+                                            <h5 class="card-title">Drought<br>Code</h5>
+                                            <div class="axis-y-container mt-3 mb-4">
+                                                <div class="axis-y">
+                                                    <!-- Color-coded segments -->
+                                                    <div class="segment-y red" style="height: 25%; top: 0;"></div>
+                                                    <div class="segment-y orange" style="height: 25%; top: 25%;"></div>
+                                                    <div class="segment-y yellow" style="height: 20%; top: 50%;"></div>
+                                                    <div class="segment-y green" style="height: 15%; top: 70%;"></div>
+                                                    <div class="segment-y blue" style="height: 15%; top: 85%;"></div>
+                                                    <!-- ticks -->
+                                                    <div class="tick-y" style="top: 100%;"><label>0</label></div>
+                                                    <div class="tick-y" style="top: 85%;"><label>150</label></div>
+                                                    <div class="tick-y" style="top: 70%;"><label>300</label></div>
+                                                    <div class="tick-y" style="top: 50%;"><label>500</label></div>
+                                                    <div class="tick-y" style="top: 25%;"><label>750</label></div>
+                                                </div>
+                                                <div class="arrow-dc" id="arrow-dc">
+                                                    <div class="arrow-value-dc" id="arrowValue-dc"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                            <!-- BUI Card -->
-                                <div class="text-center widget-x mb-2 p-2 foreground">
-                                    <h5 class="card-title">Buildup Index</h5>
-                                    <div class="axis-x-container">
-                                        <div class="axis-x">
-                                            <!-- Color-coded segments -->
-                                            <div class="segment-x blue" style="width: 24%; left: 0;"></div>
-                                            <div class="segment-x green" style="width: 24%; left: 24%;"></div>
-                                            <div class="segment-x yellow" style="width: 12%; left: 48%;"></div>
-                                            <div class="segment-x orange" style="width: 20%; left: 60%;"></div>
-                                            <div class="segment-x red" style="width: 20%; left: 80%;"></div>
-                                            <!-- ticks -->
-                                            <div class="tick-x" style="left: 0;"><label>0</label></div>
-                                            <div class="tick-x" style="left: 24%;"><label>60</label></div>
-                                            <div class="tick-x" style="left: 48%;"><label>120</label></div>
-                                            <div class="tick-x" style="left: 60%;"><label>150</label></div>
-                                            <div class="tick-x" style="left: 80%;"><label>200</label></div>
-                                        </div>
-                                        <div class="arrow-bui" id="arrow-bui">
-                                            <div class="arrow-value-bui" id="arrowValue-bui"></div>
-                                        </div>
+                            <!-- Row 2 -->
+                            <div class="row m-3 d-flex justify-content-center">
+                                <!-- Danger Rating Card -->
+                                <div class="card d-flex justify-content-center align-items-center text-center px-3 pt-2 foreground">
+                                    <h5 class="card-title">Fire Danger Rating</h5>
+                                    <div class="fire-danger-widget">
+                                        <div class="box low">LOW</div>
+                                        <div class="box moderate">MODERATE</div>
+                                        <div class="box high">HIGH</div>
+                                        <div class="box extreme">EXTREME</div>
+                                        <div class="line"></div>
+                                        <div class="arrow-danger-rating" id="arrow-danger-rating"></div>
                                     </div>
                                 </div>
-                            <!-- FWI Card -->
-                                <div class="text-center widget-x mb-2 p-2 foreground">
+                            </div>
+                        </div>
+                        <!-- Column 2 -->
+                        <div class="col-md-5">
+                            <div class="row d-flex justify-content-center">
+                                <!-- Indexes -->
+                                <div class="mx-5 p-2 background">
+                                    <!-- ISI Card -->
+                                    <div class="text-center widget-x p-3 mb-2 foreground">
+                                        <h5 class="card-title">Initial Spread Index</h5>
+                                        <div class="axis-x-container">
+                                            <div class="axis-x">
+                                                <!-- Color-coded segments -->
+                                                <div class="segment-x blue" style="width: 8%; left: 0;"></div>
+                                                <div class="segment-x green" style="width: 12%; left: 8%;"></div>
+                                                <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
+                                                <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
+                                                <div class="segment-x red" style="width: 41%; left: 60%;"></div>
+                                                <!-- ticks -->
+                                                <div class="tick-x" style="left: 0;"><label>0</label></div>
+                                                <div class="tick-x" style="left: 8%;"><label>2</label></div>
+                                                <div class="tick-x" style="left: 20%;"><label>5</label></div>
+                                                <div class="tick-x" style="left: 40%;"><label>10</label></div>
+                                                <div class="tick-x" style="left: 60%;"><label>15</label></div>
+                                            </div>
+                                            <div class="arrow-isi" id="arrow-isi">
+                                                <div class="arrow-value-isi" id="arrowValue-isi"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                    <!-- BUI Card -->
+                                        <div class="text-center widget-x mb-2 p-3 foreground">
+                                            <h5 class="card-title">Buildup Index</h5>
+                                            <div class="axis-x-container">
+                                                <div class="axis-x">
+                                                    <!-- Color-coded segments -->
+                                                    <div class="segment-x blue" style="width: 24%; left: 0;"></div>
+                                                    <div class="segment-x green" style="width: 24%; left: 24%;"></div>
+                                                    <div class="segment-x yellow" style="width: 12%; left: 48%;"></div>
+                                                    <div class="segment-x orange" style="width: 20%; left: 60%;"></div>
+                                                    <div class="segment-x red" style="width: 20%; left: 80%;"></div>
+                                                    <!-- ticks -->
+                                                    <div class="tick-x" style="left: 0;"><label>0</label></div>
+                                                    <div class="tick-x" style="left: 24%;"><label>60</label></div>
+                                                    <div class="tick-x" style="left: 48%;"><label>120</label></div>
+                                                    <div class="tick-x" style="left: 60%;"><label>150</label></div>
+                                                    <div class="tick-x" style="left: 80%;"><label>200</label></div>
+                                                </div>
+                                                <div class="arrow-bui" id="arrow-bui">
+                                                    <div class="arrow-value-bui" id="arrowValue-bui"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- FWI Card -->
+                                        <div class="text-center widget-x mb-2 p-3 foreground">
                                     <h5 class="card-title">Fire Weather Index</h5>
                                     <div class="axis-x-container">
                                         <div class="axis-x">
@@ -240,7 +259,8 @@
             </div>
         </div>
     </div>
-
+</div>
+    </div>
 
     <!-- Popups -->
     {% include 'modals.html' %}
@@ -263,6 +283,63 @@
         {% if error %}
         alert("{{error}}");
         {% endif %}
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.favourite-button').click(function () {
+                // hide button
+                $(this).hide();
+                var stationCode = getStationCode();
+
+                $.ajax({
+                    url: "{% url 'add_to_favourites' %}",
+                    type: "POST",
+                    data: { 'station_code': stationCode },
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    success: function (data) {
+                        console.log("Successfully added to favourites");
+                    }
+                });
+            });
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
+        }
+    </script>
+    <script>
+        // Set tomorrow's date when the button is clicked adn call prediction function
+        document.getElementById('tomorrow-forecast').addEventListener('click', function() {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate());
+
+            // Format the date in the format expected by the datepicker
+            var formattedDate = tomorrow.toISOString().split('T')[0];
+
+            // Set the date in the datepicker
+            const date_input = document.querySelector('.datepicker-input');
+            date_input.value = formattedDate;
+
+            // Trigger the change event to update the displayed date
+            var event = new Event('change');
+            date_input.dispatchEvent(event);
+
+            // Call the prediction function
+        });
     </script>
 
     <!-- JS for widgets -->

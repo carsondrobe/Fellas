@@ -2,12 +2,26 @@ import warnings
 from datetime import timedelta
 from django.core.management.base import BaseCommand
 import requests
-from django.utils import timezone
 from datetime import date
 from datetime import datetime
-from website.models import StationData,WeatherStation
+from website.models import StationData, WeatherStation, UserProfile, Alert
 import pandas as pd
 import os
+from twilio.rest import Client
+from django.conf import settings
+
+# Twilio setup
+account_sid = settings.TWILIO_ACCOUNT_SID
+auth_token = settings.TWILIO_AUTH_TOKEN
+client = Client(account_sid, auth_token)
+
+def send_sms_alert(phone_number, message):
+    """Sends an SMS alert to a given phone number."""
+    message = client.messages.create(
+        body=message,
+        from_=settings.TWILIO_PHONE_NUMBER,
+        to=phone_number
+    )
 
 class Command(BaseCommand):
     help = 'Manually download current day CSV data and update StationData model to run use the command: python manage.py csv_scrape.'
@@ -52,37 +66,87 @@ class Command(BaseCommand):
             # Create a new StationData object or update the existing one
             StationData.objects.get_or_create(**row_data)
 
-    def handle(self, *args, **kwargs) -> None:
-        """Handles the command, calls the other methods. You can change the date range here."""
-        # Create a date range for when you want to scrape the data
-        start_date = date(2024, 3, 10) # Change the start date (make sure this start_date and end_date are in the same year)
-        end_date = date.today() # Change the end date
+            # Check for extreme weather conditions for the current row
+            self.check_for_extreme_conditions(row_data)
+            
+    def check_for_extreme_conditions(self, row_data):
+        """Checks for extreme weather conditions and sends an SMS alert if any are found."""
+        # Initialize the message variable
+        message = ''
+
+        # Check for extreme weather conditions
+        extreme_conditions = []
+        if row_data['HOURLY_TEMPERATURE'] < -20:
+            extreme_conditions.append(f"Current temperature is {row_data['HOURLY_TEMPERATURE']}°C. Please stay warm!")
+        elif row_data['HOURLY_TEMPERATURE'] > 40:
+            extreme_conditions.append(f"Current temperature is {row_data['HOURLY_TEMPERATURE']}°C. Please stay cool!")
+
+        if row_data['HOURLY_WIND_SPEED'] > 50 and row_data['HOURLY_PRECIPITATION'] > 50:
+            extreme_conditions.append(f"Current Wind Speed is: {row_data['HOURLY_WIND_SPEED']}km/h and Precipitation is: {row_data['HOURLY_PRECIPITATION']}mm these are both high.")
+
+        if extreme_conditions:
+            # Fetch the station from the row data
+            station = WeatherStation.objects.get(STATION_NAME=row_data['STATION_NAME'])
+            # Fetch the user profiles where the station is in the user's favourite stations list
+            user_profiles = UserProfile.objects.filter(favorite_stations__id=station.id)
+            
+            for user_profile in user_profiles:
+                phone_number = user_profile.phone_number
+                if phone_number:
+                    message = f"Extreme weather conditions detected at {station.STATION_NAME}: " + " ".join(extreme_conditions) + " Please stay safe."
+                    send_sms_alert(phone_number, message)
+
+                    # Save Alert to the database
+                    alert = Alert(
+                        alert_name='Extreme Weather Conditions',
+                        message=message,
+                        alert_type='Weather',
+                        station=station,
+                        alert_active=True
+                    )
+                    alert.save()
+
+    def create_date_range(self, start_date, end_date):
+        """Creates a date range."""
         delta = timedelta(days=1)
         dates = []
         while start_date <= end_date:
             dates.append(start_date)
             start_date += delta
+        return dates
+
+    def process_date(self, date_current):
+        """Processes a single date - downloads the corresponding CSV, updates the model, and deletes the CSV."""
+        # Format the date as yyyy-mm-dd
+        date_str = date_current.strftime('%Y-%m-%d')
+        # Get the year from the date
+        year = date_current.strftime('%Y')
+
+        # Create the URL and filename
+        url = f'https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/{year}/{date_str}.csv'
+        filename = f'{date_str}.csv'
+
+        try:
+            # Open a temporary file
+            with open(filename, 'wb') as temp_file:
+                # Try to download the CSV
+                if self.download_csv(temp_file, url):
+                    self.update_model_with_csv(filename)
+            self.stdout.write(self.style.SUCCESS(f'Data inserted into the model for {filename}'))
+        finally:
+            # Delete the CSV file after model updated
+            if os.path.exists(filename):
+                os.remove(filename)
+                self.stdout.write(self.style.SUCCESS(f'File {filename} Deleted Successfully'))
+
+    def handle(self, *args, **kwargs) -> None:
+        """Handles the command, calls the other methods. You can change the date range here."""
+        # Create a date range for when you want to scrape the data
+        start_date = date.today() - timedelta(days=1)  # Yesterday's date #date(2024, 3, 19) # Change the start date (make sure this start_date and end_date are in the same year)
+        end_date = date.today() # Change the end date
+
+        dates = self.create_date_range(start_date, end_date)
 
         # Loop over the dates
         for date_current in dates:
-            # Format the date as yyyy-mm-dd
-            date_str = date_current.strftime('%Y-%m-%d')
-            # Get the year from the date
-            year = date_current.strftime('%Y')
-
-            # Create the URL and filename
-            url = f'https://www.for.gov.bc.ca/ftp/HPR/external/!publish/BCWS_DATA_MART/{year}/{date_str}.csv'
-            filename = f'{date_str}.csv'
-
-            try:
-                # Open a temporary file
-                with open(filename, 'wb') as temp_file:
-                    # Try to download the CSV
-                    if self.download_csv(temp_file, url):
-                        self.update_model_with_csv(filename)
-                self.stdout.write(self.style.SUCCESS(f'Data inserted into the model for {filename}'))
-            finally:
-                # Delete the CSV file after model updated
-                if os.path.exists(filename):
-                    os.remove(filename)
-                    self.stdout.write(self.style.SUCCESS(f'File {filename} Deleted Successfully'))
+            self.process_date(date_current)

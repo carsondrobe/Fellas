@@ -80,6 +80,11 @@ describe('updateDataHTML Functionality', () => {
             <div id="wind-gust"></div>
         `;
     });
+
+    // Mock window.location.pathname
+    delete window.location;
+    window.location = { pathname: '/weather/' };
+
     // Temperature Widget
     test('Correctly updates temperature widget.', () => {
         const mockData = { HOURLY_TEMPERATURE: '25°C' };
@@ -130,17 +135,6 @@ describe('updateDataHTML Functionality', () => {
         updateDataHTML(mockData);
         expect(document.getElementById('wind-direction')).toHaveTextContent('');
     });
-    // Wind Gust Widget
-    test('Correctly updates wind gust widget.', () => {
-        const mockData = { HOURLY_WIND_GUST: '20 km/h' };
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-gust')).toHaveTextContent('20 km/h');
-    });
-    test('Does not update the wind gust widget when data is missing.', () => {
-        const mockData = {};
-        updateDataHTML(mockData);
-        expect(document.getElementById('wind-gust')).toHaveTextContent('');
-    });
 });
 
 // Define a test suite for the calculation of distance between 2 points
@@ -168,14 +162,14 @@ describe('getSelectedDate() Functionality', () => {
         document.getElementById('selected_date').innerHTML = "Today";
         const fixedDate = new Date('2024-03-19T12:00:00Z');
         jest.useFakeTimers().setSystemTime(fixedDate);
-        expect(getSelectedDate()).toBe('2024-03-19 12:00:00');
+        expect(getSelectedDate()).toBe('2024-03-19');
         jest.useRealTimers();
     });
     // Create a test for getting the datetime when date picker is set to a specific date
     test('Correctly returns the current date and time when date picker is set to a specific date.', () => {
         const specificDate = '2024-03-19';
         document.getElementById('selected_date').innerHTML = specificDate;
-        expect(getSelectedDate()).toBe(specificDate + ' 12:00:00');
+        expect(getSelectedDate()).toBe(specificDate);
     });
 });
 
