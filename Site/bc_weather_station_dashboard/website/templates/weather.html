@@ -81,38 +81,37 @@
                             <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
                         </div>
                     </div>
-                <!-- Last updated time -->
-                <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
-                onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
-                style="cursor: default;"></span>
-                <!-- Row 1 -->
-                <div class="row pt-4 justify-content-center">
-                    <!-- Temperature Card -->
-                    <div class="col-md-4 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground">
-                        <div class="card rounded shadow bg-info text-white"  id="temperature-card">
-                            <div class="card-body text-center p-4">
-                                <!-- Temp icon and title -->
-                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
-                                    <span class="mr-2">
-                                        <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
-                                    </span>
-                                    <span aria-label="Hourly Temperature">Hourly Temperature</span>
-                                </h5>
-                                <!-- Current (hourly?) temperature -->
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
-                                    <span class="display-4 align-bottom muted-white">°C</span>
-                                </div>
-                                <!-- Current daily high/low -->
-                                <div class="d-flex justify-content-center align-items-center mt-2">
-                                    <span class="less-prominent" title="Current daily high">High: 20°C</span>
-                                    <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
+                    <!-- Last updated time -->
+                    <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
+                        onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
+                        style="cursor: default;"></span>
+                    <!-- Row 1 -->
+                    <div class="row pt-4 justify-content-center">
+                        <!-- Temperature Card -->
+                        <div class="col-md-3 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground">
+                            <div class="card rounded shadow bg-info text-white"  id="temperature-card">
+                                <div class="card-body text-center p-4">
+                                    <!-- Temp icon and title -->
+                                    <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
+                                        <span class="mr-2">
+                                            <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
+                                        </span>
+                                        <span aria-label="Hourly Temperature">Hourly Temperature</span>
+                                    </h5>
+                                    <!-- Current (hourly?) temperature -->
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
+                                        <span class="display-4 align-bottom muted-white">°C</span>
+                                    </div>
+                                    <!-- Current daily high/low -->
+                                    <div class="d-flex justify-content-center align-items-center mt-4">
+                                        <span class="less-prominent" title="Current daily high">High: 20°C</span>
+                                        <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- End Temperature card -->
+                        <!-- End Temperature card -->
 
                         <!-- Snow Depth Card -->
                         <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0" style="min-width: 16em">
@@ -123,7 +122,7 @@
                         </div>
 
                         <!-- Relative Humidity Card -->
-                        <div class="col-md-4 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0 ">
+                        <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0 ">
                             <div class="card foreground">
                                 <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
                                     <!-- Humidity icon and title -->
@@ -143,9 +142,9 @@
                     <!-- Row 2 -->
                     <div class="row pt-4 justify-content-center">
                         <!-- Precipitation Card -->
-                        <div class="col-md-3">
+                        <div class="col-md-3 ml-3 mr-sm-4 mr-md-1 foreground">
                             <div
-                                class="card mb-md-0 mb-3 mx-md-0 mx-4 foreground align-items-center justify-content-center">
+                                class="card mb-md-0 mb-3 mx-md-0 mx-4  align-items-center justify-content-center foreground">
                                 <div class="card-body text-center align-items-center justify-content-center">
                                     <h5 class="card-title">Precipitation</h5>
                                     <div class="precipitation-container">
@@ -156,8 +155,8 @@
                             </div>
                         </div>
                         <!-- Wind Direction Card -->
-                        <div class="col-md-4">
-                            <div class="card rounded shadow mb-md-0 mb-3  mx-md-0 mx-4 foreground">
+                        <div class="col-md-3">
+                            <div class="card rounded shadow mb-md-0 mb-3 mx-md-0 mx-0 foreground">
                                 <div class="card-body text-center" id="wind-direction">
                                     <h5 class="card-title">Wind Direction</h5>
                                     <h2 class="card-text" id="wind-direction">N/A</h2>
@@ -165,7 +164,7 @@
                             </div>
                         </div>
                         <!-- Wind Speed Card -->
-                        <div class="col-md-3 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0" style="min-width: 240px;">
+                        <div class="col-md-3 col-sm-12 mr-md-0 mx-0 mb-5 mb-md-0" style="min-width: 240px;">
                             <div class="card foreground">
                                 <div class="card-body text-center">
                                     <img src="{% static 'images/wind-icon.svg' %}" alt="Wind Speed Icon"
