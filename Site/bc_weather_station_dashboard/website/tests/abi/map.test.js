@@ -85,50 +85,50 @@ describe('updateDataHTML Functionality', () => {
     delete window.location;
     window.location = { pathname: '/weather/' };
 
-    // Temperature Widget
+    // // Temperature Widget
     // test('Correctly updates temperature widget.', () => {
     //     const mockData = { HOURLY_TEMPERATURE: '25°C' };
     //     updateDataHTML(mockData);
     //     expect(document.getElementById('temperature')).toHaveTextContent('25°C');
     // });
-    test('Does not update the temp widget when data is missing.', () => {
-        const mockData = {};
-        updateDataHTML(mockData);
-        expect(document.getElementById('temperature')).toHaveTextContent('');
-    });
-    // Precipitation Widget
-    // test('Correctly updates precipitation widget.', () => {
-    //     const mockData = { HOURLY_PRECIPITATION: '10 mm' };
+    // test('Does not update the temp widget when data is missing.', () => {
+    //     const mockData = {};
     //     updateDataHTML(mockData);
-    //     expect(document.getElementById('precipitation')).toHaveTextContent('10 mm');
+    //     expect(document.getElementById('temperature')).toHaveTextContent('');
     // });
+    // Precipitation Widget
+    test('Correctly updates precipitation widget.', () => {
+        const mockData = { HOURLY_PRECIPITATION: '10 mm' };
+        updateDataHTML(mockData);
+        expect(document.getElementById('precipitation')).toHaveTextContent('10 mm');
+    });
     test('Does not update the precipitation widget when data is missing.', () => {
         const mockData = {};
         updateDataHTML(mockData);
         expect(document.getElementById('precipitation')).toHaveTextContent('');
     });
-    // // Snow Depth Widget
-    // test('Correctly updates snow depth widget.', () => {
-    //     const mockData = { SNOW_DEPTH: '5 mm' };
-    //     updateDataHTML(mockData);
-    //     expect(document.getElementById('snow-depth')).toHaveTextContent('5 mm');
-    // });
-    // test('Does not update the snow depth widget when data is missing.', () => {
-    //     const mockData = {};
-    //     updateDataHTML(mockData);
-    //     expect(document.getElementById('snow-depth')).toHaveTextContent('');
-    // });
-    // // Snow Quality Widget
-    // test('Correctly updates snow quality widget.', () => {
-    //     const mockData = { SNOW_DEPTH_QUALITY: 'Good' };
-    //     updateDataHTML(mockData);
-    //     expect(document.getElementById('snow-quality')).toHaveTextContent('Good');
-    // });
-    // test('Does not update the snow quality widget when data is missing.', () => {
-    //     const mockData = {};
-    //     updateDataHTML(mockData);
-    //     expect(document.getElementById('snow-quality')).toHaveTextContent('');
-    // });
+    // Snow Depth Widget
+    test('Correctly updates snow depth widget.', () => {
+        const mockData = { SNOW_DEPTH: '5 mm' };
+        updateDataHTML(mockData);
+        expect(document.getElementById('snow-depth')).toHaveTextContent('5 mm');
+    });
+    test('Does not update the snow depth widget when data is missing.', () => {
+        const mockData = {};
+        updateDataHTML(mockData);
+        expect(document.getElementById('snow-depth')).toHaveTextContent('');
+    });
+    // Snow Quality Widget
+    test('Correctly updates snow quality widget.', () => {
+        const mockData = { SNOW_DEPTH_QUALITY: 'Good' };
+        updateDataHTML(mockData);
+        expect(document.getElementById('snow-quality')).toHaveTextContent('Good');
+    });
+    test('Does not update the snow quality widget when data is missing.', () => {
+        const mockData = {};
+        updateDataHTML(mockData);
+        expect(document.getElementById('snow-quality')).toHaveTextContent('');
+    });
     // Wind Direction Widget
     test('Does not update the wind direction widget when data is missing.', () => {
         const mockData = {};

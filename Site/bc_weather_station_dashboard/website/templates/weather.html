@@ -72,12 +72,7 @@
                 <hr>
             </div>
             <!-- Weather Data Column -->
-            {# <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">#}
-                {# <h2 class="foreground text-center">#}
-                    {# Weather#}
-                    {# </h2>#}
-
-                <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
                     <div class="foreground d-flex justify-content-between align-items-center" style="height: 60px;">
                         <div class="align-self-center pl-3 pt-1">
                             <h3 id="weather-title">Weather</h3>
@@ -86,37 +81,38 @@
                             <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
                         </div>
                     </div>
-                    <!-- Last updated time -->
-                    <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
-                        onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
-                        style="cursor: default;"></span>
-                    <!-- Row 1 -->
-                    <div class="row pt-4 justify-content-center">
-                        <!-- Temperature Card -->
-                        <div class="col-md-4 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground">
-                            <div class="card rounded shadow bg-info text-white">
-                                <div class="card-body text-center p-4">
-                                    <!-- Temp icon and title -->
-                                    <h5 class="card-title mb-4 d-flex align-items-center justify-content-center">
-                                        <span class="mr-2">
-                                            <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
-                                        </span>
-                                        <span aria-label="Hourly Temperature">Hourly Temperature</span>
-                                    </h5>
-                                    <!-- Current (hourly?) temperature -->
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
-                                        <span class="display-4 align-bottom muted-white">°C</span>
-                                    </div>
-                                    <!-- Current daily high/low -->
-                                    <div class="d-flex justify-content-center align-items-center mt-4">
-                                        <span class="less-prominent" title="Current daily high">High: 20°C</span>
-                                        <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
-                                    </div>
+                <!-- Last updated time -->
+                <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
+                onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
+                style="cursor: default;"></span>
+                <!-- Row 1 -->
+                <div class="row pt-4 justify-content-center">
+                    <!-- Temperature Card -->
+                    <div class="col-md-4 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground">
+                        <div class="card rounded shadow bg-info text-white"  id="temperature-card">
+                            <div class="card-body text-center p-4">
+                                <!-- Temp icon and title -->
+                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
+                                    <span class="mr-2">
+                                        <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
+                                    </span>
+                                    <span aria-label="Hourly Temperature">Hourly Temperature</span>
+                                </h5>
+                                <!-- Current (hourly?) temperature -->
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
+                                    <span class="display-4 align-bottom muted-white">°C</span>
+                                </div>
+                                <!-- Current daily high/low -->
+                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                    <span class="less-prominent" title="Current daily high">High: 20°C</span>
+                                    <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
                                 </div>
                             </div>
                         </div>
-                        <!-- End Temperature card -->
+                    </div>
+
+                    <!-- End Temperature card -->
 
                         <!-- Snow Depth Card -->
                         <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0" style="min-width: 16em">
@@ -297,5 +293,4 @@
             });
         </script>
 </body>
-
 </html>
