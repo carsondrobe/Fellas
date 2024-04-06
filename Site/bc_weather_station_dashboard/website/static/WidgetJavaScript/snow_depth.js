@@ -2,7 +2,7 @@ function drawSnowDepth(depth){
     if (depth === undefined || depth < 0){
         depth = 0;
     }
-    depth = Math.round(depth);
+    depth = Math.round(depth/10);
     let container = document.getElementById('snow-depth');
     let snowImage = "/static/images/snow_container_empty.svg"
     let titleTag = `<h4>Snow Depth</h4>`;
@@ -11,40 +11,40 @@ function drawSnowDepth(depth){
     }
     const imageTranslate = -3;
     let imageTag = `<img src="${snowImage}" style="
-            transform: translateY(${imageTranslate}em) translateZ(1em); 
+            transform: translateY(${imageTranslate}em); 
             min-width: 8em;
             z-index: -1;
         " width="90%"/>`;
-    const depthTranslate = 2;
     let depthTag = `<h3 style="
-            color: #0b22be;
-            transform: translateY(${depthTranslate}em) translateZ(2em);
+            color: #1a7fcc;
             z-index: 1;
             position: relative;
-        ">${depth} mm</h3>`;
+        " id="snow-value">${depth} cm</h3>`;
     if (depth === 0 ){
         depthTag = `<h4 style="
             color: #ffffff;
-            transform: translateY(${depthTranslate}em);
-            z-index: 1;
-        ">No Snow</h4>`;
+        " id="snow-value">No Snow</h4>`;
     }
     let snowDepthTag = `<div >${titleTag}${depthTag}${imageTag}</div>`;
 
     container.innerHTML = snowDepthTag;
-    setHeight();
+    setSize();
 }
-function setHeight(){
+function setSize(){
     let container = document.getElementById('snow-depth');
+    let snowValue = document.getElementById('snow-value');
     if (window.innerWidth > 1000){
-        container.style.maxHeight = `${12}em`;
+        container.style.maxHeight = `${13.5}em`;
+        snowValue.style.transform = "translateY(2em)";
+        console.log('big');
     } else {
-        container.style.maxHeight = `${30}em`;
+        container.style.maxHeight = `${25}em`;
+        snowValue.style.transform = "translateY(5em)";
+        console.log('small');
     }
-    console.log("Height set to: " + container.style.maxHeight);
 }
 $(window).resize(function() {
-  setHeight();
+  setSize();
 });
 
 drawSnowDepth(0);
