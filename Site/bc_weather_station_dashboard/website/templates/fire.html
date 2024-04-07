@@ -122,10 +122,13 @@
                                                     <!-- Color-coded segments -->
                                                     <div class="segment-y red" style="height: 22.5%; top: 0;"></div>
                                                     <div class="segment-y orange" style="height: 26.25%; top: 22.5%;">
+
                                                     </div>
                                                     <div class="segment-y yellow" style="height: 17.5%; top: 48.75%;">
+
                                                     </div>
                                                     <div class="segment-y green" style="height: 18.75%; top: 66.25%;">
+
                                                     </div>
                                                     <div class="segment-y blue" style="height: 15%; top: 85%;"></div>
                                                     <!-- ticks -->
@@ -271,6 +274,7 @@
     <!-- Popups -->
     {% include 'modals.html' %}
     {% include 'view_feedback.html' %}
+    {% include 'predictions.html' %}
 
     <!-- Swap pages button -->
     <a href="{% url 'weather' %}">
@@ -328,23 +332,16 @@
         }
     </script>
     <script>
-        // Set tomorrow's date when the button is clicked adn call prediction function
         document.getElementById('tomorrow-forecast').addEventListener('click', function () {
-            var tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate());
-
-            // Format the date in the format expected by the datepicker
-            var formattedDate = tomorrow.toISOString().split('T')[0];
-
-            // Set the date in the datepicker
-            const date_input = document.querySelector('.datepicker-input');
-            date_input.value = formattedDate;
-
-            // Trigger the change event to update the displayed date
-            var event = new Event('change');
-            date_input.dispatchEvent(event);
-
-            // Call the prediction function
+            $.ajax({
+                url: "{% url 'predictions' %}",
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $('#viewPredictionsModal img').attr('src', 'data:image/png;base64,' + data.uri);
+                    $('#viewPredictionsModal').modal('show');
+                }
+            });
         });
     </script>
 

@@ -204,6 +204,7 @@
     {% include 'modals.html' %}
     {% include 'view_feedback.html' %}
     {% include 'view_favourites.html' %}
+    {% include 'predictions.html' %}
 
     <!-- Swap pages button -->
     <a href="{% url 'fire' %}">
@@ -241,8 +242,35 @@
                 });
             });
         });
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
+        }
+        document.getElementById('tomorrow-forecast').addEventListener('click', function () {
+            $.ajax({
+                url: "{% url 'predictions' %}",
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $('#viewPredictionsModal img').attr('src', 'data:image/png;base64,' + data.uri);
+                    $('#viewPredictionsModal').modal('show');
+                }
+            });
+        });
     </script>
-
 
     <!-- JS for widgets -->
     <script src="{% static 'home.js' %}"></script>
@@ -273,25 +301,9 @@
         function getStationCode() {
             return $('#station-name-code').text().split('#')[1];
         }
-        // Set tomorrow's date when the button is clicked adn call prediction function
-        document.getElementById('tomorrow-forecast').addEventListener('click', function () {
-            var tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate());
 
-            // Format the date in the format expected by the datepicker
-            var formattedDate = tomorrow.toISOString().split('T')[0];
-
-            // Set the date in the datepicker
-            const date_input = document.querySelector('.datepicker-input');
-            date_input.value = formattedDate;
-
-            // Trigger the change event to update the displayed date
-            var event = new Event('change');
-            date_input.dispatchEvent(event);
-
-            // Call the prediction function
-        });
     </script>
 </body>
+
 
 </html>
