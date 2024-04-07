@@ -36,7 +36,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Station Map Column -->
-            <div class="col-md-4 col-sm-12 text-center border-right">
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 text-center border-right border-dark">
                 <div class="foreground d-flex justify-content-between align-items-center mb-3" style="height: 60px;">
                     <div class="align-self-center pt-2">
                         <h4 id="station-name-code" class="foreground"></h4>
@@ -49,7 +49,7 @@
                     {% endif %}
                 </div>
                 <!-- Leaflet Map Implementation -->
-                <div id="map" style="height: 50em; width: 100%;">
+                <div id="map" style="height: 53em; width: 100%;">
                     <button id="find-me-btn">Find me!</button>
                 </div>
                 <script src="{% static 'JavaScript/map.js' %}"></script>
@@ -67,7 +67,7 @@
                 <hr>
             </div>
             <!-- Fire Information Column -->
-            <div class="col-md-8">
+            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
                 <div class="foreground d-flex justify-content-between align-items-center mb-1" style="height: 60px;">
                     <div class="align-self-center pl-3 pt-1">
                         <h3>Fire Information</h3>
@@ -231,26 +231,24 @@
                                         </div>
                                     <!-- FWI Card -->
                                         <div class="text-center widget-x mb-2 p-3 foreground">
-                                            <h5 class="card-title">Fire Weather Index</h5>
-                                            <div class="axis-x-container">
-                                                <div class="axis-x">
-                                                    <!-- Color-coded segments -->
-                                                    <div class="segment-x blue" style="width: 10%; left: 0;"></div>
-                                                    <div class="segment-x green" style="width: 10%; left: 10%;"></div>
-                                                    <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
-                                                    <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
-                                                    <div class="segment-x red" style="width: 40%; left: 60%;"></div>
-                                                    <!-- ticks -->
-                                                    <div class="tick-x" style="left: 0;"><label>0</label></div>
-                                                    <div class="tick-x" style="left: 10%;"><label>5</label></div>
-                                                    <div class="tick-x" style="left: 20%;"><label>10</label></div>
-                                                    <div class="tick-x" style="left: 40%;"><label>20</label></div>
-                                                    <div class="tick-x" style="left: 60%;"><label>30</label></div>
-                                                </div>
-                                                <div class="arrow-fwi" id="arrow-fwi">
-                                                    <div class="arrow-value-fwi" id="arrowValue-fwi"></div>
-                                                </div>
-                                            </div>
+                                    <h5 class="card-title">Fire Weather Index</h5>
+                                    <div class="axis-x-container">
+                                        <div class="axis-x">
+                                            <!-- Color-coded segments -->
+                                            <div class="segment-x blue" style="width: 10%; left: 0;"></div>
+                                            <div class="segment-x green" style="width: 10%; left: 10%;"></div>
+                                            <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
+                                            <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
+                                            <div class="segment-x red" style="width: 40%; left: 60%;"></div>
+                                            <!-- ticks -->
+                                            <div class="tick-x" style="left: 0;"><label>0</label></div>
+                                            <div class="tick-x" style="left: 10%;"><label>5</label></div>
+                                            <div class="tick-x" style="left: 20%;"><label>10</label></div>
+                                            <div class="tick-x" style="left: 40%;"><label>20</label></div>
+                                            <div class="tick-x" style="left: 60%;"><label>30</label></div>
+                                        </div>
+                                        <div class="arrow-fwi" id="arrow-fwi">
+                                            <div class="arrow-value-fwi" id="arrowValue-fwi"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -260,6 +258,8 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
     </div>
 
     <!-- Popups -->
@@ -326,14 +326,14 @@
         document.getElementById('tomorrow-forecast').addEventListener('click', function() {
             var tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate());
-    
+
             // Format the date in the format expected by the datepicker
             var formattedDate = tomorrow.toISOString().split('T')[0];
-    
+
             // Set the date in the datepicker
             const date_input = document.querySelector('.datepicker-input');
             date_input.value = formattedDate;
-    
+
             // Trigger the change event to update the displayed date
             var event = new Event('change');
             date_input.dispatchEvent(event);
