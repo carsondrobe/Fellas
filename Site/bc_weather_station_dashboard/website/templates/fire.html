@@ -36,7 +36,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Station Map Column -->
-            <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 text-center border-right border-dark">
+            <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center border-right border-dark">
                 <div class="foreground d-flex justify-content-between align-items-center mb-3" style="height: 60px;">
                     <div class="align-self-center pt-2">
                         <h4 id="station-name-code" class="foreground"></h4>
@@ -48,6 +48,7 @@
 
                     {% endif %}
                 </div>
+
                 <!-- Leaflet Map Implementation -->
                 <div id="map" style="height: 53em; width: 100%;">
                     <button id="find-me-btn">Find me!</button>
@@ -68,7 +69,7 @@
                 <hr>
             </div>
             <!-- Fire Information Column -->
-            <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-xl-7">
                 <div class="foreground d-flex justify-content-between align-items-center mb-1" style="height: 60px;">
                     <div class="align-self-center pl-3 pt-1">
                         <h3>Fire Information</h3>
@@ -89,7 +90,7 @@
                             <div class="row d-flex justify-content-center">
                                 <!-- Moisture Codes -->
                                 <div class="card p-2 ml-2 background">
-                                    <div class="row">
+                                    <div class="row d-flex flex-nowrap">
                                         <!-- FFMC Card -->
                                         <div class="text-center widget-y mr-2 p-2 foreground">
                                             <h5 class="card-title">Fine Fuel Moisture Code</h5>
@@ -121,10 +122,13 @@
                                                     <!-- Color-coded segments -->
                                                     <div class="segment-y red" style="height: 22.5%; top: 0;"></div>
                                                     <div class="segment-y orange" style="height: 26.25%; top: 22.5%;">
+
                                                     </div>
                                                     <div class="segment-y yellow" style="height: 17.5%; top: 48.75%;">
+
                                                     </div>
                                                     <div class="segment-y green" style="height: 18.75%; top: 66.25%;">
+
                                                     </div>
                                                     <div class="segment-y blue" style="height: 15%; top: 85%;"></div>
                                                     <!-- ticks -->
@@ -342,13 +346,13 @@
     </script>
 
     <!-- JS for widgets -->
-    <script src="{% static 'JavaScript/danger_rating.js' %}"></script>
-    <script src="{% static 'JavaScript/dmc.js' %}"></script>
-    <script src="{% static 'JavaScript/ffmc.js' %}"></script>
-    <script src="{% static 'JavaScript/dc.js' %}"></script>
-    <script src="{% static 'JavaScript/isi.js' %}"></script>
-    <script src="{% static 'JavaScript/bui.js' %}"></script>
-    <script src="{% static 'JavaScript/fwi.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/danger_rating.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/dmc.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/ffmc.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/dc.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/isi.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/bui.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/fwi.js' %}"></script>
 </body>
 
 </html>
