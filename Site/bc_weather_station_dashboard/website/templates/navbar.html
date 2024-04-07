@@ -12,30 +12,40 @@
     <script>
         const date_input = document.querySelector('#datepicker');
         const selected_date = document.querySelector('#selected_date');
-
+    
         // Set the max date to today
         const today = new Date();
         const yyyy = today.getFullYear();
         let mm = today.getMonth() + 1; // January is 0!
         let dd = today.getDate();
-
+    
         if (dd < 10) {
             dd = '0' + dd;
         } 
-
+    
         if (mm < 10) {
             mm = '0' + mm;
         } 
-
+    
         const maxDate = yyyy + '-' + mm + '-' + dd;
         date_input.setAttribute('max', maxDate);
-
+    
+        let previousValue = date_input.value;
+    
+        date_input.addEventListener('input', function (e) {
+            if (e.target.value === '') {
+                e.target.value = previousValue;
+            } else {
+                previousValue = e.target.value;
+            }
+        });
+    
         date_input.addEventListener('change', function (e) {
             const date = new Date(e.target.value);
             const adjusted_date = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-
+    
             if (adjusted_date.toDateString() === today.toDateString()) {
                 selected_date.textContent = "Today";
             } else if (adjusted_date.toDateString() === tomorrow.toDateString()) {
