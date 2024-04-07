@@ -46,8 +46,8 @@
                     </div>
                     {% if request.user.is_authenticated %}
 
-                    <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
-                        id="favourite-button">Favourite</button>
+                        <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
+                            id="favourite-button">Favourite</button>
 
                     {% endif %}
                 </div>
@@ -208,6 +208,7 @@
         {% include 'modals.html' %}
         {% include 'view_feedback.html' %}
         {% include 'view_favourites.html' %}
+        {% include 'predictions.html' %}
 
         <!-- Swap pages button -->
         <a href="{% url 'fire' %}">
@@ -245,8 +246,35 @@
                     });
                 });
             });
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            function getStationCode() {
+                return $('#station-name-code').text().split('#')[1];
+            }
+            document.getElementById('tomorrow-forecast').addEventListener('click', function () {
+                $.ajax({
+                    url: "{% url 'predictions' %}",
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#viewPredictionsModal img').attr('src', 'data:image/png;base64,' + data.uri);
+                        $('#viewPredictionsModal').modal('show');
+                    }
+                });
+            });
         </script>
-
 
         <!-- JS for widgets -->
         <script src="{% static 'home.js' %}"></script>
