@@ -1,0 +1,135 @@
+class WindArrow {
+    constructor(degrees) {
+        // Adjust the degrees for compass-like behavior and convert to radians
+        this.degrees = -(degrees - 90) % 360;
+        this.radians = this.degrees * (Math.PI / 180);
+    }
+
+    createCanvas(size) {
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = this.canvas.height = size;
+        return this.canvas;
+    }
+
+    getContext() {
+        this.ctx = this.canvas.getContext('2d');
+        return this.ctx;
+    }
+
+    translateAndScaleContext() {
+        this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+        this.ctx.scale(1, -1);
+    }
+
+    appendCanvasToContainer(containerId) {
+        let container = document.getElementById(containerId);
+        this.canvas.style.maxWidth = '100%'; // for responsive canvas
+        this.canvas.style.height = 'auto'; // for responsive canvas
+        container.appendChild(this.canvas);
+    }
+
+    calculateComponents() {
+        // Calculate the x and y components of the arrow
+        this.x = 115 * Math.cos(this.radians);
+        this.y = 115 * Math.sin(this.radians);
+    }
+
+    drawMainArrow() {
+        // Where the wind is coming from
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(this.x * 0.9, this.y * 0.9); // Shorten the line
+        this.ctx.strokeStyle = 'grey';
+        this.ctx.lineWidth = 8;
+        this.ctx.stroke();
+    }
+
+    drawSecondaryArrow() {
+        // where the wind is going
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(-this.x * 0.9, -this.y * 0.9); // Shorten the line
+        this.ctx.strokeStyle = 'red';
+        this.ctx.lineWidth = 8;
+        this.ctx.stroke();
+
+        // Draw the arrowhead for the secondary arrow
+        this.ctx.save();
+        this.ctx.translate(-this.x, -this.y);
+        this.ctx.rotate(this.radians + Math.PI); // Add 180 degrees to rotate in the opposite direction
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(-22.5, -15);
+        this.ctx.lineTo(-22.5, 15);
+        this.ctx.closePath();
+        this.ctx.fillStyle = 'red';
+        this.ctx.fill();
+        this.ctx.restore();
+    }
+
+    drawCircle() {
+        // Draw a circle
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, 168, 0, 2 * Math.PI);
+        this.ctx.strokeStyle = '#e5e5e5';
+        this.ctx.lineWidth = 6;
+        this.ctx.stroke();
+    }
+
+    drawLabels() {
+        // Draw labels for cardinal directions
+        this.ctx.save();
+        this.ctx.scale(1, -1);
+        this.ctx.font = '36px Arial'; // font for the letters
+        this.ctx.fillStyle = '#e5e5e5';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText('S', 0, 140);  // position of the letter
+        this.ctx.fillText('E', 140, 0);
+        this.ctx.fillStyle = 'red'; // Change fillStyle to red for 'N'
+        this.ctx.fillText('N', 0, -140);
+        this.ctx.fillStyle = '#e5e5e5'; // Change fillStyle back to black for 'W'
+        this.ctx.fillText('W', -140, 0);
+        this.ctx.restore();
+    }
+
+    drawAngleLabels() {
+        // Draw smaller, grey labels for each 15 degrees
+        // larger labels for each 30 degrees black
+        this.ctx.save();
+        this.ctx.scale(1, -1);
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        for (let angle = 0; angle < 360; angle += 15) {
+            if (angle % 90 === 0) continue;
+            let adjustedAngle = (90 - angle) % 360;
+            if (adjustedAngle < 0) adjustedAngle += 360;
+            let angleRad = adjustedAngle * (Math.PI / 180);
+            let x = 1.40 * 100 * Math.cos(angleRad);
+            let y = 1.40 * 100 * Math.sin(angleRad);
+            let fontsize = angle % 30 === 0 ? '20px' : '14px';
+            let color = angle % 30 === 0 ? '#e5e5e5' : '#c0c0c0';
+            this.ctx.font = fontsize + ' Arial';
+            this.ctx.fillStyle = color;
+            this.ctx.fillText(angle.toString(), x, -y);
+        }
+        this.ctx.restore();
+    }
+
+    draw() {
+        this.createCanvas(350);
+        this.getContext();
+        this.translateAndScaleContext();
+
+        this.calculateComponents();
+        this.drawMainArrow();
+        this.drawSecondaryArrow();
+        this.drawCircle();
+        this.drawLabels();
+        this.drawAngleLabels();
+
+        this.appendCanvasToContainer('wind-direction');
+    }
+}
+
+module.exports = WindArrow;

@@ -199,9 +199,25 @@ function updateDataHTML(currentStationData) {
     var path = window.location.pathname;
 
     // Check if the current page is weather.html
-    if (path.endsWith('/weather/')) {
+    if (document.getElementById("weather-title")) {
         if (currentStationData.HOURLY_TEMPERATURE !== undefined) {
-            document.getElementById('temperature').innerHTML = currentStationData.HOURLY_TEMPERATURE;
+            var temperature = currentStationData.HOURLY_TEMPERATURE;
+            document.getElementById('temperature').innerHTML = temperature;
+
+            var temperatureCard = document.getElementById('temperature-card');
+            temperatureCard.className = 'card rounded shadow text-white h-100';
+
+            if (temperature < 0) {
+                temperatureCard.classList.add('bg-primary'); 
+            } else if (temperature < 10) {
+                temperatureCard.classList.add('bg-info'); 
+            } else if (temperature < 20) {
+                temperatureCard.classList.add('bg-success'); 
+            } else if (temperature < 30) {
+                temperatureCard.classList.add('bg-warning'); 
+            } else {
+                temperatureCard.classList.add('bg-danger'); 
+            }
         }
         // Update the HTML elements with the station's relative humidity data
         if (currentStationData.HOURLY_RELATIVE_HUMIDITY != null) {
@@ -219,12 +235,11 @@ function updateDataHTML(currentStationData) {
             document.getElementById('precipitation').innerHTML = currentStationData.HOURLY_PRECIPITATION + " mm";
         }
         // Update the HTML elements with the station's snow depth data
-        if (currentStationData.SNOW_DEPTH !== undefined) {
-            document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
-        }
-        // Update the HTML elements with the station's snow quality data
-        if (currentStationData.SNOW_DEPTH_QUALITY !== undefined) {
-            document.getElementById('snow-quality').innerHTML = currentStationData.SNOW_DEPTH_QUALITY + " mm";
+        if (currentStationData.SNOW_DEPTH) {
+            // document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
+            drawSnowDepth(currentStationData.SNOW_DEPTH);
+        }else{
+            drawSnowDepth(0);
         }
         // Update the HTML elements with the station's wind speed data
         if (currentStationData.HOURLY_WIND_SPEED) {
@@ -246,7 +261,7 @@ function updateDataHTML(currentStationData) {
             document.getElementById('wind-speed').textContent = currentStationData.HOURLY_WIND_SPEED + " km/h";
             var windGustText = currentStationData.HOURLY_WIND_GUST + " km/h";
             document.getElementById('wind-gust').innerHTML = windGustText;
-            updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);        
+            updateWindSpeed(currentStationData.HOURLY_WIND_SPEED, currentStationData.HOURLY_WIND_GUST);
         }
         // Check if the current page is fire.html
     } else if (path.endsWith('/fire/')) {
@@ -295,7 +310,6 @@ function checkLocation() {
         // geolocation is not available
         console.log("Geolocation is not available on this browser.");
     }
-
 }
 
 // Function to get user's location 
@@ -374,6 +388,14 @@ function computeDistance(longitude1, latitude1, longitude2, latitude2) {
 var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
     document.getElementById('date_selector').addEventListener('change', function () {
+        // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
+        document.getElementById('temperature').innerHTML = "N/A";
+        // document.getElementById('relative-humidity').innerHTML = "N/A";
+        document.getElementById('precipitation').innerHTML = "N/A";
+        document.getElementById('snow-depth').innerHTML = "N/A";
+        document.getElementById('wind-speed').innerHTML = "N/A";
+        document.getElementById('wind-direction').innerHTML = "N/A";
+        // document.getElementById('wind-gust').innerHTML = "N/A";
         // Update all data since date time is changing
         updateData(currentStationCode);
     });
