@@ -18,14 +18,10 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script src="{% static 'home.js' %}"></script>
-    <script src="{% static 'wind_direction.js' %}"></script>
-    <script src="{% static 'JavaScript/humidity.js' %}"></script>
-    <script src="{% static 'JavaScript/precipitation.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/home.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/search_bar.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/precipitation_card.css' %}">
-    <script src="{% static 'JavaScript/wind_speed.js' %}"></script>
+
 
 
     <title>Dashboard</title>
@@ -56,12 +52,12 @@
                 <div id="map" style="height: 53em; width: 100%;">
                     <button id="find-me-btn">Find me!</button>
                 </div>
-                <script src="{% static 'JavaScript/map.js' %}"></script>
+
                 <!-- Search bar -->
                 <div class="container mt-4">
                     <div class="input-group">
                         <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..."
-                            list="search-suggestions" autocomplete="on">
+                            list="search-suggestions" autocomplete="on" />
                         <div class="input-group-append">
                             <button class="searchButton" type="button" id="search-btn">Search</button>
                         </div>
@@ -73,129 +69,128 @@
             </div>
             <!-- Weather Data Column -->
             <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
-                    <div class="foreground d-flex justify-content-between align-items-center" style="height: 60px;">
-                        <div class="align-self-center pl-3 pt-1">
-                            <h3 id="weather-title">Weather</h3>
-                        </div>
-                        <div>
-                            <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
-                        </div>
+                <div class="foreground d-flex justify-content-between align-items-center" style="height: 60px;">
+                    <div class="align-self-center pl-3 pt-1">
+                        <h3 id="weather-title">Weather</h3>
                     </div>
-                    <!-- Last updated time -->
-                    <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
-                        onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
-                        style="cursor: default;"></span>
-                    <!-- Row 1 -->
-                    <div class="row pt-4 justify-content-center">
-                        <!-- Temperature Card -->
-                        <div class="col-md-3 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground">
-                            <div class="card rounded shadow bg-info text-white"  id="temperature-card">
-                                <div class="card-body text-center p-4">
-                                    <!-- Temp icon and title -->
-                                    <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
-                                        <span class="mr-2">
-                                            <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
-                                        </span>
-                                        <span aria-label="Hourly Temperature">Hourly Temperature</span>
-                                    </h5>
-                                    <!-- Current (hourly?) temperature -->
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
-                                        <span class="display-4 align-bottom muted-white">°C</span>
-                                    </div>
-                                    <!-- Current daily high/low -->
-                                    <div class="d-flex justify-content-center align-items-center mt-4">
-                                        <span class="less-prominent" title="Current daily high">High: 20°C</span>
-                                        <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
-                                    </div>
+                    <div>
+                        <button id="tomorrow-forecast" class="btn btn-warning">Tomorrow's Forecast</button>
+                    </div>
+                </div>
+                <!-- Last updated time -->
+                <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
+                    onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
+                    style="cursor: default;"></span>
+                <!-- Row 1 -->
+                <div class="row pt-4 justify-content-center">
+                    <!-- Temperature Card -->
+                    <div class="col-md-3 col-sm-12 mr-md-0 mx-2 mb-5 mb-md-0 foreground">
+                        <div class="card rounded shadow bg-info text-white" id="temperature-card">
+                            <div class="card-body text-center p-4">
+                                <!-- Temp icon and title -->
+                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
+                                    <span class="mr-2">
+                                        <img src="{% static 'images/thermometer.svg' %}" alt="Thermometer">
+                                    </span>
+                                    <span aria-label="Hourly Temperature">Hourly Temperature</span>
+                                </h5>
+                                <!-- Current (hourly?) temperature -->
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <h3 class="card-text mr-2 display-4 mb-0" id="temperature">N/A</h3>
+                                    <span class="display-4 align-bottom muted-white">°C</span>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- End Temperature card -->
-
-                        <!-- Snow Depth Card -->
-                        <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0" style="min-width: 16em">
-                            <div class="card foreground">
-                                <div class="card-body text-center p-4 d-flex flex-column justify-content-between"
-                                    id="snow-depth"> </div>
-                            </div>
-                        </div>
-
-                        <!-- Relative Humidity Card -->
-                        <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0 ">
-                            <div class="card foreground">
-                                <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
-                                    <!-- Humidity icon and title -->
-                                    <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
-                                        <span class="mr-2">
-                                            <img src="{% static 'images/humidity.svg' %}" alt="Humidity Icon"
-                                                class="weather-icon">
-                                        </span>
-                                        <span>Relative Humidity</span>
-                                    </h5>
-                                    <!-- Humidity progress bar -->
-                                    <div id="humidity-progress-bar"></div> <!-- Container for the progress bar -->
+                                <!-- Current daily high/low -->
+                                <div class="d-flex justify-content-center align-items-center mt-4">
+                                    <span class="less-prominent" title="Current daily high">High: 20°C</span>
+                                    <span class="ml-4 less-prominent" title="Current daily low">Low: 12°C</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Row 2 -->
-                    <div class="row pt-4 justify-content-center">
-                        <!-- Precipitation Card -->
-                        <div class="col-md-3 ml-3 mr-sm-4 mr-md-1 foreground">
-                            <div
-                                class="card mb-md-0 mb-3 mx-md-0 mx-4  align-items-center justify-content-center foreground">
-                                <div class="card-body text-center align-items-center justify-content-center">
-                                    <h5 class="card-title">Precipitation</h5>
-                                    <div class="precipitation-container">
-                                        <div id="cloud" class="cloud"></div>
-                                    </div>
-                                    <h2 class="card-text" id="precipitation">N/A</h2>
-                                </div>
+                    <!-- End Temperature card -->
+
+                    <!-- Snow Depth Card -->
+                    <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0" style="min-width: 16em">
+                        <div class="card foreground">
+                            <div class="card-body text-center p-4 d-flex flex-column justify-content-between"
+                                id="snow-depth"> </div>
+                        </div>
+                    </div>
+
+                    <!-- Relative Humidity Card -->
+                    <div class="col-md-3 col-sm-12 text-white mr-md-0 mr-3 mb-5 mb-md-0 ">
+                        <div class="card foreground">
+                            <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
+                                <!-- Humidity icon and title -->
+                                <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
+                                    <span class="mr-2">
+                                        <img src="{% static 'images/humidity.svg' %}" alt="Humidity Icon"
+                                            class="weather-icon">
+                                    </span>
+                                    <span>Relative Humidity</span>
+                                </h5>
+                                <!-- Humidity progress bar -->
+                                <div id="humidity-progress-bar"></div> <!-- Container for the progress bar -->
                             </div>
                         </div>
-                        <!-- Wind Direction Card -->
-                        <div class="col-md-3">
-                            <div class="card rounded shadow mb-md-0 mb-3 mx-md-0 mx-0 foreground">
-                                <div class="card-body text-center" id="wind-direction">
-                                    <h5 class="card-title">Wind Direction</h5>
-                                    <h2 class="card-text" id="wind-direction">N/A</h2>
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="row pt-4 justify-content-center">
+                    <!-- Precipitation Card -->
+                    <div class="col-md-3 ml-3 mr-sm-4 mr-md-1 foreground">
+                        <div
+                            class="card mb-md-0 mb-3 mx-md-0 mx-4  align-items-center justify-content-center foreground">
+                            <div class="card-body text-center align-items-center justify-content-center">
+                                <h5 class="card-title">Precipitation</h5>
+                                <div class="precipitation-container">
+                                    <div id="cloud" class="cloud"></div>
                                 </div>
+                                <h2 class="card-text" id="precipitation">N/A</h2>
                             </div>
                         </div>
-                        <!-- Wind Speed Card -->
-                        <div class="col-md-3 col-sm-12 mr-md-0 mx-0 mb-5 mb-md-0" style="min-width: 240px;">
-                            <div class="card foreground">
-                                <div class="card-body text-center">
-                                    <img src="{% static 'images/wind-icon.svg' %}" alt="Wind Speed Icon"
-                                        class="wind-icon" style="width: 30px; float: left; margin-right: 5px;">
-                                    <h5 class="card-title mb-2">Wind Speed</h5>
+                    </div>
+                    <!-- Wind Direction Card -->
+                    <div class="col-md-3">
+                        <div class="card rounded shadow mb-md-0 mb-3 mx-md-0 mx-0 foreground">
+                            <div class="card-body text-center" id="wind-direction">
+                                <h5 class="card-title">Wind Direction</h5>
+                                <h2 class="card-text" id="wind-direction">N/A</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Wind Speed Card -->
+                    <div class="col-md-3 col-sm-12 mr-md-0 mx-0 mb-5 mb-md-0" style="min-width: 240px;">
+                        <div class="card foreground">
+                            <div class="card-body text-center">
+                                <img src="{% static 'images/wind-icon.svg' %}" alt="Wind Speed Icon" class="wind-icon"
+                                    style="width: 30px; float: left; margin-right: 5px;">
+                                <h5 class="card-title mb-2">Wind Speed</h5>
 
 
-                                    <div class="progress-container circle-text-container">
-                                        <svg viewBox="0 0 100 100">
-                                            <circle cx="50" cy="50" r="45" stroke="#eee" stroke-width="5" fill="none" />
+                                <div class="progress-container circle-text-container">
+                                    <svg viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" stroke="#eee" stroke-width="5" fill="none" />
 
-                                            <!-- Wind Gust Circle -->
-                                            <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
-                                                stroke-dasharray="283 283" stroke-dashoffset="283"
-                                                class="wind-gust-circle" />
+                                        <!-- Wind Gust Circle -->
+                                        <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
+                                            stroke-dasharray="283 283" stroke-dashoffset="283"
+                                            class="wind-gust-circle" />
 
-                                            <!-- Wind Speed Circle -->
-                                            <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
-                                                stroke-dasharray="283 283" stroke-dashoffset="283"
-                                                class="wind-speed-circle" />
+                                        <!-- Wind Speed Circle -->
+                                        <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
+                                            stroke-dasharray="283 283" stroke-dashoffset="283"
+                                            class="wind-speed-circle" />
 
-                                            <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#dddddddd"
-                                                id="wind-speed">
-                                                N/A
-                                            </text>
-                                        </svg>
-                                    </div>
-                                    <div style="margin-top: 1em;">
-                                        <h5 class="card-title">Wind Gust </h5>
-                                        <h5 class="card-text" id="wind-gust">N/A</h5>
-                                    </div>
+                                        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#dddddddd"
+                                            id="wind-speed">
+                                            N/A
+                                        </text>
+                                    </svg>
+                                </div>
+                                <div style="margin-top: 1em;">
+                                    <h5 class="card-title">Wind Gust </h5>
+                                    <h5 class="card-text" id="wind-gust">N/A</h5>
                                 </div>
                             </div>
                         </div>
@@ -203,93 +198,100 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Popups -->
-        {% include 'modals.html' %}
-        {% include 'view_feedback.html' %}
-        {% include 'view_favourites.html' %}
+    <!-- Popups -->
+    {% include 'modals.html' %}
+    {% include 'view_feedback.html' %}
+    {% include 'view_favourites.html' %}
 
-        <!-- Swap pages button -->
-        <a href="{% url 'fire' %}">
-            <img id="swapPageIcon" src="{%  static 'images/flame_icon.svg' %}" alt="fire_icon">
-        </a>
+    <!-- Swap pages button -->
+    <a href="{% url 'fire' %}">
+        <img id="swapPageIcon" src="{%  static 'images/flame_icon.svg' %}" alt="fire_icon">
+    </a>
 
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-        <script>
-            {% if error %}
-            alert("{{error}}");
-            {% endif %}
-        </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+        {% if error %}
+        alert("{{error}}");
+        {% endif %}
+    </script>
 
-        <script>
-            $(document).ready(function () {
-                $('.favourite-button').click(function () {
-                    // hide button
-                    $(this).hide();
-                    var stationCode = getStationCode();
+    <script>
+        $(document).ready(function () {
+            $('.favourite-button').click(function () {
+                // hide button
+                $(this).hide();
+                var stationCode = getStationCode();
 
-                    $.ajax({
-                        url: "{% url 'add_to_favourites' %}",
-                        type: "POST",
-                        data: { 'station_code': stationCode },
-                        headers: { 'X-CSRFToken': getCookie('csrftoken') },
-                        success: function (data) {
-                            console.log("Successfully added to favourites");
-                        }
-                    });
+                $.ajax({
+                    url: "{% url 'add_to_favourites' %}",
+                    type: "POST",
+                    data: { 'station_code': stationCode },
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    success: function (data) {
+                        console.log("Successfully added to favourites");
+                    }
                 });
             });
-        </script>
+        });
+    </script>
 
 
-        <!-- JS for widgets -->
-        <script src="{% static 'home.js' %}"></script>
-        <script src="{% static 'WidgetJavaScript/snow_depth.js' %}"></script>
-        <script src="{% static 'WidgetJavaScript/wind_direction.js' %}"></script>
-        <script src="{% static 'WidgetJavaScript/ffmc.js' %}"></script>
-        <script src="{% static 'ffmc.js' %}"></script>
-        <script>
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
+    <!-- JS for widgets -->
+    <script src="{% static 'home.js' %}"></script>
+    <script src="{% static 'JavaScript/map.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/snow_depth.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/wind_direction.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/ffmc.js' %}"></script>
+    <script src="{% static 'ffmc.js' %}"></script>
+    <script src="{% static 'JavaScript/wind_speed.js' %}"></script>
+    <script src="{% static 'wind_direction.js' %}"></script>
+    <script src="{% static 'JavaScript/humidity.js' %}"></script>
+    <script src="{% static 'JavaScript/precipitation.js' %}"></script>
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
                     }
                 }
-                return cookieValue;
             }
-            function getStationCode() {
-                return $('#station-name-code').text().split('#')[1];
-            }
-            // Set tomorrow's date when the button is clicked adn call prediction function
-            document.getElementById('tomorrow-forecast').addEventListener('click', function () {
-                var tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate());
+            return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
+        }
+        // Set tomorrow's date when the button is clicked adn call prediction function
+        document.getElementById('tomorrow-forecast').addEventListener('click', function () {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate());
 
-                // Format the date in the format expected by the datepicker
-                var formattedDate = tomorrow.toISOString().split('T')[0];
+            // Format the date in the format expected by the datepicker
+            var formattedDate = tomorrow.toISOString().split('T')[0];
 
-                // Set the date in the datepicker
-                const date_input = document.querySelector('.datepicker-input');
-                date_input.value = formattedDate;
+            // Set the date in the datepicker
+            const date_input = document.querySelector('.datepicker-input');
+            date_input.value = formattedDate;
 
-                // Trigger the change event to update the displayed date
-                var event = new Event('change');
-                date_input.dispatchEvent(event);
+            // Trigger the change event to update the displayed date
+            var event = new Event('change');
+            date_input.dispatchEvent(event);
 
-                // Call the prediction function
-            });
-        </script>
+            // Call the prediction function
+        });
+    </script>
 </body>
+
 </html>
