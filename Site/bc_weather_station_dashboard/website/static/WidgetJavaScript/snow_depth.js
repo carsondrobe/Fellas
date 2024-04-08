@@ -5,7 +5,7 @@ function drawSnowDepth(depth){
     depth = Math.round(depth/10);
     let container = document.getElementById('snow-depth');
     let snowImage = "/static/images/snow_container_empty.svg"
-    let titleTag = `<h4>Snow Depth</h4>`;
+    let titleTag = `<h5>Snow Depth</h5>`;
     if (depth > 0 ){
         snowImage = "/static/images/snow_container.svg"
     }
