@@ -7,7 +7,7 @@ const QUnit = require('qunit');
 const html = fs.readFileSync(path.resolve(__dirname, '../../templates/weather.html'), 'utf8');
 const { document } = (new JSDOM(html)).window;
 global.document = document;
-const { getCurrentPrecipitationValue, clearIntervals } = require('../../static/JavaScript/precipitation');
+const { getCurrentPrecipitationValue, clearIntervals } = require('../../static/widgetsJS/weather/precipitation');
 
 // Define a test suite for the getCurrentPrecipitationValue function
 QUnit.module('Precipitation Tests', function(hooks) {
