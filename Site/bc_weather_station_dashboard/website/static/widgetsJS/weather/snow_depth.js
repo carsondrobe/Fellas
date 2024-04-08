@@ -5,16 +5,16 @@ function drawSnowDepth(depth){
     depth = Math.round(depth/10);
     let container = document.getElementById('snow-depth');
     let snowImage = "/static/images/snow_container_empty.svg"
-    let titleTag = `<h4>Snow Depth</h4>`;
+    let titleTag = `<h5>Snow Depth</h5>`;
     if (depth > 0 ){
         snowImage = "/static/images/snow_container.svg"
     }
-    const imageTranslate = -3;
+    const imageTranslate = -4;
     let imageTag = `<img src="${snowImage}" style="
             transform: translateY(${imageTranslate}em); 
             min-width: 8em;
             z-index: -1;
-        " width="90%"/>`;
+        " width="200em"/>`;
     let depthTag = `<h3 style="
             color: #1a7fcc;
             z-index: 1;
@@ -25,26 +25,12 @@ function drawSnowDepth(depth){
             color: #ffffff;
         " id="snow-value">No Snow</h4>`;
     }
-    let snowDepthTag = `<div >${titleTag}${depthTag}${imageTag}</div>`;
+    let snowDepthTag = `<div>${titleTag}${depthTag}${imageTag}</div>`;
 
     container.innerHTML = snowDepthTag;
-    setSize();
-}
-function setSize(){
-    let container = document.getElementById('snow-depth');
+    container.style.maxHeight = `${13.5}em`;
     let snowValue = document.getElementById('snow-value');
-    if (window.innerWidth > 1000){
-        container.style.maxHeight = `${13.5}em`;
-        snowValue.style.transform = "translateY(2em)";
-        console.log('big');
-    } else {
-        container.style.maxHeight = `${25}em`;
-        snowValue.style.transform = "translateY(5em)";
-        console.log('small');
-    }
+    snowValue.style.transform = "translateY(2em)";
 }
-$(window).resize(function() {
-  setSize();
-});
 
 drawSnowDepth(0);

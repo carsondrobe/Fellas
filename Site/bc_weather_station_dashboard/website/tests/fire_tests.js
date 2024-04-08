@@ -12,7 +12,7 @@ global.document = document;
 // FFMC tests
 
 // Import the updateFFMC function
-const { updateFFMC } = require('../static/JavaScript/ffmc.js');
+const { updateFFMC } = require('../static/dataLogic/ffmc.js');
 
 // Define a test suite for the updateFFMC function
 QUnit.module('updateFFMC', function() {
@@ -42,7 +42,7 @@ QUnit.module('updateFFMC', function() {
 // DMC tests
 
 // Import the updateDMC function
-const { updateDMC } = require('../static/JavaScript/dmc.js');
+const { updateDMC } = require('../static/dataLogic/dmc.js');
 
 // Define a test suite for the updateDMC function
 QUnit.module('updateDMC', function() {
@@ -72,7 +72,7 @@ QUnit.module('updateDMC', function() {
 // DC tests
 
 // Import the updateDC function
-const { updateDC } = require('../static/JavaScript/dc.js');
+const { updateDC } = require('../static/dataLogic/dc.js');
 
 // Define a test suite for the updateDC function
 QUnit.module('updateDC', function() {
@@ -102,7 +102,7 @@ QUnit.module('updateDC', function() {
 // ISI tests
 
 // Import the updateISI function
-const { updateISI } = require('../static/JavaScript/isi.js');
+const { updateISI } = require('../static/dataLogic/isi.js');
 
 // Define a test suite for the updateISI function
 QUnit.module('updateISI', function() {
@@ -132,7 +132,7 @@ QUnit.module('updateISI', function() {
 // BUI tests
 
 // Import the updateBUI function
-const { updateBUI } = require('../static/JavaScript/bui.js');
+const { updateBUI } = require('../static/dataLogic/bui.js');
 
 // Define a test suite for the updateBUI function
 QUnit.module('updateBUI', function() {
@@ -163,7 +163,7 @@ QUnit.module('updateBUI', function() {
 // FWI tests
 
 // Import the updateFWI function
-const { updateFWI } = require('../static/JavaScript/fwi.js');
+const { updateFWI } = require('../static/dataLogic/fwi.js');
 
 // Define a test suite for the updateFWI function
 QUnit.module('updateFWI', function() {
@@ -194,7 +194,7 @@ QUnit.module('updateFWI', function() {
 // dangerRating tests
 
 // Import the function that updates the danger rating
-const { updateDangerRating } = require('../static/JavaScript/danger_rating.js');
+const { updateDangerRating } = require('../static/dataLogic/danger_rating.js');
 
 // Define a test suite for the updateDangerRating function
 QUnit.module('updateDangerRating', function() {

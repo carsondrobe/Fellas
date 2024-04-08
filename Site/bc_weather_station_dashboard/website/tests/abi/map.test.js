@@ -13,7 +13,7 @@ global.L = {
 // Create variables for fetch mocking and functions, and jsdom
 const fetchMock = require('jest-fetch-mock');
 fetchMock.enableMocks();
-const { initMap, initMarkerIcon, computeDistance, updateDataHTML, getSelectedDate, checkLocation } = require('../../static/JavaScript/map');
+const { initMap, initMarkerIcon, computeDistance, updateDataHTML, getSelectedDate, checkLocation } = require('../../static/dataLogic/map');
 require('@testing-library/jest-dom');
 
 // Define a test suite for the initialization of leaflet map and markers

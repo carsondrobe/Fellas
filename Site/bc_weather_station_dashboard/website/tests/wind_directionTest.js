@@ -1,6 +1,6 @@
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
-const WindArrow = require('../static/wind_direction.js');
+const WindArrow = require('../static/widgetsJS/weather/wind_direction.js');
 
 QUnit.module('WindArrow', function(hooks) {
     hooks.beforeEach(function() {

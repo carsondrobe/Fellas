@@ -1,4 +1,4 @@
-const { updateWindSpeed } = require('../../static/JavaScript/wind_speed.js');
+const { updateWindSpeed } = require('../../static/widgetsJS/weather/wind_speed.js');
 
 QUnit.module("updateWindSpeed", hooks => {
     // Mock DOM setup
