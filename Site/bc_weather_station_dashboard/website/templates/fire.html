@@ -80,8 +80,8 @@
                 </div>
                 <!-- Last updated time -->
                 <span class="badge badge-pill badge-dark expand-on-hover" id="last-updated-time"
-                onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
-                style="cursor: default;"></span>
+                    onmouseover="showUpdatedTime(this)" onmouseout="hideUpdatedTime(this)"
+                    style="cursor: default;"></span>
                 <div class="container">
                     <div class="row">
                         <!-- Column 1 -->
@@ -91,7 +91,7 @@
                                 <!-- Moisture Codes -->
                                 <div class="card p-2 ml-2 background">
                                     <div class="row d-flex flex-nowrap">
-                                    <!-- FFMC Card -->
+                                        <!-- FFMC Card -->
                                         <div class="text-center widget-y mr-2 p-2 foreground">
                                             <h5 class="card-title">Fine Fuel Moisture Code</h5>
                                             <div class="axis-y-container mt-3 mb-4">
@@ -114,16 +114,22 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    <!-- DMC Card -->
+                                        <!-- DMC Card -->
                                         <div class="text-center widget-y mr-2 p-2 foreground">
                                             <h5 class="card-title">Duff Moisture Code</h5>
                                             <div class="axis-y-container mt-3 mb-4">
                                                 <div class="axis-y">
                                                     <!-- Color-coded segments -->
                                                     <div class="segment-y red" style="height: 22.5%; top: 0;"></div>
-                                                    <div class="segment-y orange" style="height: 26.25%; top: 22.5%;"></div>
-                                                    <div class="segment-y yellow" style="height: 17.5%; top: 48.75%;"></div>
-                                                    <div class="segment-y green" style="height: 18.75%; top: 66.25%;"></div>
+                                                    <div class="segment-y orange" style="height: 26.25%; top: 22.5%;">
+
+                                                    </div>
+                                                    <div class="segment-y yellow" style="height: 17.5%; top: 48.75%;">
+
+                                                    </div>
+                                                    <div class="segment-y green" style="height: 18.75%; top: 66.25%;">
+
+                                                    </div>
                                                     <div class="segment-y blue" style="height: 15%; top: 85%;"></div>
                                                     <!-- ticks -->
                                                     <div class="tick-y" style="top: 100%;"><label>0</label></div>
@@ -137,7 +143,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    <!-- DC Card -->
+                                        <!-- DC Card -->
                                         <div class="text-center widget-y p-2 foreground">
                                             <h5 class="card-title">Drought<br>Code</h5>
                                             <div class="axis-y-container mt-3 mb-4">
@@ -166,7 +172,8 @@
                             <!-- Row 2 -->
                             <div class="row m-3 d-flex justify-content-center">
                                 <!-- Danger Rating Card -->
-                                <div class="card d-flex justify-content-center align-items-center text-center px-3 pt-2 foreground">
+                                <div
+                                    class="card d-flex justify-content-center align-items-center text-center px-3 pt-2 foreground">
                                     <h5 class="card-title">Fire Danger Rating</h5>
                                     <div class="fire-danger-widget">
                                         <div class="box low">LOW</div>
@@ -208,7 +215,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                    <!-- BUI Card -->
+                                        <!-- BUI Card -->
                                         <div class="text-center widget-x mb-2 p-3 foreground">
                                             <h5 class="card-title">Buildup Index</h5>
                                             <div class="axis-x-container">
@@ -231,26 +238,28 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    <!-- FWI Card -->
+                                        <!-- FWI Card -->
                                         <div class="text-center widget-x mb-2 p-3 foreground">
-                                    <h5 class="card-title">Fire Weather Index</h5>
-                                    <div class="axis-x-container">
-                                        <div class="axis-x">
-                                            <!-- Color-coded segments -->
-                                            <div class="segment-x blue" style="width: 10%; left: 0;"></div>
-                                            <div class="segment-x green" style="width: 10%; left: 10%;"></div>
-                                            <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
-                                            <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
-                                            <div class="segment-x red" style="width: 40%; left: 60%;"></div>
-                                            <!-- ticks -->
-                                            <div class="tick-x" style="left: 0;"><label>0</label></div>
-                                            <div class="tick-x" style="left: 10%;"><label>5</label></div>
-                                            <div class="tick-x" style="left: 20%;"><label>10</label></div>
-                                            <div class="tick-x" style="left: 40%;"><label>20</label></div>
-                                            <div class="tick-x" style="left: 60%;"><label>30</label></div>
-                                        </div>
-                                        <div class="arrow-fwi" id="arrow-fwi">
-                                            <div class="arrow-value-fwi" id="arrowValue-fwi"></div>
+                                            <h5 class="card-title">Fire Weather Index</h5>
+                                            <div class="axis-x-container">
+                                                <div class="axis-x">
+                                                    <!-- Color-coded segments -->
+                                                    <div class="segment-x blue" style="width: 10%; left: 0;"></div>
+                                                    <div class="segment-x green" style="width: 10%; left: 10%;"></div>
+                                                    <div class="segment-x yellow" style="width: 20%; left: 20%;"></div>
+                                                    <div class="segment-x orange" style="width: 20%; left: 40%;"></div>
+                                                    <div class="segment-x red" style="width: 40%; left: 60%;"></div>
+                                                    <!-- ticks -->
+                                                    <div class="tick-x" style="left: 0;"><label>0</label></div>
+                                                    <div class="tick-x" style="left: 10%;"><label>5</label></div>
+                                                    <div class="tick-x" style="left: 20%;"><label>10</label></div>
+                                                    <div class="tick-x" style="left: 40%;"><label>20</label></div>
+                                                    <div class="tick-x" style="left: 60%;"><label>30</label></div>
+                                                </div>
+                                                <div class="arrow-fwi" id="arrow-fwi">
+                                                    <div class="arrow-value-fwi" id="arrowValue-fwi"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -261,12 +270,11 @@
             </div>
         </div>
     </div>
-</div>
-    </div>
 
     <!-- Popups -->
     {% include 'modals.html' %}
     {% include 'view_feedback.html' %}
+    {% include 'predictions.html' %}
 
     <!-- Swap pages button -->
     <a href="{% url 'weather' %}">
@@ -324,34 +332,27 @@
         }
     </script>
     <script>
-        // Set tomorrow's date when the button is clicked adn call prediction function
-        document.getElementById('tomorrow-forecast').addEventListener('click', function() {
-            var tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate());
-
-            // Format the date in the format expected by the datepicker
-            var formattedDate = tomorrow.toISOString().split('T')[0];
-
-            // Set the date in the datepicker
-            const date_input = document.querySelector('.datepicker-input');
-            date_input.value = formattedDate;
-
-            // Trigger the change event to update the displayed date
-            var event = new Event('change');
-            date_input.dispatchEvent(event);
-
-            // Call the prediction function
+        document.getElementById('tomorrow-forecast').addEventListener('click', function () {
+            $.ajax({
+                url: "{% url 'predictions' %}",
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $('#viewPredictionsModal img').attr('src', 'data:image/png;base64,' + data.uri);
+                    $('#viewPredictionsModal').modal('show');
+                }
+            });
         });
     </script>
 
     <!-- JS for widgets -->
-    <script src="{% static 'JavaScript/danger_rating.js' %}"></script>
-    <script src="{% static 'JavaScript/dmc.js' %}"></script>
-    <script src="{% static 'JavaScript/ffmc.js' %}"></script>
-    <script src="{% static 'JavaScript/dc.js' %}"></script>
-    <script src="{% static 'JavaScript/isi.js' %}"></script>
-    <script src="{% static 'JavaScript/bui.js' %}"></script>
-    <script src="{% static 'JavaScript/fwi.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/danger_rating.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/dmc.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/ffmc.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/dc.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/isi.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/bui.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/fwi.js' %}"></script>
 </body>
 
 </html>

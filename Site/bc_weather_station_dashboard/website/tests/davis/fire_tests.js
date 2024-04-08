@@ -102,7 +102,7 @@ QUnit.module('updateDC', function () {
 // ISI tests
 
 // Import the updateISI function
-const { updateISI } = require('../../static/JavaScript/isi.js');
+const { updateISI } = require('../../static/WidgetJavaScript/isi.js');
 
 // Define a test suite for the updateISI function
 QUnit.module('updateISI', function () {
@@ -163,7 +163,7 @@ QUnit.module('updateBUI', function () {
 // FWI tests
 
 // Import the updateFWI function
-const { updateFWI } = require('../../static/JavaScript/fwi.js');
+const { updateFWI } = require('../../static/WidgetJavaScript/fwi.js');
 
 // Define a test suite for the updateFWI function
 QUnit.module('updateFWI', function () {

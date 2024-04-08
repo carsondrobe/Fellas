@@ -18,14 +18,10 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script src="{% static 'home.js' %}"></script>
-    <script src="{% static 'wind_direction.js' %}"></script>
-    <script src="{% static 'JavaScript/humidity.js' %}"></script>
-    <script src="{% static 'JavaScript/precipitation.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/home.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/search_bar.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'CSS/precipitation_card.css' %}">
-    <script src="{% static 'JavaScript/wind_speed.js' %}"></script>
+
 
 
     <title>Dashboard</title>
@@ -46,8 +42,8 @@
                     </div>
                     {% if request.user.is_authenticated %}
 
-                        <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
-                            id="favourite-button">Favourite</button>
+                    <button type="button" class="btn btn-success favourite-button" style="margin-left: 1em;"
+                        id="favourite-button">Favourite</button>
 
                     {% endif %}
                 </div>
@@ -56,12 +52,12 @@
                 <div id="map" style="height: 53em; width: 100%;">
                     <button id="find-me-btn">Find me!</button>
                 </div>
-                <script src="{% static 'JavaScript/map.js' %}"></script>
+
                 <!-- Search bar -->
                 <div class="container mt-4">
                     <div class="input-group">
                         <input type="input" id="searchInput" class="form-control" placeholder="Search for stations..."
-                            list="search-suggestions" autocomplete="on">
+                            list="search-suggestions" autocomplete="on" />
                         <div class="input-group-append">
                             <button class="searchButton" type="button" id="search-btn">Search</button>
                         </div>
@@ -163,19 +159,19 @@
                                     <h5 class="card-title mb-2">Wind Speed</h5>
 
 
-                                    <div class="progress-container circle-text-container">
-                                        <svg viewBox="0 0 100 100">
-                                            <circle cx="50" cy="50" r="45" stroke="#eee" stroke-width="5" fill="none" />
+                                <div class="progress-container circle-text-container">
+                                    <svg viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="45" stroke="#eee" stroke-width="5" fill="none" />
 
-                                            <!-- Wind Gust Circle -->
-                                            <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
-                                                stroke-dasharray="283 283" stroke-dashoffset="283"
-                                                class="wind-gust-circle" />
+                                        <!-- Wind Gust Circle -->
+                                        <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
+                                            stroke-dasharray="283 283" stroke-dashoffset="283"
+                                            class="wind-gust-circle" />
 
-                                            <!-- Wind Speed Circle -->
-                                            <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
-                                                stroke-dasharray="283 283" stroke-dashoffset="283"
-                                                class="wind-speed-circle" />
+                                        <!-- Wind Speed Circle -->
+                                        <circle cx="50" cy="50" r="45" stroke="#0dcaf0" stroke-width="5" fill="none"
+                                            stroke-dasharray="283 283" stroke-dashoffset="283"
+                                            class="wind-speed-circle" />
 
                                             <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#dddddddd"
                                                 id="wind-speed">
@@ -195,120 +191,110 @@
             </div>
         </div>
 
-        <!-- Popups -->
-        {% include 'modals.html' %}
-        {% include 'view_feedback.html' %}
-        {% include 'view_favourites.html' %}
-        {% include 'predictions.html' %}
+    <!-- Popups -->
+    {% include 'modals.html' %}
+    {% include 'view_feedback.html' %}
+    {% include 'view_favourites.html' %}
+    {% include 'predictions.html' %}
 
-        <!-- Swap pages button -->
-        <a href="{% url 'fire' %}">
-            <img id="swapPageIcon" src="{%  static 'images/flame_icon.svg' %}" alt="fire_icon">
-        </a>
+    <!-- Swap pages button -->
+    <a href="{% url 'fire' %}">
+        <img id="swapPageIcon" src="{%  static 'images/flame_icon.svg' %}" alt="fire_icon">
+    </a>
 
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-        <script>
-            {% if error %}
-            alert("{{error}}");
-            {% endif %}
-        </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script>
+        {% if error %}
+        alert("{{error}}");
+        {% endif %}
+    </script>
 
-        <script>
-            $(document).ready(function () {
-                $('.favourite-button').click(function () {
-                    // hide button
-                    $(this).hide();
-                    var stationCode = getStationCode();
+    <script>
+        $(document).ready(function () {
+            $('.favourite-button').click(function () {
+                // hide button
+                $(this).hide();
+                var stationCode = getStationCode();
 
-                    $.ajax({
-                        url: "{% url 'add_to_favourites' %}",
-                        type: "POST",
-                        data: { 'station_code': stationCode },
-                        headers: { 'X-CSRFToken': getCookie('csrftoken') },
-                        success: function (data) {
-                            console.log("Successfully added to favourites");
-                        }
-                    });
-                });
-            });
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-            function getStationCode() {
-                return $('#station-name-code').text().split('#')[1];
-            }
-            document.getElementById('tomorrow-forecast').addEventListener('click', function () {
                 $.ajax({
-                    url: "{% url 'predictions' %}",
-                    type: 'get',
-                    dataType: 'json',
+                    url: "{% url 'add_to_favourites' %}",
+                    type: "POST",
+                    data: { 'station_code': stationCode },
+                    headers: { 'X-CSRFToken': getCookie('csrftoken') },
                     success: function (data) {
-                        $('#viewPredictionsModal img').attr('src', 'data:image/png;base64,' + data.uri);
-                        $('#viewPredictionsModal').modal('show');
+                        console.log("Successfully added to favourites");
                     }
                 });
             });
-        </script>
-
-        <!-- JS for widgets -->
-        <script src="{% static 'home.js' %}"></script>
-        <script src="{% static 'WidgetJavaScript/snow_depth.js' %}"></script>
-        <script src="{% static 'WidgetJavaScript/wind_direction.js' %}"></script>
-        <script src="{% static 'WidgetJavaScript/ffmc.js' %}"></script>
-        <script src="{% static 'ffmc.js' %}"></script>
-        <script>
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
+        });
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
                     }
                 }
-                return cookieValue;
             }
-            function getStationCode() {
-                return $('#station-name-code').text().split('#')[1];
-            }
-            // Set tomorrow's date when the button is clicked adn call prediction function
-            document.getElementById('tomorrow-forecast').addEventListener('click', function () {
-                var tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate());
-
-                // Format the date in the format expected by the datepicker
-                var formattedDate = tomorrow.toISOString().split('T')[0];
-
-                // Set the date in the datepicker
-                const date_input = document.querySelector('.datepicker-input');
-                date_input.value = formattedDate;
-
-                // Trigger the change event to update the displayed date
-                var event = new Event('change');
-                date_input.dispatchEvent(event);
-
-                // Call the prediction function
+            return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
+        }
+        document.getElementById('tomorrow-forecast').addEventListener('click', function () {
+            $.ajax({
+                url: "{% url 'predictions' %}",
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    $('#viewPredictionsModal img').attr('src', 'data:image/png;base64,' + data.uri);
+                    $('#viewPredictionsModal').modal('show');
+                }
             });
-        </script>
+        });
+    </script>
+
+    <!-- JS for widgets -->
+    <script src="{% static 'home.js' %}"></script>
+    <script src="{% static 'JavaScript/map.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/snow_depth.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/wind_direction.js' %}"></script>
+    <script src="{% static 'WidgetJavaScript/ffmc.js' %}"></script>
+    <script src="{% static 'ffmc.js' %}"></script>
+    <script src="{% static 'JavaScript/wind_speed.js' %}"></script>
+    <script src="{% static 'wind_direction.js' %}"></script>
+    <script src="{% static 'JavaScript/humidity.js' %}"></script>
+    <script src="{% static 'JavaScript/precipitation.js' %}"></script>
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function getStationCode() {
+            return $('#station-name-code').text().split('#')[1];
+        }
+
+    </script>
 </body>
+
+
 </html>
