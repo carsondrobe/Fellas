@@ -84,7 +84,7 @@
                     <!-- Row 1 -->
                     <div class="row pt-3 mx-2">
                         <!-- Temperature Card -->
-                        <div class="col-lg-4 col-md-4 col-sm-12 mb-5 foreground">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-5">
                             <div class="card rounded shadow bg-info text-white" id="temperature-card">
                                 <div class="card-body d-flex flex-column p-4">
                                     <!-- Temp icon and title -->
@@ -105,14 +105,14 @@
 
                         <!-- Snow Depth Card -->
                         <div class="col-lg-4 col-md-4 col-sm-12 mb-5 h-100" style="min-width: 16em">
-                            <div class="card foreground h-100">
+                            <div class="card foreground shadow h-100">
                                 <div class="card-body text-center p-4 d-flex flex-column justify-content-between" id="snow-depth" style="overflow: hidden;"> </div>
                             </div>
                         </div>
 
                         <!-- Relative Humidity Card -->
                         <div class="col-lg-4 col-md-4 col-sm-12 mb-5">
-                            <div class="card foreground h-100">
+                            <div class="card foreground shadow h-100">
                                 <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
                                     <!-- Humidity icon and title -->
                                     <h5 class="card-title d-flex align-items-center justify-content-center">
@@ -134,7 +134,7 @@
                     <div class="row pt-1 mx-2">
                         <!-- Precipitation Card -->
                         <div class="col-lg-4 col-md-4 col-sm-12 mb-5">
-                            <div class="card mb-md-0 mb-3 align-items-center foreground">
+                            <div class="card mb-md-0 mb-3 align-items-center shadow foreground">
                                 <div class="card-body text-center align-items-center justify-content-center">
                                     <h5 class="card-title">Precipitation</h5>
                                     <div class="precipitation-container">
@@ -146,7 +146,7 @@
                         </div>
                         <!-- Wind Direction Card -->
                         <div class="col-lg-4 col-md-4 col-sm-12 mb-5">
-                            <div class="card foreground">
+                            <div class="card foreground shadow">
                                     <div class="card-body text-center" id="wind-direction">
                                         <h5 class="card-title">Wind Direction</h5>
                                         <h5 class="card-text" id="wind-direction">N/A</h5>
@@ -155,7 +155,7 @@
                             </div>
                         <!-- Wind Speed Card -->
                          <div class="col-lg-4 col-md-4 col-sm-12 mb-5" style="min-width: 240px;">
-                                <div class="card foreground">
+                                <div class="card foreground shadow">
                                 <div class="card-body text-center">
                                     <img src="{% static 'images/wind-icon.svg' %}" alt="Wind Speed Icon"
                                         class="wind-icon" style="width: 30px; float: left; margin-right: 5px;">
