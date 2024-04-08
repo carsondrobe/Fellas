@@ -115,17 +115,20 @@
                             <div class="card foreground h-100">
                                 <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
                                     <!-- Humidity icon and title -->
-                                    <h5 class="card-title mb-2 d-flex align-items-center justify-content-center">
+                                    <h5 class="card-title d-flex align-items-center justify-content-center">
                                         <span class="mr-2">
                                             <img src="{% static 'images/humidity.svg' %}" alt="Humidity Icon" class="weather-icon">
                                         </span>
-                                        <span>Relative Humidity</span>
+                                        <span style="white-space: nowrap;">Relative Humidity</span>
                                     </h5>
                                     <!-- Humidity progress bar -->
-                                    <div id="humidity-progress-bar" class="d-flex align-items-center justify-content-center flex-grow-1"></div> <!-- Container for the progress bar -->
+                                    <div style="display: flex; justify-content: center; align-items: center; flex-grow: 1;">
+                                        <div id="humidity-progress-bar" style="width: 200px; height: 100px;"></div> <!-- Container for the progress bar -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- End relative humidity card -->
                     </div>
                     <!-- Row 2 -->
                     <div class="row pt-1 mx-2">
@@ -146,7 +149,7 @@
                             <div class="card foreground">
                                     <div class="card-body text-center" id="wind-direction">
                                         <h5 class="card-title">Wind Direction</h5>
-                                        <h2 class="card-text" id="wind-direction">N/A</h2>
+                                        <h5 class="card-text" id="wind-direction">N/A</h5>
                                     </div>
                                 </div>
                             </div>
