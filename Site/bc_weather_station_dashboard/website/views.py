@@ -22,9 +22,12 @@ import io
 import urllib, base64
 import numpy as np
 import datetime
+import json
 
 
 current_page = "weather"
+
+
 def home(request, **kwargs):
     try:
         user_type = request.user.userprofile.user_type
@@ -389,3 +392,19 @@ def predictions(request):
     uri = urllib.parse.quote(string)
 
     return JsonResponse({"uri": uri})
+
+
+@csrf_exempt
+def set_session_data(request):
+    data = json.loads(request.body)
+    for key, value in data.items():
+        request.session[key] = value
+    print(request.session.items())
+    return JsonResponse({"status": "success"})
+
+
+def get_session_data(request):
+    # Retrieve specific keys or all session data
+    data = {key: request.session[key] for key in request.session.keys()}
+    print(data)
+    return JsonResponse(data)

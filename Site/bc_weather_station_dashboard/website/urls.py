@@ -53,4 +53,6 @@ urlpatterns = [
     path("profile/", views.view_profile, name="view_profile"),
     path("alerts/", views.alerts_view, name="alerts"),
     path("predictions/", views.predictions, name="predictions"),
+    path("set_session_data/", views.set_session_data, name="set_session_data"),
+    path("get_session_data/", views.get_session_data, name="get_session_data"),
 ]

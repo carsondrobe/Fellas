@@ -6,7 +6,7 @@ var markerIcon;
 var closestStation;
 
 // Initialize map
-if(!map) {
+if (!map) {
     map = initMap(map);
 }
 
@@ -42,64 +42,63 @@ function initMarkerIcon(markerIcon) {
     return markerIcon;
 }
 
-window.onload = function() {
+window.onload = function () {
     fetchWeatherStationInfo();
 };
 
 // Create function to fetch weather station information
 function fetchWeatherStationInfo() {
     return fetch('/weather_stations_information/')
-        // Check response
         .then(response => {
-            // If response is ok
-            if (response.ok) {
-                return response.json();
-                // If response is error
-            } else {
+            if (!response.ok) {
                 throw new Error("Error: Could not fetch weather stations.");
             }
+            return response.json();
         })
         .then(data => {
-            // Check if there is a station in local storage
-            let storedStation = localStorage.getItem('station');
-            // Retrieve date from localStorage
-            var storedDate = localStorage.getItem('selectedDate');
-            if (storedStation && storedDate) {
-                // console.log(storedDate);
-                // console.log(storedStation);
-                // Set the selected date in the date picker
-                const date = new Date(storedDate);
-                const dateString = date.toISOString().split('T')[0]; // Convert the date to yyyy-mm-dd format
-                if(document.getElementById('selected_date').innerHTML == "Today" && dateString == getSelectedDate()) {
-                    checkLocation();
-                } else {
-                    document.getElementById('datepicker').value = dateString;
-                    document.getElementById('selected_date').innerHTML = storedDate;
-                    // If there is, use it
-                    let station = JSON.parse(storedStation);
-                    // Find the station in the data
-                    let selectedStation = data.find(s => s.id === station.id);
+            return getSessionData().then(sessionData => {
+                const storedStationCode = sessionData.currentStationCode;
+                const storedDate = sessionData.selectedDate;
+
+
+                if (storedStationCode) {
+                    let selectedStation = data.find(s => s.code === storedStationCode);
                     if (selectedStation) {
-                        // closestStation = storedStation;
                         createMarker(selectedStation, 1);
                     }
+
+
+
+                    try {
+                        const formattedDate = formatDate(storedDate);
+                        const date = new Date(formattedDate);
+                        const dateString = date.toISOString().split('T')[0];
+                        if (document.getElementById('selected_date').innerHTML == "Today" && dateString == getSelectedDate()) {
+
+                            checkLocation();
+                        } else {
+                            document.getElementById('datepicker').value = dateString;
+                            document.getElementById('selected_date').innerHTML = storedDate;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing stored date:', storedDate, e);
+                        // Handle the error or set a default value
+                    }
+
+                } else {
+                    checkLocation();
                 }
-            } else {
-                // If there isn't, get user location
-                checkLocation();
-            }
-            // Create marker for each weather station
-            data.forEach(station => {
-                createMarker(station, 0);
+
+                data.forEach(station => createMarker(station, 0));
+                return data;
             });
-            // Return data
-            return data;
         })
         .catch(error => {
             console.error('Error fetching weather stations information:', error);
             return undefined;
         });
 }
+
 
 // Function to update the data on the right column
 function updateData(stationCode) {
@@ -144,8 +143,8 @@ function updateData(stationCode) {
     var selectedDate = getSelectedDate() + " 12:00:00";
     document.getElementById('last-updated-time').textContent = '';
     var dataUrl = `/station_data/?`;
-    if(document.getElementById('selected_date').innerHTML == "Today") {
-        if(window.location.pathname.endsWith("fire/")) {
+    if (document.getElementById('selected_date').innerHTML == "Today") {
+        if (window.location.pathname.endsWith("fire/")) {
             dataUrl += `datetime=${getSelectedDate()} 12:00:00&station_code=${stationCode}`;
         } else {
             dataUrl += `latest=true&station_code=${stationCode}`;
@@ -156,14 +155,14 @@ function updateData(stationCode) {
     // console.log(dataUrl);
     // Return date from date picker and fetch all of the data for the clicked station
     return fetch(dataUrl)
-            .then(response => {
+        .then(response => {
             // If station data is found
             var errorMsg = document.getElementById("error-msg");
             if (response.ok) {
                 errorMsg.innerHTML = "";
                 errorMsg.style.display = "none";
                 // Update last updated at time
-                if(document.getElementById('selected_date').innerHTML == "Today") {
+                if (document.getElementById('selected_date').innerHTML == "Today") {
                     document.getElementById('last-updated-time').textContent = 'Just Now';
                 } else {
                     document.getElementById('last-updated-time').textContent = '12:00 PM';
@@ -188,8 +187,10 @@ function updateData(stationCode) {
         })
         .finally(() => {
             // Store station code and selected date in localStorage
-            localStorage.setItem('currentStationCode', stationCode);
-            localStorage.setItem('selectedDate', getSelectedDate());
+            // localStorage.setItem('currentStationCode', stationCode);
+            // localStorage.setItem('selectedDate', getSelectedDate());
+            saveSessionData('currentStationCode', stationCode);
+            saveSessionData('selectedDate', getSelectedDate());
         });
 }
 
@@ -208,15 +209,15 @@ function updateDataHTML(currentStationData) {
             temperatureCard.className = 'card rounded shadow text-white h-100';
 
             if (temperature < 0) {
-                temperatureCard.classList.add('bg-primary'); 
+                temperatureCard.classList.add('bg-primary');
             } else if (temperature < 10) {
-                temperatureCard.classList.add('bg-info'); 
+                temperatureCard.classList.add('bg-info');
             } else if (temperature < 20) {
-                temperatureCard.classList.add('bg-success'); 
+                temperatureCard.classList.add('bg-success');
             } else if (temperature < 30) {
-                temperatureCard.classList.add('bg-warning'); 
+                temperatureCard.classList.add('bg-warning');
             } else {
-                temperatureCard.classList.add('bg-danger'); 
+                temperatureCard.classList.add('bg-danger');
             }
         }
         // Update the HTML elements with the station's relative humidity data
@@ -238,7 +239,7 @@ function updateDataHTML(currentStationData) {
         if (currentStationData.SNOW_DEPTH) {
             // document.getElementById('snow-depth').innerHTML = currentStationData.SNOW_DEPTH + " mm";
             drawSnowDepth(currentStationData.SNOW_DEPTH);
-        }else{
+        } else {
             drawSnowDepth(0);
         }
         // Update the HTML elements with the station's wind speed data
@@ -362,8 +363,8 @@ function createMarker(station, display) {
         currentStationCode = station.code;
         document.getElementById('station-name-code').innerText = station.name + " - #" + station.code;
         updateData(currentStationCode);
-         // Store selected station in local storage
-         localStorage.setItem('station', JSON.stringify(station));
+        // Store selected station in local storage
+        saveSessionData('currentStationCode', currentStationCode);
     });
     // If display is 1, display
     if (display === 1) {
@@ -388,16 +389,24 @@ function computeDistance(longitude1, latitude1, longitude2, latitude2) {
 var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
     document.getElementById('date_selector').addEventListener('change', function () {
-        // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
-        document.getElementById('temperature').innerHTML = "N/A";
-        // document.getElementById('relative-humidity').innerHTML = "N/A";
-        document.getElementById('precipitation').innerHTML = "N/A";
-        document.getElementById('snow-depth').innerHTML = "N/A";
-        document.getElementById('wind-speed').innerHTML = "N/A";
-        document.getElementById('wind-direction').innerHTML = "N/A";
+        // check if weather
+        if (document.getElementById('weather-title')) {
+            // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
+            document.getElementById('temperature').innerHTML = "N/A";
+            // document.getElementById('relative-humidity').innerHTML = "N/A";
+            document.getElementById('precipitation').innerHTML = "N/A";
+            document.getElementById('snow-depth').innerHTML = "N/A";
+            document.getElementById('wind-speed').innerHTML = "N/A";
+            document.getElementById('wind-direction').innerHTML = "N/A";
+        }
         // document.getElementById('wind-gust').innerHTML = "N/A";
         // Update all data since date time is changing
+        var newSelectedDate = getSelectedDate();
+        saveSessionData('selectedDate', newSelectedDate);
+
         updateData(currentStationCode);
+
+
     });
 
     // Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
@@ -425,6 +434,65 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
         checkLocation();
     });
 });
+function saveSessionData(key, value) {
+    console.log('Saving session data:', key, value);
+
+    fetch('/set_session_data/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // Ensure CSRF token is sent
+        },
+        body: JSON.stringify({ [key]: value })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Session data could not be saved');
+            }
+            return response.json();
+        })
+        .then(data => console.log('Session data saved', data))
+        .catch(error => console.error('Error saving session data', error));
+}
+async function getSessionData() {
+
+    try {
+        const response = await fetch('/get_session_data/');
+        if (!response.ok) {
+            throw new Error('Failed to fetch session data');
+        }
+
+        //save response.json
+        let data = response.json();
+        return await data;
+    } catch (error) {
+        return console.error('Error fetching session data', error);
+    }
+}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function formatDate(str) {
+    const parts = str.split('-');
+    if (parts.length === 3) {
+        return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+    }
+    return str; // return the original string if it doesn't match expected format
+}
+
+
 
 // Export functions for testing
 module.exports = {
