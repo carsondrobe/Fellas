@@ -389,13 +389,16 @@ function computeDistance(longitude1, latitude1, longitude2, latitude2) {
 var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     // Add event listener for change of selection of date picker, resets values of widgets to N/A before updating them so old values don't linger
     document.getElementById('date_selector').addEventListener('change', function () {
-        // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
-        document.getElementById('temperature').innerHTML = "N/A";
-        // document.getElementById('relative-humidity').innerHTML = "N/A";
-        document.getElementById('precipitation').innerHTML = "N/A";
-        document.getElementById('snow-depth').innerHTML = "N/A";
-        document.getElementById('wind-speed').innerHTML = "N/A";
-        document.getElementById('wind-direction').innerHTML = "N/A";
+        // check if weather
+        if (document.getElementById('weather-title')) {
+            // Reset all elements here since an error caused by null value may not allow the request to make it to updateDataHTML
+            document.getElementById('temperature').innerHTML = "N/A";
+            // document.getElementById('relative-humidity').innerHTML = "N/A";
+            document.getElementById('precipitation').innerHTML = "N/A";
+            document.getElementById('snow-depth').innerHTML = "N/A";
+            document.getElementById('wind-speed').innerHTML = "N/A";
+            document.getElementById('wind-direction').innerHTML = "N/A";
+        }
         // document.getElementById('wind-gust').innerHTML = "N/A";
         // Update all data since date time is changing
         var newSelectedDate = getSelectedDate();
@@ -432,6 +435,8 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     });
 });
 function saveSessionData(key, value) {
+    console.log('Saving session data:', key, value);
+
     fetch('/set_session_data/', {
         method: 'POST',
         headers: {
@@ -450,6 +455,7 @@ function saveSessionData(key, value) {
         .catch(error => console.error('Error saving session data', error));
 }
 async function getSessionData() {
+
     try {
         const response = await fetch('/get_session_data/');
         if (!response.ok) {
