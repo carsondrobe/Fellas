@@ -399,7 +399,7 @@ def set_session_data(request):
     data = json.loads(request.body)
     for key, value in data.items():
         request.session[key] = value
-    print(request.session.keys())
+    print(request.session.items())
     return JsonResponse({"status": "success"})
 
 

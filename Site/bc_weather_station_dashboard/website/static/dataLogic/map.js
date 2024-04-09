@@ -60,22 +60,35 @@ function fetchWeatherStationInfo() {
                 const storedStationCode = sessionData.currentStationCode;
                 const storedDate = sessionData.selectedDate;
 
-                if (storedStationCode && storedDate) {
-                    const date = new Date(storedDate);
-                    const dateString = date.toISOString().split('T')[0];
-                    if (document.getElementById('selected_date').innerHTML == "Today" && dateString == getSelectedDate()) {
-                        checkLocation();
-                    } else {
-                        document.getElementById('datepicker').value = dateString;
-                        document.getElementById('selected_date').innerHTML = storedDate;
-                        let selectedStation = data.find(s => s.code === storedStationCode);
-                        if (selectedStation) {
-                            createMarker(selectedStation, 1);
-                        }
+
+                if (storedStationCode) {
+                    let selectedStation = data.find(s => s.code === storedStationCode);
+                    if (selectedStation) {
+                        createMarker(selectedStation, 1);
                     }
+
+
+
+                    try {
+                        const formattedDate = formatDate(storedDate);
+                        const date = new Date(formattedDate);
+                        const dateString = date.toISOString().split('T')[0];
+                        if (document.getElementById('selected_date').innerHTML == "Today" && dateString == getSelectedDate()) {
+
+                            checkLocation();
+                        } else {
+                            document.getElementById('datepicker').value = dateString;
+                            document.getElementById('selected_date').innerHTML = storedDate;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing stored date:', storedDate, e);
+                        // Handle the error or set a default value
+                    }
+
                 } else {
                     checkLocation();
                 }
+
                 data.forEach(station => createMarker(station, 0));
                 return data;
             });
@@ -385,7 +398,12 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('wind-direction').innerHTML = "N/A";
         // document.getElementById('wind-gust').innerHTML = "N/A";
         // Update all data since date time is changing
+        var newSelectedDate = getSelectedDate();
+        saveSessionData('selectedDate', newSelectedDate);
+
         updateData(currentStationCode);
+
+
     });
 
     // Add event listener for clicks on map, resets values of widgets to N/A before updating them so old values don't linger
@@ -414,7 +432,6 @@ var eventListeners = document.addEventListener('DOMContentLoaded', function () {
     });
 });
 function saveSessionData(key, value) {
-    console.log('Saving session data');
     fetch('/set_session_data/', {
         method: 'POST',
         headers: {
@@ -432,16 +449,19 @@ function saveSessionData(key, value) {
         .then(data => console.log('Session data saved', data))
         .catch(error => console.error('Error saving session data', error));
 }
-function getSessionData() {
-    console.log('Getting session data');
-    return fetch('/get_session_data/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch session data');
-            }
-            return response.json();
-        })
-        .catch(error => console.error('Error fetching session data', error));
+async function getSessionData() {
+    try {
+        const response = await fetch('/get_session_data/');
+        if (!response.ok) {
+            throw new Error('Failed to fetch session data');
+        }
+
+        //save response.json
+        let data = response.json();
+        return await data;
+    } catch (error) {
+        return console.error('Error fetching session data', error);
+    }
 }
 function getCookie(name) {
     let cookieValue = null;
@@ -457,6 +477,15 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function formatDate(str) {
+    const parts = str.split('-');
+    if (parts.length === 3) {
+        return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+    }
+    return str; // return the original string if it doesn't match expected format
+}
+
 
 
 // Export functions for testing
