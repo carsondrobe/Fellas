@@ -14,15 +14,18 @@ import tensorflow as tf
 from tensorflow import keras
 import datetime
 from ..models import StationData, WeatherStation
+from django.conf import settings
 
-loaded_model = keras.models.load_model('website/forecast_model/weather_predictor.h5')
+loaded_model = keras.models.load_model(
+    '/Fellas/Site/bc_weather_station_dashboard/website/forecast_model/weather_predictor.h5')
 response = None
-
 
 # Receives request from view_predictions.js
 # This function generates a plot
 # and returns the URI of the plot to the frontend. Essentially passing back an encoded image
 # to the frontend.
+
+
 def create_predictions(request):
     global response
     if response is not None:
