@@ -18,6 +18,7 @@ from django.conf import settings
 
 response = None
 
+
 # Receives request from view_predictions.js
 # This function generates a plot
 # and returns the URI of the plot to the frontend. Essentially passing back an encoded image
@@ -120,21 +121,32 @@ def get_data_points(request):
 def get_previous_days(request, num_days=7):
     current_station_code = request.session.get("currentStationCode", None)
 
+    tempurature_data = []
+    three_hours_ago = datetime.datetime.now() - datetime.timedelta(hours=3)
+    three_hours_ago = three_hours_ago.replace(minute=0, second=0, microsecond=0)
+    station_data = StationData.objects.filter(
+        STATION_CODE=current_station_code,
+        DATE_TIME=three_hours_ago
+    ).values()
+    if len(station_data) != 1:
+        print("No data for", three_hours_ago, ", ", station_data)
+        return []
+    tempurature_data.append(station_data[0])
+
     previous_day = datetime.datetime.now() - datetime.timedelta(days=1)
     previous_day = previous_day.replace(hour=12, minute=0, second=0, microsecond=0)
-
-    noon_data = []
-    for _ in range(num_days):
+    for _ in range(num_days - 1):
         station_data = StationData.objects.filter(
             STATION_CODE=current_station_code,
             DATE_TIME=previous_day
         ).values()
         if len(station_data) > 0:
-            noon_data.append(station_data[0])
+            tempurature_data.append(station_data[0])
         else:
             print("No data for", previous_day)
         previous_day = previous_day - datetime.timedelta(days=1)
-    return noon_data
+    tempurature_data.reverse()
+    return tempurature_data
 
 
 def get_coords(request):
