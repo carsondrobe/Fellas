@@ -7,10 +7,12 @@ This web-based application offers a solution for accessing daily and historical 
 ### Key Features
 
 1. **Data Visualizations:** Explore real-time and historical weather data through custom designed widgets.
-2. **Data Filtering:** Customize your data view by filtering based on day and weather station
-3. **Weather Station Exploration:** Utilize the map to discover the locations of BC wildfire weather stations.
-4. **Alert System:** Receive alerts for extreme weather events for your favourited stations.
-5. **Secure Login/Registration:** Create an account to personalize your experience and set up alerts.
+2. **Real time data updates:** done with github actions to collect realtime actual data from the government of BC.
+3. **Data Filtering:** Customize your data view by filtering based on day and weather station
+4. **Weather Station Exploration:** Utilize the map to discover the locations of BC wildfire weather stations.
+5. **Alert System:** Receive alerts for extreme weather events for your favourited stations.
+6. **Secure Login/Registration:** Create an account to personalize your experience and set up alerts.
+
 
 ## The Weather Page
 
