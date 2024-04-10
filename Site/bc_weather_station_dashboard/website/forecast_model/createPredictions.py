@@ -100,7 +100,7 @@ def create_predictions(request):
 
 def get_days_of_week(start_date, num_days):
     days_of_week = []
-    current_date = start_date
+    current_date = start_date + datetime.timedelta(days=1)
     for _ in range(num_days):
         days_of_week.append(current_date.strftime("%A"))  # Get the full name of the day (e.g., Monday, Tuesday)
         current_date += datetime.timedelta(days=1)

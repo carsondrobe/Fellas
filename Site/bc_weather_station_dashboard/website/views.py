@@ -26,7 +26,6 @@ def home(request, **kwargs):
         user_type = request.user.userprofile.user_type
     except:
         user_type = "CU"
-    create_predictions(request) # preload predictions
     context = {"user_type": user_type}
     if current_page == "weather":
         return weather(request, **kwargs, **context)
