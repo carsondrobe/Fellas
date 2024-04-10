@@ -16,8 +16,7 @@ import datetime
 from ..models import StationData, WeatherStation
 from django.conf import settings
 
-loaded_model = keras.models.load_model(
-    '/Fellas/Site/bc_weather_station_dashboard/website/forecast_model/weather_predictor.h5')
+loaded_model = keras.models.load_model('website/forecast_model/weather_predictor.h5')
 response = None
 
 # Receives request from view_predictions.js
