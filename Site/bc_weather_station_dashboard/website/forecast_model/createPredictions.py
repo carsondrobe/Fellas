@@ -16,7 +16,6 @@ import datetime
 from ..models import StationData, WeatherStation
 from django.conf import settings
 
-loaded_model = keras.models.load_model('website/forecast_model/weather_predictor.h5')
 response = None
 
 # Receives request from view_predictions.js
@@ -112,6 +111,7 @@ def get_data_points(request):
     coords = get_coords(request)
     inputs = preprocess_data(past_days, coords)
     inputs = inputs.reshape(1, 7, 11)
+    loaded_model = keras.models.load_model('website/forecast_model/weather_predictor.h5')
     prediction = loaded_model.predict(inputs, verbose=0)
     scatter_points = format_data_as_scatter(past_days, prediction)
     return scatter_points
