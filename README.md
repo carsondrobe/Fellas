@@ -54,3 +54,5 @@ Admins can perform bulk data uploads from BC weather stations, ensuring data acc
 ##### Database Management
 
 Efficiently store, retrieve, update, and delete user and product data in the system's database.
+
+## Setup info located [here](setupInstructions.md)
