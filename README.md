@@ -13,7 +13,9 @@ This web-based application offers a solution for accessing daily and historical 
 5. **Alert System:** Receive alerts for extreme weather events for your favourited stations.
 6. **Secure Login/Registration:** Create an account to personalize your experience and set up alerts.
 
-[Dashboard Walkthrough](https://youtu.be/NwfrZulFd_w)
+[Dashboard Video Walkthrough](https://youtu.be/NwfrZulFd_w)
+
+[Slides Presentation](https://docs.google.com/presentation/d/1BatpZIMTzcmC1jZfb_F__NmrUi5w8jc10Q3Qb79VViM/edit?usp=sharing)
 
 ## The Weather Page
 
