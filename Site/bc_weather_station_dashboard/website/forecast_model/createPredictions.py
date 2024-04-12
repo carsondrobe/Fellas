@@ -217,29 +217,30 @@ def preprocess_data(past_days, coords):
     li = []
     for day in past_days:
         li.append(pd.DataFrame(day, index=[0]))
-    df = pd.concat(li, axis=0, ignore_index=True)
+    if len(li):
+        df = pd.concat(li, axis=0, ignore_index=True)
 
-    df['DATE_TIME'] = pd.to_datetime(df['DATE_TIME'], format='%Y%m%d%H')
-    df['DATE'] = df['DATE_TIME'].dt.date
-    df['TIME'] = df['DATE_TIME'].dt.time
-    df['X'], df['Y'] = coords
+        df['DATE_TIME'] = pd.to_datetime(df['DATE_TIME'], format='%Y%m%d%H')
+        df['DATE'] = df['DATE_TIME'].dt.date
+        df['TIME'] = df['DATE_TIME'].dt.time
+        df['X'], df['Y'] = coords
 
-    wv = df.pop('HOURLY_WIND_SPEED')
-    max_wv = df.pop('HOURLY_WIND_GUST')
+        wv = df.pop('HOURLY_WIND_SPEED')
+        max_wv = df.pop('HOURLY_WIND_GUST')
 
-    wd_rad = df.pop('HOURLY_WIND_DIRECTION') * np.pi / 180
+        wd_rad = df.pop('HOURLY_WIND_DIRECTION') * np.pi / 180
 
-    df['Wx'] = wv * np.cos(wd_rad)
-    df['Wy'] = wv * np.sin(wd_rad)
+        df['Wx'] = wv * np.cos(wd_rad)
+        df['Wy'] = wv * np.sin(wd_rad)
 
-    df['max Wx'] = max_wv * np.cos(wd_rad)
-    df['max Wy'] = max_wv * np.sin(wd_rad)
+        df['max Wx'] = max_wv * np.cos(wd_rad)
+        df['max Wy'] = max_wv * np.sin(wd_rad)
 
-    timestamp_s = df['DATE_TIME'].map(pd.Timestamp.timestamp)
-    day = 24 * 60 * 60
-    year = 365.2425 * day
-    df['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
-    df['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
+        timestamp_s = df['DATE_TIME'].map(pd.Timestamp.timestamp)
+        day = 24 * 60 * 60
+        year = 365.2425 * day
+        df['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
+        df['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
 
     columns_we_need = ['X',
                        'Y',
@@ -252,6 +253,10 @@ def preprocess_data(past_days, coords):
                        'max Wy',
                        'Year sin',
                        'Year cos']
+    if len(li) == 0:
+        df = pd.DataFrame(columns=columns_we_need)
+        for i in range(7):
+            df.loc[i] = np.random.rand(len(columns_we_need))
 
     df = df[columns_we_need]
     df = (df - train_mean) / train_std
