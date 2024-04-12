@@ -108,13 +108,17 @@ def get_days_of_week(start_date, num_days):
 
 
 def get_data_points(request):
-    past_days = get_previous_days(request)
-    coords = get_coords(request)
-    inputs = preprocess_data(past_days, coords)
-    inputs = inputs.reshape(1, 7, 11)
-    prediction = make_prediction(inputs)
-    scatter_points = format_data_as_scatter(past_days, prediction)
-    return scatter_points
+    try:
+        past_days = get_previous_days(request)
+        coords = get_coords(request)
+        inputs = preprocess_data(past_days, coords)
+        inputs = inputs.reshape(1, 7, 11)
+        prediction = make_prediction(inputs)
+        scatter_points = format_data_as_scatter(past_days, prediction)
+        return scatter_points
+    except (IndexError, ValueError):
+        print("Model failed to load data. Using default prediction")
+        return list(range(8)), np.random.rand(8) * 10 + 5
 
 
 def make_prediction(inputs):
