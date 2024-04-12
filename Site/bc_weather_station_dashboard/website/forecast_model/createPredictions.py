@@ -174,12 +174,13 @@ def get_coords(request):
     if current_station_code is None:
         current_station_code = 1277
     station = WeatherStation.objects.filter(STATION_CODE=current_station_code).values()
+    exception_message = "Station code " + str(current_station_code) + " not found in database. Station: " + str(station)
+    print(exception_message)
     try:
         x = station[0]["X"]
         y = station[0]["Y"]
     except IndexError:
         # raise station code
-        exception_message = "Station code " + current_station_code + " not found in database. Station: " + station
         raise Exception(exception_message)
     return x, y
 
