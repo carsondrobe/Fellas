@@ -140,7 +140,6 @@ def get_previous_days(request, num_days=7):
     ).values()
     if len(station_data) == 1:
         temperature_data.append(station_data[0])
-        print("today's weather: ", station_data[0])
     elif len(station_data) == 0:
         print("Data appears to be out of date, using last value for today for prediction")
         times = StationData.objects.filter(
@@ -175,8 +174,13 @@ def get_coords(request):
     if current_station_code is None:
         current_station_code = 1277
     station = WeatherStation.objects.filter(STATION_CODE=current_station_code).values()
-    x = station[0]["X"]
-    y = station[0]["Y"]
+    try:
+        x = station[0]["X"]
+        y = station[0]["Y"]
+    except IndexError:
+        # raise station code
+        exception_message = "Station code " + current_station_code + " not found in database. Station: " + station
+        raise Exception(exception_message)
     return x, y
 
 
