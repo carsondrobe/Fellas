@@ -112,26 +112,47 @@ def get_data_points(request):
     coords = get_coords(request)
     inputs = preprocess_data(past_days, coords)
     inputs = inputs.reshape(1, 7, 11)
-    loaded_model = keras.models.load_model('website/forecast_model/weather_predictor.h5')
-    prediction = loaded_model.predict(inputs, verbose=0)
+    prediction = make_prediction(inputs)
     scatter_points = format_data_as_scatter(past_days, prediction)
     return scatter_points
 
 
+def make_prediction(inputs):
+    try:
+        loaded_model = keras.models.load_model('website/forecast_model/weather_predictor.h5')
+        return loaded_model.predict(inputs, verbose=0)
+    except:
+        print("Model failed to load. Using default prediction")
+        return np.ones((1, 7, 1))
+
+
 def get_previous_days(request, num_days=7):
     current_station_code = request.session.get("currentStationCode", None)
+    if current_station_code is None:
+        current_station_code = 1277
 
-    tempurature_data = []
-    three_hours_ago = datetime.datetime.now() - datetime.timedelta(hours=3)
-    three_hours_ago = three_hours_ago.replace(minute=0, second=0, microsecond=0)
+    temperature_data = []
+    two_hours_ago = datetime.datetime.now() - datetime.timedelta(hours=2)
+    two_hours_ago = two_hours_ago.replace(minute=0, second=0, microsecond=0)
     station_data = StationData.objects.filter(
         STATION_CODE=current_station_code,
-        DATE_TIME=three_hours_ago
+        DATE_TIME=two_hours_ago
     ).values()
-    if len(station_data) != 1:
-        print("No data for", three_hours_ago, ", ", station_data)
-        return []
-    tempurature_data.append(station_data[0])
+    if len(station_data) == 1:
+        temperature_data.append(station_data[0])
+        print("today's weather: ", station_data[0])
+    elif len(station_data) == 0:
+        print("Data appears to be out of date, using last value for today for prediction")
+        times = StationData.objects.filter(
+            STATION_CODE=current_station_code,
+        ).values()
+        if len(times) > 0:
+            temperature_data.append(times[len(times) - 1])
+        else:
+            print("unable to get relevant data for prediction")
+    elif len(station_data) > 1:
+        print("Multiple data points for", two_hours_ago, "using the first one in prediction")
+        temperature_data.append(station_data[0])
 
     previous_day = datetime.datetime.now() - datetime.timedelta(days=1)
     previous_day = previous_day.replace(hour=12, minute=0, second=0, microsecond=0)
@@ -141,16 +162,18 @@ def get_previous_days(request, num_days=7):
             DATE_TIME=previous_day
         ).values()
         if len(station_data) > 0:
-            tempurature_data.append(station_data[0])
+            temperature_data.append(station_data[0])
         else:
             print("No data for", previous_day)
         previous_day = previous_day - datetime.timedelta(days=1)
-    tempurature_data.reverse()
-    return tempurature_data
+    temperature_data.reverse()
+    return temperature_data
 
 
 def get_coords(request):
     current_station_code = request.session.get("currentStationCode", None)
+    if current_station_code is None:
+        current_station_code = 1277
     station = WeatherStation.objects.filter(STATION_CODE=current_station_code).values()
     x = station[0]["X"]
     y = station[0]["Y"]
