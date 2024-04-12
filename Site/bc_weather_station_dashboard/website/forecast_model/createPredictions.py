@@ -115,6 +115,8 @@ def get_data_points(request):
         inputs = inputs.reshape(1, 7, 11)
         prediction = make_prediction(inputs)
         scatter_points = format_data_as_scatter(past_days, prediction)
+        if not(len(scatter_points[0]) == len(scatter_points[1]) == 8):
+            raise ValueError("Data points are not the correct length")
         return scatter_points
     except (IndexError, ValueError):
         print("Model failed to load data. Using default prediction")
