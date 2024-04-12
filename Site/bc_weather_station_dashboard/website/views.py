@@ -15,15 +15,8 @@ from django.conf import settings
 from .models import UserProfile
 from .forms import UserProfileForm
 from django.db.models import Max
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import matplotlib
-import io
-import urllib, base64
-import numpy as np
-import datetime
+from .forecast_model.createPredictions import create_predictions
 import json
-
 
 current_page = "weather"
 
@@ -33,7 +26,7 @@ def home(request, **kwargs):
         user_type = request.user.userprofile.user_type
     except:
         user_type = "CU"
-
+    create_predictions(request)
     context = {"user_type": user_type}
     if current_page == "weather":
         return weather(request, **kwargs, **context)
@@ -359,39 +352,8 @@ def alerts_view(request):
     return JsonResponse(data, safe=False)
 
 
-### Predictions
-# Receives request from view_predictions.js
-# This function generates a plot
-# and returns the URI of the plot to the frontend. Essentially passing back an encoded image
-# to the frontend.
-
-
 def predictions(request):
-    matplotlib.use("agg")  # IMPORTANT for Django to use matplotlib
-
-    # Example data for scatter plot
-    x = np.array([1, 2, 3, 4, 5])
-    y = np.array([2, 3, 2, 4, 3])
-
-    # Set figure size here (width, height) in inches
-    plt.figure(figsize=(10, 6))  # Example size: 10 inches by 6 inches
-
-    # Create a scatter plot
-    plt.scatter(x, y)
-
-    # Adding title
-    plt.title("Tomorrow's Prediction")
-
-    # Save the plot to a buffer
-    buf = io.BytesIO()
-    plt.savefig(
-        buf, format="png", bbox_inches="tight"
-    )  # Ensuring no clipping of the figure
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    uri = urllib.parse.quote(string)
-
-    return JsonResponse({"uri": uri})
+    return create_predictions(request)
 
 
 @csrf_exempt
